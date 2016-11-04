@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>edit: {{model.filename}}</h1>
+    <h2>body</h2>
+    <textarea name="content">{{model.content|safe}}</textarea>
+
+    <h2>meta</h2>
+    {% for key, value in model.metadata.items() -%}
+    <label for="metadata-key[{{key}}]">Key {% if key in model.REQUIRED_META
+      %}(<strong>required</strong>){% endif %}: </label>
+    <input type="text" name="metadata-key[{{key}}]" value="{{key|safe}}" />
+
+    <label for="metadata-value[{{key}}]">Value</label>
+    <input type="text" name="metadata-value[{{key}}]" value="{{value|safe}}" />
+    <br />
+    {% endfor %}
+  </body>
+</html>

@@ -13,5 +13,13 @@ def game(filename):
   game = Game(filename)
   return render_template("game.html", game=game)
 
+@app.route("/game/<filename>/edit", methods=["GET", "POST"])
+def edit_game(filename):
+  game = Game(filename)
+  # if request.method == "POST":
+  #   game.update(**request.form)
+
+  return render_template("edit.html", model=game)
+
 def run_app():
   app.run()
