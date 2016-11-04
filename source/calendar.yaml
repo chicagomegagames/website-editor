@@ -1,0 +1,18 @@
+---
+upcoming_games:
+  - date: "22 October, 2016"
+    name: "My Kind of Town"
+    location: "618 S Michigan Ave, 9th Floor <br> Chicago, Illinois"
+    tickets:
+      link: "https://www.eventbrite.com/e/my-kind-of-town-tickets-26809031535"
+      text: Ticket Information
+    note: "Lead a gang of survivors back into the city following the devastating defeat in the Zombie War in hopes of surviving the winter"
+
+  - date: "28 January, 2017"
+    name: "Watch the Skies"
+    location: "TBD"
+
+upcoming_events:
+  - date: "17 September, 2016"
+    name: "Design Jam"
+    location: "TBD"

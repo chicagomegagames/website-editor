@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900');
+
+$font-sans: "Source Sans Pro", sans-serif;
+$font-serif: "Source Serif Pro", "Gentium Book Basic", serif;
+
+$font-size: 20px;
+$line-height: 1.5em;
+
+$width: 740px;
+
+body {
+  font-family: $font-serif;
+  font-size: $font-size;
+  line-height: $line-height;
+  background: #eff1f5;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3 {
+  padding-top: 0;
+  margin-top: 0;
+  font-family: $font-sans;
+  font-weight: 900;
+}
+
+a.contact {
+  font-style: italic;
+}
+
+.third {
+  width: 33%;
+}
+
+.two-thirds {
+  width: 66%;
+
+  .third, .two-thirds {
+    height: 25vh;
+    min-height: 250px;
+    overflow: hidden;
+
+    padding: 2vw;
+
+    box-sizing: border-box;
+
+    .third {
+      padding: 0;
+    }
+  }
+
+  .third {
+    width: 50%;
+    float: left;
+
+    //&:nth-child(2n + 1) {
+    //  clear: both;
+    //}
+  }
+
+  .two-thirds {
+    width: 100%;
+    clear: both;
+  }
+
+}
+
+.left.third {
+  height: 100%;
+  width: 33%;
+
+  float: left;
+
+  .info {
+    position: absolute;
+    margin-top: -245px;
+    top: 50%;
+
+    text-align: center;
+    width: 33%;
+  }
+}
+
+.right {
+  height: 100%;
+  float: right;
+  overflow-y: scroll;
+}
+
+.page-about {
+  background: orange;
+}
+
+.page-blog {
+  background: green;
+}
+
+.page-next-event {
+  background: yellow;
+}
+
+.game-my-kind-of-town {
+  background: blue;
+}
+
+.game-watch-the-skies {
+  background: red;
+}
