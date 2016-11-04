@@ -1,0 +1,9 @@
+click==6.6
+Flask==0.11.1
+future==0.15.2
+itsdangerous==0.24
+Jinja2==2.7.3
+markdown2==2.2.1
+MarkupSafe==0.23
+PyYAML==3.11
+Werkzeug==0.11.11
