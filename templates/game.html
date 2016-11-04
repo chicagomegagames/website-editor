@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>{{game.filename}}</h1>
+    <h2>meta</h2>
+    <ul>
+      {% for key, value in game.metadata.items() -%}
+      <li><strong>{{key}}</strong>: {{value}}</li>
+      {%- endfor %}
+    </ul>
+
+    <h2>body</h2>
+    {{game.content|safe}}
+  </body>
+</html>

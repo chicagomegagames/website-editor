@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <ul>
+    {% for game in games %}
+      <li><a href="/game/{{game.filename}}">{{game.filename}}</a></li>
+    {% endfor %}
+    </ul>
+  </body>
+</html>
