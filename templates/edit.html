@@ -1,24 +1,38 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <h1>edit: {{model.filename}}</h1>
-    <h2>body</h2>
-    <textarea name="content">{{model.markdown|safe}}</textarea>
+    <form id="edit">
+        <h1>edit: {{model.filename}}</h1>
+        <input type="submit" value="save page" />
+        <h2>body</h2>
+        <textarea name="content">{{model.markdown|safe}}</textarea>
 
-    <h2>required meta</h2>
-    {% for key, value in required_meta.items() -%}
-    <label for="required_meta[{{key}}]">{{key}}: </label>
-    <input type="text" name="required_meta[{{key}}]" value={{value|safe}} />
-    <br />
-    {% endfor -%}
+        <h2>required meta</h2>
+        {% for key, value in required_meta.items() -%}
+        <label for="required_meta[{{key}}]">{{key}}: </label>
+        <input type="text" name="required_meta[{{key}}]" value="{{value|safe}}" data-metadata-name="{{key}}" data-metadata-type="value" />
+        <br />
+        {% endfor -%}
 
-    <h2>other meta</h2>
-    {% for key, value in other_meta.items() -%}
-    <label for="metadata-key[{{key}}]">Key: </label>
-    <input type="text" name="metadata-key[{{key}}]" value="{{key|safe}}" />
+        <h2>other meta</h2>
+        <table id="other_meta">
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+            </tr>
+            {% for key, value in other_meta.items() -%}
+            <tr>
+                <td>
+                    <input type="text" class="extra_meta extra_meta_key"  value="{{key|safe}}" data-metadata-name="{{key}}" data-metadata-type="key" />
+                </td>
+                <td>
+                    <input type="text" class="extra_meta extra_meta_value" value="{{value|safe}}" data-metadata-name="{{key}}" data-metadata-type="value" />
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
 
-    <label for="metadata-value[{{key}}]">Value</label>
-    <input type="text" name="metadata-value[{{key}}]" value="{{value|safe}}" />
-    <br />
-    {% endfor %}
+        <button id="add_meta">add meta</button>
+
+    </form>
 {% endblock %}

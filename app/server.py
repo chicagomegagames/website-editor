@@ -1,5 +1,6 @@
-from flask import Flask, render_template
-from .models import Game
+from flask import Flask, render_template, request, jsonify
+from .models import Game, InvalidModelError
+import sys
 
 app = Flask("makeme_admin")
 
@@ -25,8 +26,26 @@ def game(filename):
 @app.route("/game/<filename>/edit", methods=["GET", "POST"])
 def edit_game(filename):
     game = Game(filename)
-    # if request.method == "POST":
-    #   game.update(**request.form)
+    errors = []
+
+    if request.method == "POST":
+        # assumption: if you posted data to this route, it is
+        # valid json. gorrammit.
+        game.update(**request.form)
+        if not game.validate():
+            errors = game.errors
+        else:
+            game.save()
+
+        response = {}
+        if errors != []:
+            response["errors"] = errors
+            response["success"] = False
+        else:
+            response["success"] = True
+            response["model"] = game.serialize()
+
+        return jsonify(**response)
 
     required_meta = {}
     other_meta = {}
@@ -40,7 +59,7 @@ def edit_game(filename):
         if key not in required_meta:
             required_meta[key] = None
 
-    return template("edit.html", model=game, required_meta=required_meta, other_meta=other_meta)
+    return template("edit.html", model=game, required_meta=required_meta, other_meta=other_meta, errors=errors)
 
 def run_app():
     app.run()
