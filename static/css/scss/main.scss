@@ -1,0 +1,36 @@
+body {
+  font-family: "Source Code Pro", monospace;
+}
+
+.sidebar {
+  width: 300px;
+  float: left;
+
+  h1 {
+    font-size: 1.5em;
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 1.3em;
+    margin: 0;
+  }
+}
+
+.page {
+  width: calc(100% - 300px);
+  float: right;
+
+  p {
+    max-width: 700px;
+  }
+
+  textarea {
+    width: 100%;
+    max-width: 700px;
+    height: 20em;
+
+    font-family: "Source Code Pro", monospace;
+    font-size: 1em;
+  }
+}

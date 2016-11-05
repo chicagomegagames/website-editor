@@ -1,0 +1,36 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <title>
+      {%- if title is defined -%}
+        {{title}} | Chicago MegaGames Editor
+      {%- else -%}
+        Chicago MegaGames Editor
+      {%- endif -%}
+    </title>
+
+    <link rel="stylesheet" href="{{url_for("static", filename="css/main.css")}}" />
+    <script src="{{url_for("static", filename="js/main.js")}}"></script>
+  </head>
+  <body>
+    <div class="sidebar">
+      <h1>Chicago MegaGames</h1>
+      <h2>editor</h2>
+      <ul>
+        {%- if site.games is defined %}
+        <li><strong>Games</strong></li>
+        <ul>
+          {%- for game in site.games %}
+          <li><a href="/game/{{game.filename}}">{{game.filename}}</a></li>
+          {%- endfor %}
+          <li><a href="#" id="new_game">New Game</a></li>
+        </ul>
+        {%- endif %}
+      </ul>
+    </div>
+
+    <div class="page">
+      {% block main %}{% endblock %}
+    </div>
+  </body>
+</html>

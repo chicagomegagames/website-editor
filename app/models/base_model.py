@@ -31,6 +31,7 @@ class BaseModel():
         parsed_file = markdown2.markdown(contents, extras=["fenced-code-blocks", "metadata", "smarty-pants"])
 
         self.content = u"{parsed}".format(parsed=parsed_file)
+        self.markdown = "---".join(contents.split("---")[2:]).strip()
         self.metadata = parsed_file.metadata
 
     def validate(self):
