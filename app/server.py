@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect
 from .models import Game, InvalidModelError
 import sys
 import logging
@@ -22,9 +22,14 @@ def index():
     games = Game.all()
     return template("index.html", games=games)
 
-@app.route("/game/<filename>")
+@app.route("/game/<filename>", methods=["GET", "POST"])
 def game(filename):
     game = Game(filename)
+
+    if request.method == "DELETE":
+        game.delete()
+        return redirect(url_for("index"))
+
     return template("game.html", game=game)
 
 @app.route("/game/<filename>/edit", methods=["GET", "POST"])
@@ -66,4 +71,4 @@ def edit_game(filename):
     return template("edit.html", model=game, required_meta=required_meta, other_meta=other_meta, errors=errors)
 
 def run_app():
-    app.run()
+    app.run(debug=True)
