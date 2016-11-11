@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <h1>{{model.filename}}</h1>
+    <ul class="actions">
+        <li><a href="/{{prefix}}/{{model.filename}}/edit">edit</a></li>
+        <li><a href="/{{prefix}}/{{model.filename}}" data-method="delete">delete</a></li>
+    </ul>
+
+    <h2>meta</h2>
+    <ul>
+        {% for key, value in model.metadata.items() -%}
+        <li><strong>{{key}}</strong>: {{value}}</li>
+        {%- endfor %}
+    </ul>
+
+    <h2>body</h2>
+    {{model.content|safe}}
+{% endblock %}

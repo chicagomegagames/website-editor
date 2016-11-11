@@ -13,9 +13,7 @@ class InvalidModelError(Exception):
 
 class BaseModel():
     BASE_CONTENT_DIR = "content"
-    REQUIRED_META = [
-        "name"
-    ]
+    REQUIRED_META = []
 
     @classmethod
     def all(cls):
@@ -93,3 +91,5 @@ class BaseModel():
 
         return True
 
+    def delete(self):
+        os.remove(self.path)

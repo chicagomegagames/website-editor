@@ -28,6 +28,16 @@
           <li><a href="#" id="new_game">New Game</a></li>
         </ul>
         {%- endif %}
+
+        {%- if site.pages is defined %}
+        <li><strong>Pages</strong></li>
+        <ul>
+          {%- for page in site.pages %}
+          <li><a href="/page/{{page.filename}}">{{page.filename}}</a></li>
+          {%- endfor %}
+          <li><a href="#" id="new_page">New Page</a></li>
+        </ul>
+        {%- endif %}
       </ul>
     </div>
 
