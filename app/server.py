@@ -5,19 +5,25 @@ import logging
 import os
 import sys
 
-app = Flask("makeme_admin")
+app = Flask("magegame editor")
+global global_config
+
 logging.basicConfig(filename="app.log")
 logger = logging.getLogger("megagame_editor")
 logger.setLevel(logging.DEBUG)
 
 def site():
-    site = {}
-    site["games"] = Game.all()
-    site["pages"] = Page.all()
+    global global_config
+    site = {
+        "games": Game.all(),
+        "pages": Page.all(),
+        "config": global_config,
+    }
 
     return site
 
 def template(name, **kwargs):
+    print(site())
     return render_template(name, site=site(), **kwargs)
 
 def edit_model(model):
@@ -97,5 +103,7 @@ def deploy(location):
 
     return redirect(url_for("danger_zone"))
 
-def run_app():
+def run_app(config={}):
+    global global_config
+    global_config = config
     app.run(debug=True)

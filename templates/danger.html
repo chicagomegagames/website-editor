@@ -8,7 +8,15 @@
     </p>
 
     <h2>Deploy</h1>
+    {%- if site.config.deploy_locations is defined -%}
     <ul>
-        <li><a href="/deploy/staging">Deploy to Staging</a></li>
+        {%- for shortname, extras in site.config.deploy_locations.items() %}
+        <li><a href="/deploy/{{shortname}}">Deploy to {{extras.name}}</a></li>
+        {%- endfor %}
     </ul>
+    {%- else -%}
+    <p>
+        You have no deploy locations configured.
+    </p>
+    {%- endif -%}
 {% endblock %}

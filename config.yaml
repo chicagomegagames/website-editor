@@ -1,0 +1,6 @@
+deploy_locations:
+    staging:
+        location: "/Users/don/code/megagame/site_playground/deploy/staging"
+        name: Staging
+
+theme: megagames
