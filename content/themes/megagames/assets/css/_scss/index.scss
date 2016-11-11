@@ -1,0 +1,114 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic|Gentium+Book+Basic:400,400italic,700,700italic);
+
+$font-sans: "Open Sans", sans-serif;
+$font-serif: "Gentium Book Basic", serif;
+
+$font-size: 20px;
+$line-height: 1.5em;
+
+$width: 740px;
+
+body {
+  font-family: $font-serif;
+  font-size: $font-size;
+  line-height: $line-height;
+  background: #eff1f5;
+}
+
+h1 {
+  font-size: 2.5em;
+}
+
+img {
+  max-width: 100%;
+}
+
+header.top {
+  max-width: $width;
+  padding: 0 20px;
+  margin: 0 auto;
+
+  .logo {
+    margin: 4em auto 2em;
+    max-width: 400px;
+    display: block;
+  }
+
+  .main-nav {
+    ul {
+      margin: 1em auto;
+      padding: 0;
+      list-style: none;
+      display: table;
+
+      li {
+        display: inline-block;
+        padding: .5em;
+        display: table-cell;
+        font-style: italic;
+      }
+    }
+
+    &::before {
+      content: "";
+      display: block;
+      width: 20%;
+      margin: 0 auto;
+      height: 0px;
+      border-top: 3px solid black;
+    }
+
+  }
+}
+
+article {
+  max-width: $width;
+  margin: 0em auto 2em;
+
+  &::before {
+    content: "";
+    display: block;
+    width: 20%;
+    margin: 0 auto;
+    height: 0px;
+    border-top: 3px solid black;
+    margin-bottom: 2em;
+  }
+}
+
+.games-we-play {
+  max-width: $width;
+
+  .game {
+    margin-top: 2em;
+
+    h2 {
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    clear: both;
+    display: table;
+  }
+}
+
+.upcoming {
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      text-align: left;
+    }
+
+    th, td {
+      vertical-align: top;
+    }
+
+    tr {
+      td {
+        padding-top: 15px;
+      }
+    }
+  }
+}

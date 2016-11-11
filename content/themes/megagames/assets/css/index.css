@@ -1,0 +1,72 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic|Gentium+Book+Basic:400,400italic,700,700italic);
+body {
+  font-family: "Gentium Book Basic", serif;
+  font-size: 20px;
+  line-height: 1.5em;
+  background: #eff1f5; }
+
+h1 {
+  font-size: 2.5em; }
+
+img {
+  max-width: 100%; }
+
+header.top {
+  max-width: 740px;
+  padding: 0 20px;
+  margin: 0 auto; }
+  header.top .logo {
+    margin: 4em auto 2em;
+    max-width: 400px;
+    display: block; }
+  header.top .main-nav ul {
+    margin: 1em auto;
+    padding: 0;
+    list-style: none;
+    display: table; }
+    header.top .main-nav ul li {
+      display: inline-block;
+      padding: .5em;
+      display: table-cell;
+      font-style: italic; }
+  header.top .main-nav::before {
+    content: "";
+    display: block;
+    width: 20%;
+    margin: 0 auto;
+    height: 0px;
+    border-top: 3px solid black; }
+
+article {
+  max-width: 740px;
+  margin: 0em auto 2em; }
+  article::before {
+    content: "";
+    display: block;
+    width: 20%;
+    margin: 0 auto;
+    height: 0px;
+    border-top: 3px solid black;
+    margin-bottom: 2em; }
+
+.games-we-play {
+  max-width: 740px; }
+  .games-we-play .game {
+    margin-top: 2em;
+    clear: both;
+    display: table; }
+    .games-we-play .game h2 {
+      margin-top: 0;
+      padding-top: 0; }
+
+.upcoming table {
+  width: 100%;
+  border-collapse: collapse; }
+  .upcoming table th {
+    text-align: left; }
+  .upcoming table th, .upcoming table td {
+    vertical-align: top; }
+  .upcoming table tr td {
+    padding-top: 15px; }
+
+/*# sourceMappingURL=index.css.map */

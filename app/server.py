@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, jsonify, redirect
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from .models import Game, Page
-import sys
+from .static import publish_site
 import logging
+import os
+import sys
 
 app = Flask("makeme_admin")
 logging.basicConfig(filename="app.log")
@@ -82,6 +84,18 @@ def page(filename):
 @app.route("/page/<filename>/edit", methods=["GET", "POST"])
 def edit_page(filename):
     return edit_model(Page(filename))
+
+@app.route("/danger")
+def danger_zone():
+    return template("danger.html")
+
+@app.route("/deploy/<location>")
+def deploy(location):
+    deploy_location = os.path.join(os.getcwd(), "deploy", location)
+    print(deploy_location)
+    publish_site(location=deploy_location, theme="megagames")
+
+    return redirect(url_for("danger_zone"))
 
 def run_app():
     app.run(debug=True)

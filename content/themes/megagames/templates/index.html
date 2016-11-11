@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ page.title }}</title>
+    <link rel="stylesheet" href="/assets/css/index.css" />
+</head>
+<body>
+  <header class="top">
+    <img src="/assets/images/logo.svg" alt="Chicago MegaGames" class="logo" />
+    <nav class="main-nav">
+      <ul>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="http://fb.com/chicagomegagames" rel="nofollow" target="blank">Facebook</a></li>
+        <li><a href="http://twitter.com/chicagomegagame" rel="nofollow" target="blank">Twitter</a></li>
+        <li>
+          <a href="mailto:info@chicagomegagames.com">Email</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <article class="about">
+    {{ page.content }}
+  </article>
+  <article class="games-we-play">
+    <h1>Games We Play</h1>
+    {% for game in site.games %}
+    <div class="game {{ game.metadata.slug }}">
+      <h2>{{ game.metadata.name }}</h2>
+      <img src="/assets/images/{{ game.metadata.image }}" alt="" class="game-img" />
+      {{ game.content }}
+    </div>
+    {% endfor %}
+  </article>
+</body>
