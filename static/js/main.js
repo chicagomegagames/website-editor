@@ -15,12 +15,38 @@ function page_alert(message) {
 }
 
 function load_form(form) {
-  // add_meta_btn = form.querySelector("#add_meta");
-  // add_meta_btn.addEventListener("click", function(evt) {
-  //   evt.preventDefault();
-  //
-  //   now = Date.now()
-  // });
+  var meta_table = form.querySelector("table#meta tbody");
+
+  var add_meta_btn = form.querySelector("#add_meta");
+  add_meta_btn.addEventListener("click", function(evt) {
+    evt.preventDefault();
+
+    var now = Date.now();
+
+    var row = document.createElement("tr");
+    var key_cell = document.createElement("td");
+    var key_input = document.createElement("input");
+    key_input.setAttribute("type", "text");
+    key_input.setAttribute("class", "extra_meta extra_meta_key");
+    key_input.setAttribute("value", "new_meta");
+    key_input.setAttribute("data-metadata-name", now);
+    key_input.setAttribute("data-metadata-type", "key");
+    key_input.setAttribute("style", "margin-right: 9px;");
+    key_cell.appendChild(key_input);
+    row.appendChild(key_cell);
+
+    var value_cell = document.createElement("td");
+    var value_input = document.createElement("input");
+    value_input.setAttribute("type", "text");
+    value_input.setAttribute("class", "extra_meta extra_meta_value");
+    value_input.setAttribute("value", "some value goes here");
+    value_input.setAttribute("data-metadata-name", now);
+    value_input.setAttribute("data-metadata-type", "value");
+    value_cell.appendChild(value_input);
+    row.appendChild(value_cell);
+
+    meta_table.appendChild(row);
+  });
 
   form.addEventListener("submit", function(e) {
     e.preventDefault();
@@ -41,7 +67,7 @@ function load_form(form) {
     optional_meta_keys.forEach(function(element) {
       var key = element.value;
       var metadata_key = element.getAttribute("data-metadata-name");
-      var value_search = "input.extra_meta[data-metadata-type=value][data-metadata-name=" + metadata_key + "]"
+      var value_search = "input.extra_meta[data-metadata-type=value][data-metadata-name='" + metadata_key + "']"
       var value_element = form.querySelector(value_search);
       var value = value_element.value;
 
