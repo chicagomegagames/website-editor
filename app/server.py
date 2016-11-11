@@ -1,8 +1,12 @@
 from flask import Flask, render_template, request, jsonify
 from .models import Game, InvalidModelError
 import sys
+import logging
 
 app = Flask("makeme_admin")
+logging.basicConfig(filename="app.log")
+logger = logging.getLogger("megagame_editor")
+logger.setLevel(logging.DEBUG)
 
 def site():
     site = {}
@@ -31,7 +35,7 @@ def edit_game(filename):
     if request.method == "POST":
         # assumption: if you posted data to this route, it is
         # valid json. gorrammit.
-        game.update(**request.form)
+        game.update(**request.get_json(force=True))
         if not game.validate():
             errors = game.errors
         else:

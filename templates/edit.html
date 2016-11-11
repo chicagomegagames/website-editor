@@ -7,19 +7,23 @@
         <h2>body</h2>
         <textarea name="content">{{model.markdown|safe}}</textarea>
 
-        <h2>required meta</h2>
-        {% for key, value in required_meta.items() -%}
-        <label for="required_meta[{{key}}]">{{key}}: </label>
-        <input type="text" name="required_meta[{{key}}]" value="{{value|safe}}" data-metadata-name="{{key}}" data-metadata-type="value" />
-        <br />
-        {% endfor -%}
-
-        <h2>other meta</h2>
-        <table id="other_meta">
+        <h2>meta</h2>
+        <table id="meta">
             <tr>
                 <th>Key</th>
                 <th>Value</th>
             </tr>
+            {% for key, value in required_meta.items() -%}
+            <tr>
+                <td>
+                    <label for="required_meta[{{key}}]">{{key}}</label>
+                </td>
+                <td>
+                    <input type="text" name="required_meta[{{key}}]" value="{{value|safe}}" data-metadata-name="{{key}}" data-metadata-type="value" />
+                </td>
+            </tr>
+            {% endfor -%}
+
             {% for key, value in other_meta.items() -%}
             <tr>
                 <td>

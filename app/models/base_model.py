@@ -2,6 +2,9 @@ import markdown2
 import os
 import os.path
 import yaml
+import logging
+
+logger = logging.getLogger("megagame_editor")
 
 class InvalidModelError(Exception):
     def __init__(self, reason, model):
@@ -27,6 +30,9 @@ class BaseModel():
         self.__valid = False
         self.errors = []
 
+    def __str__(self):
+        return "<{cls}: {path}>".format(cls=self.__class__.__name__, path=self.path)
+
     def parse_page(self):
         contents = ""
         with open(self.path) as f:
@@ -45,7 +51,11 @@ class BaseModel():
             "required_meta": self.REQUIRED_META,
         }
 
+    def __regenerate_markdown(self):
+        self.content = markdown2.markdown(self.markdown, extras=["fenced-code-blocks", "smarty-pants"])
+
     def validate(self):
+        logger.debug("Validating {0}".format(str(self)))
         self.errors = []
         for key in self.REQUIRED_META:
             if key not in self.metadata or not self.metadata[key]:
@@ -53,22 +63,6 @@ class BaseModel():
 
         self.__valid = self.errors == []
         return self.__valid
-
-    def save(self):
-        self.validate()
-
-        if not self.__changed or not self.__valid:
-            return False
-
-        with open(self.path, "r+") as f:
-            f.seek(0)
-            f.write("---\n")
-            f.write(yaml.dump(self.metadata, default_flow_style=False))
-            f.write("---\n\n")
-            f.write(self.content)
-            f.truncate()
-
-        return True
 
     def update(self, **kwargs):
         if "metadata" in kwargs:
@@ -79,4 +73,23 @@ class BaseModel():
         if "markdown" in kwargs:
             if self.markdown != kwargs["markdown"]:
                 self.markdown = kwargs["markdown"]
+                self.__regenerate_markdown()
                 self.__changed = True
+
+    def save(self):
+        self.validate()
+
+        if not self.__changed or not self.__valid:
+            return False
+
+        logger.debug("Saving {0}".format(str(self)))
+        with open(self.path, "r+") as f:
+            f.seek(0)
+            f.write("---\n")
+            f.write(yaml.dump(self.metadata, default_flow_style=False))
+            f.write("---\n\n")
+            f.write(self.markdown)
+            f.truncate()
+
+        return True
+
