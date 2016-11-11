@@ -18,9 +18,33 @@ body {
     max-width: 700px; }
   .page textarea {
     width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid black;
     max-width: 700px;
     height: 20em;
     font-family: "Source Code Pro", monospace;
     font-size: 1em; }
+  .page input {
+    font-size: 1em;
+    font-family: "Source Code Pro", monospace; }
+  .page input[type=text] {
+    border: 1px solid black;
+    padding: 5px; }
+  .page table#meta {
+    width: 100%;
+    max-width: 700px; }
+    .page table#meta input {
+      width: 100%; }
+    .page table#meta tr td:nth-child(2n -1) {
+      text-align: right;
+      box-sizing: border-box;
+      width: 30%; }
+      .page table#meta tr td:nth-child(2n -1) input {
+        text-align: right;
+        width: calc(100% - 20px); }
+      .page table#meta tr td:nth-child(2n -1)::after {
+        content: ":";
+        width: 10px; }
 
 /*# sourceMappingURL=main.css.map */
