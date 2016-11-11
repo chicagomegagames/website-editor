@@ -11,7 +11,26 @@ document.addEventListener("DOMContentLoaded", function(evt) {
 });
 
 function page_alert(message) {
-  alert(message);
+  var notifications = document.querySelector("#notifications");
+  var notification = document.createElement("div");
+  notification.setAttribute("class", "notification");
+
+  var textElement = document.createElement("p");
+  textElement.appendChild(document.createTextNode(message));
+  notification.appendChild(textElement);
+  notification.style.height = 0;
+
+  notifications.appendChild(notification);
+  height = textElement.offsetHeight;
+  notification.style.height = height;
+
+  window.setTimeout(function() {
+    notification.style.height = 0;
+    window.setTimeout(function() {
+      notification.remove();
+    }, 2000);
+  }, 5000);
+
 }
 
 function load_form(form) {

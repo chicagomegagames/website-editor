@@ -21,6 +21,22 @@ body {
   width: calc(100% - 300px);
   float: right;
 
+  #notifications {
+    .notification {
+      box-sizing: border-box;
+      background: rgb(139, 255, 15);
+      overflow-y: hidden;
+
+      transition: height 1s;
+
+      p {
+        padding: 10px 20px;
+        overflow-y: hidden;
+        margin: 0;
+      }
+    }
+  }
+
   p {
     max-width: 700px;
   }

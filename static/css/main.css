@@ -14,6 +14,15 @@ body {
 .page {
   width: calc(100% - 300px);
   float: right; }
+  .page #notifications .notification {
+    box-sizing: border-box;
+    background: #8bff0f;
+    overflow-y: hidden;
+    transition: height 1s; }
+    .page #notifications .notification p {
+      padding: 10px 20px;
+      overflow-y: hidden;
+      margin: 0; }
   .page p {
     max-width: 700px; }
   .page textarea {
