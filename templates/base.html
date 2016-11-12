@@ -18,7 +18,15 @@
       <h2>editor</h2>
       <ul>
         <li><a href="/danger">Danger Zone</a></li>
-        <li><a href="https://chicagomegagames.com">Live Site</a></li>
+
+        {%- if site.config.deploy_locations is defined -%}
+        <li><strong>Live Versions</strong></li>
+        <ul>
+          {%- for shortname, extras in site.config.deploy_locations.items() %}
+          <li><a href="{{extras.url}}">{{extras.name}}</a></li>
+          {%- endfor %}
+        </ul>
+        {%- endif -%}
 
         {%- if site.games is defined %}
         <li><strong>Games</strong></li>

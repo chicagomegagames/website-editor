@@ -23,7 +23,6 @@ def site():
     return site
 
 def template(name, **kwargs):
-    print(site())
     return render_template(name, site=site(), **kwargs)
 
 def edit_model(model):
@@ -93,13 +92,13 @@ def edit_page(filename):
 
 @app.route("/danger")
 def danger_zone():
-    return template("danger.html")
+    return template("danger.html", title="Danger Zone")
 
 @app.route("/deploy/<location>")
 def deploy(location):
+    global global_config
     deploy_location = os.path.join(os.getcwd(), "deploy", location)
-    print(deploy_location)
-    publish_site(location=deploy_location, theme="megagames")
+    publish_site(location=deploy_location, theme=global_config["theme"])
 
     return redirect(url_for("danger_zone"))
 
