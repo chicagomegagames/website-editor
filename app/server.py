@@ -60,6 +60,11 @@ def edit_model(model):
 
     return template("edit.html", model=model, required_meta=required_meta, other_meta=other_meta, errors=errors)
 
+def is_delete_request():
+    if request.method == "POST" and "_method" in request.form:
+        return request.form["_method"] == "DELETE"
+    return False
+
 @app.route("/")
 def index():
     games = Game.all()
@@ -69,7 +74,7 @@ def index():
 def game(filename):
     game = Game(filename)
 
-    if request.method == "DELETE":
+    if is_delete_request():
         game.delete()
         return redirect(url_for("index"))
 
@@ -94,6 +99,12 @@ def page(filename):
 @app.route("/page/<filename>/edit", methods=["GET", "POST"])
 def edit_page(filename):
     return edit_model(Page(filename))
+
+@app.route("/page/new/<filename>", methods=["POST"])
+def new_page(filename):
+    page = Page.create(filename)
+    response = {"success": True, "edit_path": url_for("edit_page", filename=page.filename)}
+    return jsonify(**response)
 
 @app.route("/danger")
 def danger_zone():

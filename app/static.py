@@ -31,7 +31,6 @@ def publish_site(location=os.path.join(os.getcwd(), "_site"), theme="default"):
             layout = "default.html"
 
         template = templ_env.get_template(layout)
-        print(output_file)
         with open(output_file, "w+") as writer:
             writer.write(template.render(site=site, page=page))
 

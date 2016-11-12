@@ -6,39 +6,76 @@ document.addEventListener("DOMContentLoaded", function(evt) {
 
   var add_game = document.querySelector("#new_game");
   if (add_game) {
-    load_add_game(add_game);
+    add_game.addEventListener("click", function(evt) {
+      evt.preventDefault();
+      new_file("/game/new/")
+    });
   }
+
+  var add_page = document.querySelector("#new_page");
+  if (add_page) {
+    add_page.addEventListener("click", function(evt) {
+      evt.preventDefault();
+      new_file("/page/new/");
+    });
+  }
+
+  var delete_links = document.querySelectorAll("a[data-method=delete]");
+  delete_links.forEach(function(link) {
+    setup_delete_link(link);
+  });
 });
 
+function new_file(xhr_location) {
+  var filename = prompt("Filename");
+  if (filename.substr("-3") !== ".md") {
+    filename = filename + ".md"
+  }
 
-function load_add_game(add_game) {
-  add_game.addEventListener("click", function(evt) {
+  punctuation = new RegExp("[\W_]+", "g")
+  spaces = new RegExp(" ", "g")
+  filename = filename.replace(punctuation, "_");
+  filename = filename.replace(spaces, "_");
+  filename = filename.toLowerCase();
+
+  var xhr = new XMLHttpRequest()
+  xhr.addEventListener("load", function(evt) {
+    console.log(xhr.response);
+    var response = JSON.parse(xhr.response);
+    if (response.success === true) {
+      page_alert("successfully created file!");
+      window.location = response.edit_path
+    }
+  });
+
+  xhr.open("POST", xhr_location + filename, true);
+  xhr.overrideMimeType("application/json");
+  xhr.send();
+}
+
+function setup_delete_link(link) {
+  var path = link.getAttribute("href");
+  var form = document.createElement("form");
+  form.setAttribute("method", "POST");
+  form.setAttribute("action", path);
+
+  var method_field = document.createElement("input");
+  method_field.setAttribute("type", "hidden");
+  method_field.setAttribute("name", "_method");
+  method_field.setAttribute("value", "DELETE");
+
+  form.appendChild(method_field);
+  document.body.appendChild(form);
+
+  console.log("delete path");
+  console.log(path)
+
+  link.addEventListener("click", function(evt) {
     evt.preventDefault();
 
-    var filename = prompt("Filename");
-    if (filename.substr("-3") !== ".md") {
-      filename = filename + ".md"
+    if (confirm("Actually delete file?")) {
+      form.submit();
     }
-
-    punctuation = new RegExp("[\W_]+", "g")
-    spaces = new RegExp(" ", "g")
-    filename = filename.replace(punctuation, "_");
-    filename = filename.replace(spaces, "_");
-    filename = filename.toLowerCase();
-
-    var xhr = new XMLHttpRequest()
-    xhr.addEventListener("load", function(evt) {
-      console.log(xhr.response);
-      var response = JSON.parse(xhr.response);
-      if (response.success === true) {
-        page_alert("successfully created new game!");
-        window.location = response.edit_path
-      }
-    });
-
-    xhr.open("POST", "/game/new/" + filename, true);
-    xhr.overrideMimeType("application/json");
-    xhr.send();
   });
 }
 
