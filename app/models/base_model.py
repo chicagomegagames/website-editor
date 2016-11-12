@@ -15,7 +15,20 @@ class BaseModel():
         path = os.path.join(cls.BASE_CONTENT_DIR, cls.CONTENT_DIR)
         return [cls(filename) for filename in os.listdir(path)]
 
-    def __init__(self, filename):
+    @classmethod
+    def create(cls, filename):
+        path = os.path.join(cls.BASE_CONTENT_DIR, cls.CONTENT_DIR, filename)
+        dummy_meta = {}
+        for meta in cls.REQUIRED_META:
+            dummy_meta[meta] = None
+        with open(path, "w+") as writer:
+            writer.write("---\n")
+            writer.write(yaml.dump(dummy_meta, default_flow_style=False))
+            writer.write("---\n\n")
+        model = cls(filename)
+        return model
+
+    def __init__(self, filename, **kwargs):
         self.filename = filename
         self.path = os.path.join(self.BASE_CONTENT_DIR, self.CONTENT_DIR, filename)
         self.parse_page()

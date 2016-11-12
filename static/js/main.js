@@ -4,11 +4,43 @@ document.addEventListener("DOMContentLoaded", function(evt) {
     load_form(edit_form);
   }
 
-  var add_game = document.querySelector("#add_game");
+  var add_game = document.querySelector("#new_game");
   if (add_game) {
     load_add_game(add_game);
   }
 });
+
+
+function load_add_game(add_game) {
+  add_game.addEventListener("click", function(evt) {
+    evt.preventDefault();
+
+    var filename = prompt("Filename");
+    if (filename.substr("-3") !== ".md") {
+      filename = filename + ".md"
+    }
+
+    punctuation = new RegExp("[\W_]+", "g")
+    spaces = new RegExp(" ", "g")
+    filename = filename.replace(punctuation, "_");
+    filename = filename.replace(spaces, "_");
+    filename = filename.toLowerCase();
+
+    var xhr = new XMLHttpRequest()
+    xhr.addEventListener("load", function(evt) {
+      console.log(xhr.response);
+      var response = JSON.parse(xhr.response);
+      if (response.success === true) {
+        page_alert("successfully created new game!");
+        window.location = response.edit_path
+      }
+    });
+
+    xhr.open("POST", "/game/new/" + filename, true);
+    xhr.overrideMimeType("application/json");
+    xhr.send();
+  });
+}
 
 function page_alert(message) {
   var notifications = document.querySelector("#notifications");

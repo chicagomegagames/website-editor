@@ -79,6 +79,11 @@ def game(filename):
 def edit_game(filename):
     return edit_model(Game(filename))
 
+@app.route("/game/new/<filename>", methods=["POST"])
+def new_game(filename):
+    game = Game.create(filename)
+    response = {"success": True, "edit_path": url_for("edit_game", filename=game.filename)}
+    return jsonify(**response)
 
 @app.route("/page/<filename>")
 def page(filename):
