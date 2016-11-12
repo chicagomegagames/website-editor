@@ -6,11 +6,6 @@ import logging
 
 logger = logging.getLogger("megagame_editor")
 
-class InvalidModelError(Exception):
-    def __init__(self, reason, model):
-        self.reason = reason
-        super().__init__("{reason}\n\tin <{classname}: {filename}>".format(reason=reason, classname=model.__class__.__name__, filename=model.filename))
-
 class BaseModel():
     BASE_CONTENT_DIR = "content"
     REQUIRED_META = []
