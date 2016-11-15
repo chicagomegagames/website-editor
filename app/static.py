@@ -5,7 +5,14 @@ from .models import Game, Page
 
 def publish_site(location=os.path.join(os.getcwd(), "_site"), theme="default"):
     if os.path.exists(location):
-        shutil.rmtree(location)
+        #shutil.rmtree(location)
+        root, dirs, files = next(os.walk(location))
+        for d in dirs:
+            shutil.rmtree(os.path.join(root, d))
+
+        for f in files:
+            os.remove(os.path.join(root, f))
+
     make_directory_tree(location)
 
     theme_dir = os.path.join(os.getcwd(), "content", "themes", theme)
