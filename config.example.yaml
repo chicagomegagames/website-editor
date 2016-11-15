@@ -5,3 +5,7 @@ deploy_locations:
         url: "http://localhost:8000"
 
 theme: megagames
+debug: true
+host: 0.0.0.0
+
+content_directory: "/Users/don/code/megagame/site_playground/content2"

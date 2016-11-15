@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-from .models import Game, Page
+from .models import BaseModel, Game, Page
 from .static import publish_site
 import logging
 import os
@@ -7,10 +7,6 @@ import sys
 
 app = Flask("magegame editor")
 global global_config
-
-logging.basicConfig(filename="app.log")
-logger = logging.getLogger("megagame_editor")
-logger.setLevel(logging.DEBUG)
 
 def site():
     global global_config
@@ -121,4 +117,17 @@ def deploy(location):
 def run_app(config={}):
     global global_config
     global_config = config
-    app.run(debug=True)
+    if "debug" in config:
+        debug = config["debug"]
+    else:
+        debug = False
+
+    if "host" in config:
+        host = config["host"]
+    else:
+        host = "0.0.0.0"
+
+    if "content_directory" in config:
+        BaseModel.set_base_dir(config["content_directory"])
+
+    app.run(debug=debug, host=host)

@@ -4,11 +4,13 @@ import os.path
 import yaml
 import logging
 
-logger = logging.getLogger("megagame_editor")
-
 class BaseModel():
     BASE_CONTENT_DIR = "content"
     REQUIRED_META = []
+
+    @classmethod
+    def set_base_dir(cls, directory):
+        cls.BASE_CONTENT_DIR = directory
 
     @classmethod
     def all(cls):
@@ -61,7 +63,6 @@ class BaseModel():
         self.content = markdown2.markdown(self.markdown, extras=["fenced-code-blocks", "smarty-pants"])
 
     def validate(self):
-        logger.debug("Validating {0}".format(str(self)))
         self.errors = []
         for key in self.REQUIRED_META:
             if key not in self.metadata or not self.metadata[key]:
@@ -88,7 +89,6 @@ class BaseModel():
         if not self.__changed or not self.__valid:
             return False
 
-        logger.debug("Saving {0}".format(str(self)))
         with open(self.path, "r+") as f:
             f.seek(0)
             f.write("---\n")
