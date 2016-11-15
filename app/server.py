@@ -109,8 +109,11 @@ def danger_zone():
 @app.route("/deploy/<location>")
 def deploy(location):
     global global_config
-    deploy_location = os.path.join(os.getcwd(), "deploy", location)
-    publish_site(location=deploy_location, theme=global_config["theme"])
+    #deploy_location = os.path.join(os.getcwd(), "deploy", location)
+    if location not in global_config["deploy_locations"]:
+        abort(500)
+
+    publish_site(location=global_config["deploy_locations"][location]["location"], theme=global_config["theme"])
 
     return redirect(url_for("danger_zone"))
 
@@ -129,5 +132,8 @@ def run_app(config={}):
 
     if "content_directory" in config:
         BaseModel.set_base_dir(config["content_directory"])
+
+    if "deploy_locations" not in config:
+        config["deploy_locations"] = {}
 
     app.run(debug=debug, host=host)
