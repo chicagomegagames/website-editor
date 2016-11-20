@@ -36,15 +36,34 @@ def publish_site(location=os.path.join(os.getcwd(), "_site"), theme="default"):
         if "layout" in page.metadata:
             layout = page.metadata["layout"]
         else:
-            layout = "default.html"
+            layout = "page.html"
 
         template = templ_env.get_template(layout)
         with open(output_file, "w+") as writer:
             writer.write(template.render(site=site, page=page))
 
+    for game in games:
+        slug = game.metadata["slug"]
+        if slug[0] == "/":
+            slug = slug[1:]
+
+        output_directory = os.path.join(location, "games", slug)
+        output_file = os.path.join(output_directory, "index.html")
+        make_directory_tree(output_directory)
+
+        if "layout" in game.metadata:
+            layout = game.metadata["layout"]
+        else:
+            layout = "page.html"
+
+        template = templ_env.get_template(layout)
+        with open(output_file, "w+") as writer:
+            writer.write(template.render(site=site, page=game))
+
     assets_dir = os.path.join(theme_dir, "assets")
     if os.path.exists(assets_dir):
         shutil.copytree(assets_dir, os.path.join(location, "assets"))
+
 
 def make_directory_tree(path):
     if not os.path.exists(path):
