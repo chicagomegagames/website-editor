@@ -4,7 +4,7 @@ class Page(BaseModel):
     CONTENT_DIR = "pages"
     REQUIRED_META = list(BaseModel.REQUIRED_META)
     REQUIRED_META.extend([
-        "title",
+        "name",
         "slug",
         "layout",
     ])
