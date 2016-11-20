@@ -7,6 +7,7 @@ import logging
 class BaseModel():
     BASE_CONTENT_DIR = "content"
     REQUIRED_META = []
+    OPTIONAL_META = []
 
     @classmethod
     def set_base_dir(cls, directory):
@@ -57,6 +58,7 @@ class BaseModel():
             "markdown": self.markdown,
             "metadata": self.metadata,
             "required_meta": self.REQUIRED_META,
+            "optional_meta": self.OPTIONAL_META,
         }
 
     def __regenerate_markdown(self):

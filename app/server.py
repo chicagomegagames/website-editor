@@ -42,19 +42,7 @@ def edit_model(model):
 
         return jsonify(**response)
 
-    required_meta = {}
-    other_meta = {}
-    for key, value in model.metadata.items():
-        if key in model.REQUIRED_META:
-            required_meta[key] = value
-        else:
-            other_meta[key] = value
-
-    for key in model.REQUIRED_META:
-        if key not in required_meta:
-            required_meta[key] = None
-
-    return template("edit.html", model=model, required_meta=required_meta, other_meta=other_meta, errors=errors)
+    return template("edit.html", model=model, required_meta=model.REQUIRED_META, optional_meta=model.OPTIONAL_META, errors=errors)
 
 def is_delete_request():
     if request.method == "POST" and "_method" in request.form:

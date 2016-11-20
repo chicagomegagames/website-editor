@@ -40,19 +40,21 @@ body {
   .page input[type=text] {
     border: 1px solid black;
     padding: 5px; }
-  .page table#meta {
+  .page table.meta {
     width: 100%;
     max-width: 700px; }
-    .page table#meta input {
+    .page table.meta input {
       width: 100%; }
-    .page table#meta tr td:nth-child(2n -1) {
+    .page table.meta td {
+      vertical-align: baseline; }
+    .page table.meta tr td:nth-child(2n -1) {
       text-align: right;
       box-sizing: border-box;
       width: 30%; }
-      .page table#meta tr td:nth-child(2n -1) input {
+      .page table.meta tr td:nth-child(2n -1) input {
         text-align: right;
         width: calc(100% - 20px); }
-      .page table#meta tr td:nth-child(2n -1)::after {
+      .page table.meta tr td:nth-child(2n -1)::after {
         content: ":";
         width: 10px; }
 
