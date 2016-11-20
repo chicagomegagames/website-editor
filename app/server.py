@@ -76,7 +76,7 @@ def new_game(filename):
 
 @app.route("/page/<filename>")
 def page(filename):
-    page= Page(filename)
+    page = Page(filename)
 
     return template("model.html", model=page, prefix="page")
 
