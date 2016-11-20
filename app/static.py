@@ -1,7 +1,7 @@
 import os
 import jinja2
 import shutil
-from .models import Game, Page
+from .models import Game, Page, Event
 
 def publish_site(location=os.path.join(os.getcwd(), "_site"), theme="default"):
     if os.path.exists(location):
@@ -21,7 +21,8 @@ def publish_site(location=os.path.join(os.getcwd(), "_site"), theme="default"):
 
     pages = Page.all()
     games = Game.all()
-    site = {"games": games, "pages": pages}
+    calendar = Event.future_events()
+    site = {"games": games, "pages": pages, "calendar": calendar}
 
     for page in pages:
         slug = page.metadata["slug"]

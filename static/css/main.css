@@ -58,4 +58,10 @@ body {
         content: ":";
         width: 10px; }
 
+table {
+  max-width: 700px;
+  width: 100%; }
+  table td {
+    vertical-align: top; }
+
 /*# sourceMappingURL=main.css.map */

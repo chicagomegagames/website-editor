@@ -18,21 +18,19 @@
 <h2>Upcoming Events</h2>
 
 <table class="upcoming">
-  {% for event in site.calendar.upcoming_events %}
+  {% for event in site.calendar %}
   <tr>
     <td>
-      {{ event.date }}
-      {%- if event.time is defined %}<br />{{ event.time }}{%- endif %}
+      {{ event.metadata.date }}
+      {%- if event.metadata.time is defined %}<br />{{ event.metadata.time }}{%- endif %}
     </td>
     <td>
       <p>
-        <strong>{{ event.name }}</strong> <br>
-        {{ event.location }}
+        <strong>{{ event.metadata.name }}</strong> <br>
+        {{ event.metadata.location }}
       </p>
 
-      {%- if event.description is defined %}
-      {{ event.description }}
-      {% endif -%}
+      {{ event.content }}
     </td>
   </tr>
   {% endfor %}

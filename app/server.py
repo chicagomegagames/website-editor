@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-from .models import BaseModel, Game, Page
+from .models import BaseModel, Game, Page, Event
 from .static import publish_site
 import logging
 import os
@@ -89,6 +89,11 @@ def new_page(filename):
     page = Page.create(filename)
     response = {"success": True, "edit_path": url_for("edit_page", filename=page.filename)}
     return jsonify(**response)
+
+@app.route("/events/")
+def all_events():
+    events = Event.all()
+    return template("events.html", events=events)
 
 @app.route("/danger")
 def danger_zone():
