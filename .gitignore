@@ -10,3 +10,4 @@ app.log
 *.css.map
 deploy
 config.yaml
+*.retry
