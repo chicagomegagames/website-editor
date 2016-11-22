@@ -24,8 +24,7 @@ class Event(BaseModel):
 
     @classmethod
     def future_events(cls):
-        #events = sorted(cls.all(), key=lambda event: event.date)
-        return [event for event in events if event.future_event]
+        return [event for event in cls.all() if event.future_event]
 
     @classmethod
     def create(cls):
