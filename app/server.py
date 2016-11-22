@@ -13,6 +13,7 @@ def create_app(config = {}):
     config_function = site_config(config)
     app.register_blueprint(Game._app_blueprint(site_config=config_function))
     app.register_blueprint(Page._app_blueprint(site_config=config_function))
+    app.register_blueprint(Event._app_blueprint(site_config=config_function))
 
 
     def template(name, **kwargs):
@@ -21,11 +22,6 @@ def create_app(config = {}):
     @app.route("/")
     def index():
         return template("index.html")
-
-    @app.route("/events/")
-    def all_events():
-        events = Event.all()
-        return template("events.html", events=events)
 
     @app.route("/danger")
     def danger_zone():
