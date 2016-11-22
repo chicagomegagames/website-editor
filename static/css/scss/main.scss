@@ -1,5 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700');
+
+$font-main: "Source Code Pro", monospace;
+$font-size: 16px;
+$line-height: 1.5em;
+$width: 800px;
+
 body {
-  font-family: "Source Code Pro", monospace;
+  font-family: $font-main;
+  font-size: $font-size;
+  line-height: $line-height;
+}
+
+a {
+  color: #4dadf7;
 }
 
 .sidebar {
@@ -38,7 +51,8 @@ body {
   }
 
   p {
-    max-width: 700px;
+    max-width: $width;
+    margin: 0 0 $line-height;
   }
 
   textarea {
@@ -47,7 +61,7 @@ body {
     padding: 10px;
     border: 1px solid black;
 
-    max-width: 700px;
+    max-width: $width;
     height: 20em;
 
     font-family: "Source Code Pro", monospace;
@@ -66,7 +80,7 @@ body {
 
   table.meta {
     width: 100%;
-    max-width: 700px;
+    max-width: $width;
 
     input {
       width: 100%;
@@ -95,8 +109,9 @@ body {
 }
 
 table {
-  max-width: 700px;
+  max-width: $width;
   width: 100%;
+  font-size: $font-size;
 
   td {
     vertical-align: top;
