@@ -11,3 +11,6 @@ app.log
 deploy
 config.yaml
 *.retry
+content/games
+content/pages
+content/events
