@@ -10,7 +10,7 @@ class Game(BaseModel):
     ])
 
     OPTIONAL_META = [
-        "hero_imgage",
+        "hero_image",
         "hero_alt",
         "hero_caption",
         "layout"
