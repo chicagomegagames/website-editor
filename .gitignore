@@ -9,3 +9,4 @@ __pycache__
 app.log
 *.css.map
 deploy
+config.yaml
