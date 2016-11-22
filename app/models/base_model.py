@@ -1,11 +1,12 @@
+from flask import Blueprint, render_template, request, jsonify
 import markdown2
 import os
 import os.path
 import yaml
-import logging
 
 class BaseModel():
     BASE_CONTENT_DIR = "content"
+    ROUTE_PREFIX = ""
     REQUIRED_META = []
     OPTIONAL_META = []
 
@@ -49,7 +50,7 @@ class BaseModel():
 
         content_splits = contents.split("---")
         metadata = content_splits[1]
-        markdown = "---".join(content_splits[2:])
+        markdown = ("---".join(content_splits[2:])).strip()
 
         parsed_html = markdown2.markdown(markdown, extras=["fenced-code-blocks", "smarty-pants"])
 
@@ -107,3 +108,63 @@ class BaseModel():
 
     def delete(self):
         os.remove(self.path)
+
+    @classmethod
+    def _app_blueprint(cls, site_config = {}):
+        blueprint = Blueprint(cls.ROUTE_PREFIX, __name__, url_prefix = "/{}".format(cls.ROUTE_PREFIX))
+
+        def _is_delete_request(request):
+            if request.method == "POST" and "_method" in request.form:
+                return request.form["_method"] == "DELETE"
+            return False
+
+        def template(name, **kwargs):
+            if callable(site_config):
+                config = site_config()
+            else:
+                config = site_config
+
+            return render_template(name, site=config, prefix=cls.ROUTE_PREFIX, **kwargs)
+
+        @blueprint.route("/<filename>", methods=["GET", "POST"])
+        def show(filename):
+            model = cls(filename)
+
+            if _is_delete_request(request):
+                model.delete()
+                return redirect(url_for("index"))
+
+            return template("model.html", model=model)
+
+        @blueprint.route("/<filename>/edit", methods=["GET", "POST"])
+        def edit(filename):
+            model = cls(filename)
+
+            errors = []
+            if request.method == "POST":
+                # assumption: if you posted data to this route, it is
+                # valid json. gorrammit.
+                model.update(**request.get_json(force=True))
+                if not model.validate():
+                    errors = model.errors
+                else:
+                    model.save()
+
+                response = {}
+                if errors != []:
+                    response["errors"] = errors
+                    response["success"] = False
+                else:
+                    response["success"] = True
+                    response["model"] = model.serialize()
+
+                return jsonify(**response)
+
+            return template("edit.html", model=model, required_meta=model.REQUIRED_META, optional_meta=model.OPTIONAL_META, errors=[])
+
+        @blueprint.route("/new/<filename>", methods=["POST"])
+        def new(filename):
+            model = cls.create(filename)
+            return jsonify(success=True, edit_path=url_for(".edit", filename=model.filename))
+
+        return blueprint
