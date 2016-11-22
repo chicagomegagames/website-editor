@@ -1,6 +1,6 @@
 ---
 name: Watch the Skies
-image: gwp_wts.jpg
+slug: watch_the_skies
 ---
 
 The year is 2020. and while there are still no _Back to the Future II_&ndash;style hoverboards, there have been more than a few aliens buming around Earth for a few decades.

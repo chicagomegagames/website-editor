@@ -1,7 +1,10 @@
 ---
-title: Chicago MegaGames
-slug: /
+hero_alt: ''
+hero_caption: ''
+hero_image: ''
 layout: index.html
+name: Chicago MegaGames
+slug: /about/
 ---
 
 Chicago MegaGames is a volunteer organization dedicated to designing, developing, and running games with 20 players or more.
