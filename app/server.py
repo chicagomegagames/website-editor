@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
+from raven.contrib.flask import Sentry
 from .models import BaseModel, Game, Page, Event
 from .static import publish_site
 import os
@@ -6,6 +7,8 @@ import sys
 
 def create_app(config = {}):
     app = Flask("megagame editor")
+    if "sentry_dns" in config:
+        sentry = Sentry(app, dsn=config["sentry_dns"])
 
     config_function = site_config(config)
     app.register_blueprint(Game._app_blueprint(site_config=config_function))
