@@ -1,0 +1,33 @@
+---
+- hosts: all
+  tasks:
+    - name: Own the git repo
+      file:
+        path: /tmp/git_repos/website_editor
+        state: directory
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_id }}"
+      become: yes
+      become_user: root
+      become_method: sudo
+
+    - name: get the latest version of the editor
+      git:
+        repo: "git@gitlab.com:megagames/website-editor.git"
+        dest: /tmp/git_repos/website-editor
+        accept_hostkey: yes
+        ssh_opts: -o ForwardAgent=yes
+
+    - name: synchronize the source to the working directory
+      shell: 'rsync -avz --exclude=".*" --delete /tmp/git_repos/website-editor/ /home/manager/megagame_manager/current'
+      become: yes
+      become_user: manager
+      become_method: sudo
+
+    - name: restart megagame_manager
+      systemd:
+        name: megagame_manager
+        state: restarted
+      become: yes
+      become_user: root
+      become_method: sudo
