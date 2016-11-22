@@ -47,11 +47,15 @@ class BaseModel():
         with open(self.path) as f:
             contents = "".join(f)
 
-        parsed_file = markdown2.markdown(contents, extras=["fenced-code-blocks", "metadata", "smarty-pants"])
+        content_splits = contents.split("---")
+        metadata = content_splits[1]
+        markdown = "---".join(content_splits[2:])
 
-        self.content = u"{parsed}".format(parsed=parsed_file)
-        self.markdown = "---".join(contents.split("---")[2:]).strip()
-        self.metadata = parsed_file.metadata
+        parsed_html = markdown2.markdown(markdown, extras=["fenced-code-blocks", "smarty-pants"])
+
+        self.content = u"{parsed}".format(parsed=parsed_html)
+        self.markdown = markdown
+        self.metadata = yaml.load(metadata)
 
     def serialize(self):
         return {
