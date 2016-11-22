@@ -3,10 +3,17 @@
 {% block main %}
     <h1>Events</h1>
 
+    <ul>
+        <li><a href="/events/new">New Event</a></li>
+    </ul>
+
     <table>
     {% for event in events %}
         <tr>
             <td>
+                {% if not event.future_event %}
+                <p><strong>PAST EVENT</strong></p>
+                {% endif %}
                 <p>
                     {{ event.metadata.date }}
                     {%- if event.metadata.time is defined %}<br />
@@ -22,6 +29,11 @@
 
                 {{ event.content|safe }}
             </td>
+            <td>
+                <ul>
+                    <li><a href="/{{prefix}}/{{event.filename}}/edit">edit</a></li>
+                    <li><a href="/{{prefix}}/{{event.filename}}" data-method="delete">delete</a></li>
+                </ul>
         </tr>
         {% endfor %}
     </table>
