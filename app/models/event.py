@@ -62,7 +62,7 @@ class Event(BaseModel):
 
         @blueprint.errorhandler(FileNotFoundError)
         def file_not_found(error):
-            return template("404.html")
+            return template("404.html"), 404
 
         @blueprint.route("/")
         def all():

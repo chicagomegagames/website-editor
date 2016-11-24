@@ -128,7 +128,7 @@ class BaseModel():
 
         @blueprint.errorhandler(FileNotFoundError)
         def file_not_found(error):
-            return template("404.html")
+            return template("404.html"), 404
 
         @blueprint.route("/<filename>", methods=["GET", "POST"])
         def show(filename):
