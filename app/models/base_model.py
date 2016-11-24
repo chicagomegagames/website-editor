@@ -113,9 +113,9 @@ class BaseModel():
     def _app_blueprint(cls, site_config = {}):
         blueprint = Blueprint(cls.ROUTE_PREFIX, __name__, url_prefix = "/{}".format(cls.ROUTE_PREFIX))
 
-        def _is_delete_request(request):
-            if request.method == "POST" and "_method" in request.form:
-                return request.form["_method"] == "DELETE"
+        def _is_delete_request(req):
+            if req.method == "POST" and "_method" in req.form:
+                return req.form["_method"] == "DELETE"
             return False
 
         def template(name, **kwargs):
@@ -125,6 +125,10 @@ class BaseModel():
                 config = site_config
 
             return render_template(name, site=config, prefix=cls.ROUTE_PREFIX, **kwargs)
+
+        @blueprint.errorhandler(FileNotFoundError)
+        def file_not_found(error):
+            return template("404.html")
 
         @blueprint.route("/<filename>", methods=["GET", "POST"])
         def show(filename):

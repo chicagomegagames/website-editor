@@ -60,6 +60,10 @@ class Event(BaseModel):
 
             return render_template(name, site=config, prefix=cls.ROUTE_PREFIX, **kwargs)
 
+        @blueprint.errorhandler(FileNotFoundError)
+        def file_not_found(error):
+            return template("404.html")
+
         @blueprint.route("/")
         def all():
             return template("events.html", events=Event.all())
