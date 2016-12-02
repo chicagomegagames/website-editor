@@ -9,8 +9,14 @@
 
     <h2>meta</h2>
     <ul>
-        {% for key, value in model.metadata.items() -%}
-        <li><strong>{{key}}</strong>: {{value}}</li>
+        {% for name, information in model.meta().items() -%}
+        {%- if information.type == "image" -%}
+        <li><strong>{{name}}</strong>
+            <br /><img src="{{information.value}}" />
+        </li>
+        {%- else -%}
+        <li><strong>{{name}}</strong>: {{information.value}}</li>
+        {% endif %}
         {%- endfor %}
     </ul>
 

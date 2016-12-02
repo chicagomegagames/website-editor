@@ -43,6 +43,18 @@ class BaseModel():
     def __str__(self):
         return "<{cls}: {path}>".format(cls=self.__class__.__name__, path=self.path)
 
+    def meta(self):
+        meta = {}
+        for name, info in self.REQUIRED_META.items():
+            meta[name] = {"value": self.metadata[name], "type": info["type"]}
+
+        for name, info in self.OPTIONAL_META.items():
+            if name not in self.metadata or not self.metadata[name]:
+                continue
+            meta[name] = {"value": self.metadata[name], "type": info["type"]}
+
+        return meta
+
     def parse_page(self):
         contents = ""
         with open(self.path) as f:
@@ -99,7 +111,10 @@ class BaseModel():
         with open(self.path, "r+") as f:
             f.seek(0)
             f.write("---\n")
-            f.write(yaml.dump(self.metadata, default_flow_style=False))
+            f.write(yaml.dump(
+                {key: value["value"] for key, value in self.meta().items()},
+                default_flow_style=False)
+            )
             f.write("---\n\n")
             f.write(self.markdown)
             f.truncate()

@@ -8,15 +8,15 @@ import inspect
 class Event(BaseModel):
     CONTENT_DIR = "events"
     ROUTE_PREFIX = "events"
-    REQUIRED_META = [
-        "name",
-        "date",
-        "location",
-    ]
+    REQUIRED_META = {
+        "name": {"type": "text"},
+        "date": {"type": "text"},
+        "location": {"type": "text"},
+    }
 
-    OPTIONAL_META = [
-        "time",
-    ]
+    OPTIONAL_META = {
+        "time": {"type": "text"},
+    }
 
     @classmethod
     def all(cls):
