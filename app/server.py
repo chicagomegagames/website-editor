@@ -5,10 +5,10 @@ from .static import publish_site
 import os
 import sys
 
-def create_app(config = {}):
+def create_app(config = None):
     app = Flask("megagame editor")
-    if "sentry_dns" in config:
-        sentry = Sentry(app, dsn=config["sentry_dns"])
+    if config.use_sentry():
+        sentry = Sentry(app, dsn=config.sentry_dns)
 
     config_function = site_config(config)
     app.register_blueprint(Game._app_blueprint(site_config=config_function))
@@ -64,22 +64,8 @@ def site_config(config):
 
     return _config
 
-def run_app(config={}):
-    if "debug" in config:
-        debug = config["debug"]
-    else:
-        debug = False
-
-    if "host" in config:
-        host = config["host"]
-    else:
-        host = "0.0.0.0"
-
-    if "content_directory" in config:
-        BaseModel.set_base_dir(config["content_directory"])
-
-    if "deploy_locations" not in config:
-        config["deploy_locations"] = {}
+def run_app(config=None):
+    BaseModel.set_base_dir(config.content_directory)
 
     app = create_app(config)
-    app.run(debug=debug, host=host)
+    app.run(debug=config.debug, host=config.host, port=config.port)

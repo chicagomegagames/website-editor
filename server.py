@@ -1,3 +1,4 @@
+from app import Config
 from app.server import run_app
 import yaml
 import os
@@ -10,12 +11,7 @@ def main():
 
     args = parser.parse_args()
 
-    config = {}
-    if os.path.exists(args.config):
-        with open(args.config) as stream:
-            config = yaml.load(stream)
-
-    run_app(config=config)
+    run_app(config=Config.from_file(args.config))
 
 if __name__ == "__main__":
     main()
