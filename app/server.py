@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from raven.contrib.flask import Sentry
+from .controllers import ImageController
+from .image_service import ImageService
 from .models import BaseModel, Game, Page, Event
 from .static import publish_site
 import os
@@ -14,6 +16,9 @@ def create_app(config = None):
     app.register_blueprint(Game._app_blueprint(site_config=config_function))
     app.register_blueprint(Page._app_blueprint(site_config=config_function))
     app.register_blueprint(Event._app_blueprint(site_config=config_function))
+
+    image_service = ImageService(upload_path = config.upload_path)
+    app.register_blueprint(ImageController(image_service=image_service)._blueprint())
 
 
     def template(name, **kwargs):

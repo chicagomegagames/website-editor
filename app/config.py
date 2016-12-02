@@ -16,6 +16,7 @@ class Config(object):
         "host": "0.0.0.0",
         "port": 5000,
         "sentry_dns": None,
+        "upload_path": os.path.join(os.getcwd(), "image_uploads"),
     }
 
     @classmethod
