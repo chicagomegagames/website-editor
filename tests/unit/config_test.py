@@ -1,5 +1,6 @@
 from unittest import TestCase
 from app import Config
+from app.models import BaseModel
 from expects import *
 import os
 import tempfile
@@ -40,3 +41,11 @@ class TestConfig(TestCase):
 
         has_sentry = Config(theme="foo", sentry_dns="https://user:pass@sentry.io/application_id")
         expect(has_sentry.use_sentry()).to(be_true)
+
+    def test_content_directory_affects_content_directory(self):
+        default_config = Config(theme="foo")
+        expect(default_config.content_directory).to(equal(BaseModel.BASE_CONTENT_DIR))
+
+        tempdir = tempfile.TemporaryDirectory()
+        changed_config = Config(theme="foo", content_directory=tempdir.name)
+        expect(changed_config.content_directory).to(equal(BaseModel.BASE_CONTENT_DIR))

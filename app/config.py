@@ -1,3 +1,4 @@
+from .models import BaseModel
 import os
 import yaml
 
@@ -32,10 +33,13 @@ class Config(object):
             args = kwargs
         else:
             args = options
+
         self.config = {**self.DEFAULT_OPTIONS, **args}
 
         if "theme" not in self.config:
             raise KeyError("'theme' is a required configuration option")
+
+        BaseModel.set_base_dir(self.config["content_directory"])
 
     def __getattr__(self, name):
         if name in self.config:
