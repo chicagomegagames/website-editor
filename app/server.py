@@ -18,7 +18,7 @@ def create_app(config = None):
     app.register_blueprint(Event._app_blueprint(site_config=config_function))
 
     image_service = ImageService(upload_path = config.upload_path)
-    app.register_blueprint(ImageController(image_service=image_service)._blueprint())
+    app.register_blueprint(ImageController(image_service=image_service))
 
 
     def template(name, **kwargs):

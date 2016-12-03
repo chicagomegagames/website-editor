@@ -1,17 +1,13 @@
 from flask import Blueprint, request, jsonify
 
-class ImageController(object):
+class ImageController(Blueprint):
     def __init__(self, image_service = None):
+        super().__init__("images", __name__, url_prefix = "/images")
+
         self.image_service = image_service
 
-    def _blueprint(self):
-        blueprint = Blueprint("images", __name__, url_prefix = "/images")
-
-        #blueprint.route("/", self.index)
-        blueprint.add_url_rule("/", "index", self.index)
-        blueprint.add_url_rule("/upload", "upload", self.upload, methods=["POST"])
-
-        return blueprint
+        self.route("/")(self.index)
+        self.route("/upload", methods=["POST"])(self.upload)
 
     def index(self):
         images = self.image_service.images()
