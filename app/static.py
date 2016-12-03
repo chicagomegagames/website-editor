@@ -2,6 +2,7 @@ import os
 import jinja2
 import shutil
 from .models import Game, Page, Event
+from .utils import make_directory_tree
 
 def publish_site(location=os.path.join(os.getcwd(), "_site"), theme="default"):
     errors = []
@@ -62,12 +63,3 @@ def publish_site(location=os.path.join(os.getcwd(), "_site"), theme="default"):
         shutil.copytree(assets_dir, os.path.join(location, "assets"))
 
     return None
-
-
-def make_directory_tree(path):
-    if not os.path.exists(path):
-        make_directory_tree(os.path.dirname(path))
-        try:
-            os.mkdir(path)
-        except FileExistsError as e:
-            pass

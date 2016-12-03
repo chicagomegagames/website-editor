@@ -1,8 +1,16 @@
+from app.utils import make_directory_tree
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for
 import markdown2
 import os
-import os.path
 import yaml
+
+class FileAlreadyExistsError(Exception):
+    def __init__(self, cls, filename):
+        self.class_name = cls.__name__
+        self.filename = filename
+        self.path = os.path.join(cls.BASE_CONTENT_DIR, cls.CONTENT_DIR, filename)
+
+        super().__init__("Couldn't create {cls}, file already exists <{path}>".format(cls=self.class_name, path=self.path))
 
 class BaseModel():
     BASE_CONTENT_DIR = "content"
@@ -14,17 +22,40 @@ class BaseModel():
     def set_base_dir(cls, directory):
         cls.BASE_CONTENT_DIR = directory
 
+        if not os.path.exists(cls.BASE_CONTENT_DIR):
+            make_directory_tree(cls.BASE_CONTENT_DIR)
+
     @classmethod
     def all(cls):
         path = os.path.join(cls.BASE_CONTENT_DIR, cls.CONTENT_DIR)
+
+        if not os.path.exists(path):
+            os.mkdir(path)
+
         return [cls(filename) for filename in os.listdir(path)]
 
+
     @classmethod
-    def create(cls, filename):
-        path = os.path.join(cls.BASE_CONTENT_DIR, cls.CONTENT_DIR, filename)
+    def create(cls, filename, **kwargs):
+        base_path = os.path.join(cls.BASE_CONTENT_DIR, cls.CONTENT_DIR)
+        if not os.path.exists(base_path):
+            make_directory_tree(base_path)
+
+        path = os.path.join(base_path, filename)
+        if os.path.exists(path):
+            raise FileAlreadyExistsError(cls, filename)
+
         dummy_meta = {}
         for meta in cls.REQUIRED_META:
-            dummy_meta[meta] = None
+            if meta in kwargs:
+                dummy_meta[meta] = kwargs[meta]
+            else:
+                dummy_meta[meta] = None
+
+        for meta in cls.OPTIONAL_META:
+            if meta in kwargs:
+                dummy_meta[meta] = kwargs[meta]
+
         with open(path, "w+") as writer:
             writer.write("---\n")
             writer.write(yaml.dump(dummy_meta, default_flow_style=False))
