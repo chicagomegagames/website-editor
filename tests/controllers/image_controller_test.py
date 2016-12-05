@@ -1,22 +1,9 @@
+from .test_helper import *
+
 from app import create_app, Config
-from expects import *
-from expects.matchers import Matcher
-from unittest import TestCase
 import json
 import os
 import tempfile
-
-class be_successful(Matcher):
-    def __init__(self):
-        pass
-
-    def _match(self, request):
-        if request.status_code >= 200 and request.status_code <= 299:
-            return True, ["Request was successful"]
-        else:
-            return False, ["Status code outside of 2xx range"]
-
-be_successful = be_successful()
 
 
 class ImageControllerTest(TestCase):

@@ -28,7 +28,7 @@ def publish_site(location=os.path.join(os.getcwd(), "_site"), theme="default"):
 
     pages_to_generate = list(pages)
     for game in games:
-        slug = game.metadata["slug"]
+        slug = game.slug
         if slug[0] == "/":
             slug = slug[1:]
 

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block main %}
+  <h1>{{ model_name }}s</h1>
+  <ul>
+    <li><a href="/{{ prefix }}/new">new {{ model_name|lower }}</a></li>
+  </ul>
+
+  {% if models|length > 0 %}
+  <table>
+    <tr>
+      <th>Name</th>
+      {% if hide_show_page is defined and hide_show_page %}
+      {% else %}
+      <th></th>
+      {% endif %}
+      <th></th>
+      <th></th>
+    </tr>
+    {% for model in models %}
+    <tr>
+      <td>{{ model.name }}</td>
+      {% if hide_show_page is defined and hide_show_page %}
+      {% else %}
+      <td>
+        <a href="/{{ prefix }}/{{ model.filename }}">Show</a>
+      </td>
+      {% endif %}
+      <td>
+        <a href="/{{ prefix }}/{{ model.filename }}/edit">Edit</a>
+      </td>
+      <td>
+        <a href="/{{ prefix }}/{{ model.filename }}" data-method="delete">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  {% else %}
+    <p>No {{ model_name|lower }}s created</p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <form id="edit">
+    {% if model is defined and model %}
+        <h1>edit: {{model.filename}}</h1>
+    {% else %}
+        <h1>new {{ model_name|lower }}</h1>
+    {% endif %}
+        <input type="submit" value="save page" />
+
+        <table class="meta"><tr>
+            <td><label for="filename">Filename</label></td>
+            <td>
+                <input type="text" name="filename"
+                {%- if model is defined and model -%}
+                    value="{{model.filename|safe}}"
+                {%- endif -%}
+                />
+            </td>
+        </tr></table>
+
+        <h2>required meta</h2>
+        <table class="meta">
+            {% for key in required_meta -%}
+            <tr>
+                <td>
+                    <label for="meta[{{key}}]">{{key}}</label>
+                </td>
+                <td>
+                    <input type="text" name="meta[{{key}}]"
+                    {%- if model is defined and model -%}
+                        value="{{model.metadata[key]|safe}}"
+                    {% endif -%}
+                    data-metadata-name="{{key}}" data-metadata-type="value" />
+                </td>
+            </tr>
+            {% endfor -%}
+        </table>
+
+        <h2>body</h2>
+        <textarea name="content">{%- if model is defined and model -%}{{model.markdown|safe}}{%- endif -%}</textarea>
+
+        <h2>optional meta</h2>
+        <table class="meta">
+            {% for key in optional_meta -%}
+            <tr>
+                <td>
+                    <label for="meta[{{key}}]">{{key}}</label>
+                </td>
+                <td>
+                    <input type="text" name="meta[{{key}}]"
+                    {%- if model is defined and model -%}
+                        value="{{model.metadata[key]|safe}}"
+                    {% endif -%}
+                    data-metadata-name="{{key}}" data-metadata-type="value" />
+                </td>
+            </tr>
+            {% endfor -%}
+        </table>
+
+    </form>
+{% endblock %}

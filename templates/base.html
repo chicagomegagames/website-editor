@@ -28,25 +28,8 @@
         </ul>
         {%- endif -%}
 
-        {%- if site.games is defined %}
-        <li><strong>Games</strong></li>
-        <ul>
-          {%- for game in site.games %}
-          <li><a href="/game/{{game.filename}}">{{game.filename}}</a></li>
-          {%- endfor %}
-          <li><a href="#" id="new_game">New Game</a></li>
-        </ul>
-        {%- endif %}
-
-        {%- if site.pages is defined %}
-        <li><strong>Pages</strong></li>
-        <ul>
-          {%- for page in site.pages %}
-          <li><a href="/page/{{page.filename}}">{{page.filename}}</a></li>
-          {%- endfor %}
-          <li><a href="#" id="new_page">New Page</a></li>
-        </ul>
-        {%- endif %}
+        <li><strong><a href="/games/">Games</a></strong></li>
+        <li><strong><a href="/pages/">Pages</a></strong></li>
 
         <li><strong>Events</strong></li>
         <ul>

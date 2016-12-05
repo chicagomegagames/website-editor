@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(evt) {
   var edit_form = document.querySelector("#edit");
   if (edit_form) {
-    load_form(edit_form);
+    load_model_form(edit_form);
   }
 
   var add_game = document.querySelector("#new_game");
@@ -102,39 +102,31 @@ function page_alert(message) {
 
 }
 
-function load_form(form) {
+function load_model_form(form) {
   form.addEventListener("submit", function(e) {
     e.preventDefault();
 
-    var model = {}
-    model.markdown = form.querySelector("textarea[name=content]").value;
-    model.metadata = {}
+    var model = new FormData()
+    model.set("markdown", form.querySelector("textarea[name=content]").value);
+    model.set("filename", form.querySelector("input[name=filename]").value)
 
-    required_meta_inputs = [...form.querySelectorAll("input[name^=required_meta]")]
+    required_meta_inputs = [...form.querySelectorAll("input[name^=meta]")]
     required_meta_inputs.forEach(function(element) {
       var key = element.getAttribute("data-metadata-name");
       var value = element.value;
 
-      model.metadata[key] = value;
+      //model.metadata[key] = value;
+      model.set(`metadata[${key}]`, value)
     })
-
-    optional_meta_keys = [...form.querySelectorAll("input.extra_meta[data-metadata-type=key]")]
-    optional_meta_keys.forEach(function(element) {
-      var key = element.value;
-      var metadata_key = element.getAttribute("data-metadata-name");
-      var value_search = "input.extra_meta[data-metadata-type=value][data-metadata-name='" + metadata_key + "']"
-      var value_element = form.querySelector(value_search);
-      var value = value_element.value;
-
-      if (!(key in model.metadata)) {
-        model.metadata[key] = value;
-      }
-    });
 
     console.log(model);
 
     var xhr = new XMLHttpRequest()
     xhr.addEventListener("load", function(evt) {
+      if (xhr.responseURL !== document.location.href) {
+        window.location = xhr.responseURL;
+      }
+
       console.log("loaded");
       console.log(xhr.response);
       var response = JSON.parse(xhr.response);
@@ -145,7 +137,7 @@ function load_form(form) {
 
     xhr.open("POST", document.URL, true);
     xhr.overrideMimeType("application/json");
-    xhr.send(JSON.stringify(model));
+    xhr.send(model);
 
     return false;
   }, false);

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from raven.contrib.flask import Sentry
-from .controllers import ImageController
+from .controllers import ImageController, GameController, PageController
 from .image_service import ImageService
 from .models import BaseModel, Game, Page, Event
 from .static import publish_site
@@ -13,12 +13,12 @@ def create_app(config = None):
         sentry = Sentry(app, dsn=config.sentry_dns)
 
     config_function = site_config(config)
-    app.register_blueprint(Game._app_blueprint(site_config=config_function))
-    app.register_blueprint(Page._app_blueprint(site_config=config_function))
     app.register_blueprint(Event._app_blueprint(site_config=config_function))
 
     image_service = ImageService(upload_path = config.upload_path)
     app.register_blueprint(ImageController(image_service=image_service))
+    app.register_blueprint(GameController(config_function))
+    app.register_blueprint(PageController(config_function))
 
 
     def template(name, **kwargs):
@@ -35,10 +35,10 @@ def create_app(config = None):
     @app.route("/deploy/<location>")
     def deploy(location):
         #deploy_location = os.path.join(os.getcwd(), "deploy", location)
-        if location not in config["deploy_locations"]:
+        if location not in config.deploy_locations:
             abort(500)
 
-        errors = publish_site(location=config["deploy_locations"][location]["location"], theme=config["theme"])
+        errors = publish_site(location=config.deploy_locations[location]["location"], theme=config.theme)
 
         if errors is not None:
             return errors
