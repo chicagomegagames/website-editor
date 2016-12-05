@@ -60,6 +60,8 @@ class BaseModel():
             writer.write("---\n")
             writer.write(yaml.dump(dummy_meta, default_flow_style=False))
             writer.write("---\n\n")
+            if "markdown" in kwargs:
+                writer.write(kwargs["markdown"])
         model = cls(filename)
         return model
 
@@ -67,12 +69,37 @@ class BaseModel():
         self.filename = filename
         self.path = os.path.join(self.BASE_CONTENT_DIR, self.CONTENT_DIR, filename)
         self.parse_page()
-        self.__changed = False
         self.__valid = False
         self.errors = []
 
     def __str__(self):
         return "<{cls}: {path}>".format(cls=self.__class__.__name__, path=self.path)
+
+    def __getattr__(self, name):
+        if "metadata" in self.__dict__ and name in self.metadata:
+            return self.metadata[name]
+
+        raise AttributeError("'{}' is not an attribute of {}".format(name, self))
+
+    def __eq__(self, other):
+        return self.path == other.path
+
+    def set_path(self, filename):
+        if "path" in self.__dict__:
+            old_path = self.path
+        else:
+            old_path = None
+
+        new_path = os.path.join(self.BASE_CONTENT_DIR, self.CONTENT_DIR, filename)
+        if os.path.exists(new_path):
+            raise FileAlreadyExistsError(self.__class__, filename)
+
+        self.filename = filename
+        self.path = new_path
+
+        if old_path and os.path.exists(old_path):
+            os.rename(old_path, self.path)
+
 
     def meta(self):
         meta = {}
@@ -123,20 +150,26 @@ class BaseModel():
 
     def update(self, **kwargs):
         if "metadata" in kwargs:
-            if self.metadata != kwargs["metadata"]:
-                self.metadata = kwargs["metadata"]
-                self.__changed = True
+            for meta, value in kwargs["metadata"].items():
+                if meta in self.REQUIRED_META or meta in self.OPTIONAL_META:
+                    self.metadata[meta] = value
 
         if "markdown" in kwargs:
             if self.markdown != kwargs["markdown"]:
                 self.markdown = kwargs["markdown"]
                 self.__regenerate_markdown()
-                self.__changed = True
+
+        if "filename" in kwargs:
+            self.set_path(kwargs["filename"])
+
+    def refresh(self):
+        self.parse_page()
+        self.validate()
 
     def save(self):
         self.validate()
 
-        if not self.__changed or not self.__valid:
+        if not self.__valid:
             return False
 
         with open(self.path, "r+") as f:
