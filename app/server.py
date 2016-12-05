@@ -32,6 +32,10 @@ def create_app(config = None):
     def danger_zone():
         return template("danger.html", title="Danger Zone")
 
+    @app.route("/danger/error")
+    def fake_error():
+        raise Exception("Purposefully raised error to confirm everything is working.")
+
     @app.route("/deploy/<location>")
     def deploy(location):
         #deploy_location = os.path.join(os.getcwd(), "deploy", location)
