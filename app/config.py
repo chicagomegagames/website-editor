@@ -34,7 +34,10 @@ class Config(object):
         else:
             args = options
 
-        self.config = {**self.DEFAULT_OPTIONS, **args}
+        #self.config = {**self.DEFAULT_OPTIONS, **args}
+        config = dict(self.DEFAULT_OPTIONS)
+        config.update(args)
+        self.config = config
 
         if "theme" not in self.config:
             raise KeyError("'theme' is a required configuration option")
