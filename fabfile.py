@@ -54,7 +54,7 @@ def deploy():
     sudo("rsync -ac {}/ {}".format(git_checkout_path, revision_directory), user="manager")
 
     current_directory = "{}/current".format(deploy_location)
-    sudo("ln -sf {} {}".format(revision_directory, current_directory), user="manager")
+    sudo("ln -sfT {} {}".format(revision_directory, current_directory), user="manager")
     sudo("service megagame_manager restart")
 
     output = sudo("ls {}/revisions".format(deploy_location)).strip().split("\n")
