@@ -74,4 +74,11 @@ table {
   table td {
     vertical-align: top; }
 
+.models tbody tr:hover {
+  background: #eee; }
+.models .filename {
+  padding-left: 2em;
+  font-size: .9em;
+  color: #666; }
+
 /*# sourceMappingURL=main.css.map */
