@@ -91,6 +91,9 @@ class BaseModel():
             old_path = None
 
         new_path = os.path.join(self.BASE_CONTENT_DIR, self.CONTENT_DIR, filename)
+        if old_path == new_path:
+            return
+
         if os.path.exists(new_path):
             raise FileAlreadyExistsError(self.__class__, filename)
 

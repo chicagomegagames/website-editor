@@ -84,3 +84,8 @@ class TestBaseModel(TestCase):
 
         foo3 = Foo.create("foo3.md")
         expect(lambda: foo3.update(filename="foo2.md")).to(raise_error(FileAlreadyExistsError))
+
+    def test_update_filename_same_name(self):
+        foo = Foo.create("foo.md", name = "Foo!", some_field = "soemthing cool")
+        expect(foo.save()).to(be_true)
+        expect(lambda: foo.update(filename="foo.md")).not_to(raise_error)
