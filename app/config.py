@@ -14,6 +14,7 @@ class Config(object):
         "debug": False,
         "default_template": "page.html",
         "deploy_locations": {},
+        "environment": "development",
         "host": "0.0.0.0",
         "port": 5000,
         "sentry_dns": None,

@@ -13,6 +13,7 @@ def create_app(config = None):
     if config.use_sentry():
         app.config["SENTRY_CONFIG"] = {
             "release": raven.fetch_git_sha(os.getcwd()),
+            "environment": config.environment,
         }
         sentry = Sentry(app, dsn=config.sentry_dns)
 
