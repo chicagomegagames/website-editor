@@ -5,11 +5,15 @@ from .image_service import ImageService
 from .models import BaseModel, Game, Page, Event
 from .static import publish_site
 import os
+import raven
 import sys
 
 def create_app(config = None):
     app = Flask("megagame editor")
     if config.use_sentry():
+        app.config["SENTRY_CONFIG"] = {
+            "release": raven.fetch_git_sha(os.getcwd()),
+        }
         sentry = Sentry(app, dsn=config.sentry_dns)
 
     config_function = site_config(config)
