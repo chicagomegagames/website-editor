@@ -51,7 +51,7 @@ def deploy():
 
     revision_directory = "{}/revisions/{}".format(deploy_location, deploy_time)
     sudo("mkdir {}".format(revision_directory), user="manager")
-    sudo("rsync -avc {}/ {}".format(git_checkout_path, revision_directory), user="manager")
+    sudo("rsync -ac {}/ {}".format(git_checkout_path, revision_directory), user="manager")
 
     current_directory = "{}/current".format(deploy_location)
     sudo("ln -sf {} {}".format(revision_directory, current_directory), user="manager")
