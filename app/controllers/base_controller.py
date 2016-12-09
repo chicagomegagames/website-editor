@@ -58,6 +58,9 @@ class ModelController(BaseController):
         errors = []
         if request.method == "POST":
             form = form_to_dict(request.form)
+            if "filename" in form and form["filename"] == model.filename:
+                del form["filename"]
+
             model.update(**form)
             if not model.validate():
                 errors = model.errors

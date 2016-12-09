@@ -94,6 +94,15 @@ class GameControllerTest(TestCase):
         game2 = Game("mkot.md")
         expect(game2.name).to(equal("My Kind of Town"))
 
+    def test_edit_filename_passed_no_change(self):
+        game = Game.create("my_kind_of_town.md",
+            name = "My Kind of Town",
+        )
+
+        response = self.app.post("/games/my_kind_of_town.md/edit", data = {
+            "filename": "my_kind_of_town.md",
+        })
+        expect(response).to(be_successful)
 
     def test_new(self):
         form_response = self.app.get("/games/new")
