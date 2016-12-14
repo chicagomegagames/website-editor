@@ -124,11 +124,9 @@ class BaseModel():
         content_splits = contents.split("---")
         metadata = content_splits[1]
         markdown = ("---".join(content_splits[2:])).strip()
-
-        parsed_html = markdown2.markdown(markdown, extras=["fenced-code-blocks", "smarty-pants"])
-
-        self.content = u"{parsed}".format(parsed=parsed_html)
         self.markdown = markdown
+        self.__regenerate_markdown()
+
         self.metadata = yaml.load(metadata)
 
     def serialize(self):
@@ -140,7 +138,8 @@ class BaseModel():
         }
 
     def __regenerate_markdown(self):
-        self.content = markdown2.markdown(self.markdown, extras=["fenced-code-blocks", "smarty-pants"])
+        parsed_html = markdown2.markdown(self.markdown.encode("ascii", "xmlcharrefreplace"), extras=["fenced-code-blocks", "smarty-pants"])
+        self.content = u"{}".format(parsed_html)
 
     def validate(self):
         self.errors = []

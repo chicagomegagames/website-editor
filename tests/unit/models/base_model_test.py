@@ -88,3 +88,7 @@ class TestBaseModel(ModelTestCase):
         foo = Foo.create("foo.md", name = "Foo!", some_field = "soemthing cool")
         expect(foo.save()).to(be_true)
         expect(lambda: foo.update(filename="foo.md")).not_to(raise_error)
+
+    def test_special_character_conversion(self):
+        foo = Foo.create("foo.md", name="Foo!", some_field="wut", markdown="Übeltäter")
+        expect(foo.content).to(equal("<p>&#220;belt&#228;ter</p>\n"))
