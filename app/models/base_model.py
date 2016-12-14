@@ -138,7 +138,7 @@ class BaseModel():
         }
 
     def __regenerate_markdown(self):
-        parsed_html = markdown2.markdown(self.markdown.encode("ascii", "xmlcharrefreplace"), extras=["fenced-code-blocks", "smarty-pants"])
+        parsed_html = markdown2.markdown(self.markdown.encode("ascii", "xmlcharrefreplace"), extras=["fenced-code-blocks", "smarty-pants", "header-ids", "cuddled-lists", "tables"])
         self.content = u"{}".format(parsed_html)
 
     def validate(self):

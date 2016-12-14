@@ -92,3 +92,7 @@ class TestBaseModel(ModelTestCase):
     def test_special_character_conversion(self):
         foo = Foo.create("foo.md", name="Foo!", some_field="wut", markdown="Übeltäter")
         expect(foo.content).to(equal("<p>&#220;belt&#228;ter</p>\n"))
+
+    def test_header_ids(self):
+        foo = Foo.create("foo.md", name="foo", markdown="# Foo")
+        expect(foo.content).to(equal("<h1 id=\"foo\">Foo</h1>\n"))
