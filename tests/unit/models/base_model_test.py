@@ -1,8 +1,7 @@
+from .test_helper import *
 from app.models import BaseModel, FileAlreadyExistsError
-from expects import *
-from unittest import TestCase
-import tempfile
 import os
+import tempfile
 
 class Foo(BaseModel):
     CONTENT_DIR = "foo"
@@ -13,7 +12,7 @@ class Foo(BaseModel):
         "some_field": {"type": "text"},
     }
 
-class TestBaseModel(TestCase):
+class TestBaseModel(ModelTestCase):
     def setUp(self):
         self.content_dir = tempfile.TemporaryDirectory()
         BaseModel.set_base_dir(self.content_dir.name)

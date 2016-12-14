@@ -31,7 +31,13 @@ class ModelController(BaseController):
         super().__init__(route_prefix, site_config)
         self.cls = cls
         self.model_name = cls.__name__
+        self.view_options = {
+            "edit_show_filename": True,
+        }
+        self._setup_routes()
 
+
+    def _setup_routes(self):
         self.route("/")(self.index)
         self.route("/new", methods=["GET", "POST"])(self.new)
         self.route("/<filename>", methods=["GET", "POST"])(self.show)
@@ -71,6 +77,7 @@ class ModelController(BaseController):
                 success = True
                 status_code = 200
 
+
             response = {
                 "errors": errors,
                 "success": success,
@@ -79,6 +86,7 @@ class ModelController(BaseController):
 
             if success and "filename" in form:
                 return redirect(url_for(".show", filename=form["filename"]))
+
             return jsonify(**response), status_code
 
         return self.template("models/edit.html", model=model, required_meta=model.REQUIRED_META, optional_meta=model.OPTIONAL_META)
@@ -86,8 +94,14 @@ class ModelController(BaseController):
     def new(self):
         if request.method == "POST":
             form = form_to_dict(request.form)
-            model = self.cls.create(form["filename"], markdown=form["markdown"], **form["metadata"])
+            model = self._model_create(form)
 
-            return redirect(url_for(".show", filename=form["filename"]))
+            return redirect(self._new_redirect_location(model))
 
-        return self.template("models/edit.html", model=None, required_meta=self.cls.REQUIRED_META, optional_meta=self.cls.OPTIONAL_META)
+        return self.template("models/edit.html", model=None, required_meta=self.cls.REQUIRED_META, optional_meta=self.cls.OPTIONAL_META, show_filename = self.view_options["edit_show_filename"])
+
+    def _model_create(self, form):
+        return self.cls.create(form["filename"], markdown=form["markdown"], **form["metadata"])
+
+    def _new_redirect_location(self, model):
+        return url_for(".show", filename=model.filename)

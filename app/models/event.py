@@ -2,6 +2,7 @@ from flask import render_template, Blueprint, url_for, request, redirect, jsonif
 from . import BaseModel
 from dateutil.parser import parse as date_parse
 from datetime import date, datetime
+import re
 
 import inspect
 
@@ -27,9 +28,23 @@ class Event(BaseModel):
         return [event for event in cls.all() if event.future_event]
 
     @classmethod
-    def create(cls):
-        filename = datetime.now().strftime("%Y-%m-%d-%H%M.md")
-        return super().create(filename)
+    def create(cls, **kwargs):
+        if "filename" in kwargs:
+            filename = kwargs["filename"]
+            del kwargs["filename"]
+        elif "date" in kwargs:
+            date = date_parse(kwargs["date"])
+            date_str = date.strftime("%Y-%m-%d")
+
+            if "name" in kwargs:
+                formated_name = re.sub(r'\ +', '_', re.sub(r'\W+', ' ', kwargs["name"].lower()).strip())
+                filename = "{}-{}.md".format(date_str, formated_name)
+            else:
+                filename = "{}.md".format(date_str)
+        else:
+            filename = datetime.now().strftime("%Y-%m-%d-%H%M.md")
+
+        return super().create(filename, **kwargs)
 
     def __init__(self, filename):
         super().__init__(filename)

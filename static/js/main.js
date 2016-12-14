@@ -4,54 +4,11 @@ document.addEventListener("DOMContentLoaded", function(evt) {
     load_model_form(edit_form);
   }
 
-  var add_game = document.querySelector("#new_game");
-  if (add_game) {
-    add_game.addEventListener("click", function(evt) {
-      evt.preventDefault();
-      new_file("/game/new/")
-    });
-  }
-
-  var add_page = document.querySelector("#new_page");
-  if (add_page) {
-    add_page.addEventListener("click", function(evt) {
-      evt.preventDefault();
-      new_file("/page/new/");
-    });
-  }
-
   var delete_links = document.querySelectorAll("a[data-method=delete]");
   delete_links.forEach(function(link) {
     setup_delete_link(link);
   });
 });
-
-function new_file(xhr_location) {
-  var filename = prompt("Filename");
-  if (filename.substr("-3") !== ".md") {
-    filename = filename + ".md"
-  }
-
-  punctuation = new RegExp("[\W_]+", "g")
-  spaces = new RegExp(" ", "g")
-  filename = filename.replace(punctuation, "_");
-  filename = filename.replace(spaces, "_");
-  filename = filename.toLowerCase();
-
-  var xhr = new XMLHttpRequest()
-  xhr.addEventListener("load", function(evt) {
-    console.log(xhr.response);
-    var response = JSON.parse(xhr.response);
-    if (response.success === true) {
-      page_alert("successfully created file!");
-      window.location = response.edit_path
-    }
-  });
-
-  xhr.open("POST", xhr_location + filename, true);
-  xhr.overrideMimeType("application/json");
-  xhr.send();
-}
 
 function setup_delete_link(link) {
   var path = link.getAttribute("href");
@@ -66,9 +23,6 @@ function setup_delete_link(link) {
 
   form.appendChild(method_field);
   document.body.appendChild(form);
-
-  console.log("delete path");
-  console.log(path)
 
   link.addEventListener("click", function(evt) {
     evt.preventDefault();
@@ -108,7 +62,10 @@ function load_model_form(form) {
 
     var model = new FormData()
     model.set("markdown", form.querySelector("textarea[name=content]").value);
-    model.set("filename", form.querySelector("input[name=filename]").value)
+    var filename_input = form.querySelector("input[name=filename]");
+    if (filename_input) {
+      model.set("filename", filename_input.value)
+    }
 
     required_meta_inputs = [...form.querySelectorAll("input[name^=meta]")]
     required_meta_inputs.forEach(function(element) {
@@ -119,7 +76,6 @@ function load_model_form(form) {
       model.set(`metadata[${key}]`, value)
     })
 
-    console.log(model);
 
     var xhr = new XMLHttpRequest()
     xhr.addEventListener("load", function(evt) {
@@ -127,7 +83,6 @@ function load_model_form(form) {
         window.location = xhr.responseURL;
       }
 
-      console.log("loaded");
       console.log(xhr.response);
       var response = JSON.parse(xhr.response);
       if (response.success === true) {
