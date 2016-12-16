@@ -43,11 +43,14 @@ def create_app(config = None):
 
     @app.route("/deploy/<location>")
     def deploy(location):
-        #deploy_location = os.path.join(os.getcwd(), "deploy", location)
         if location not in config.deploy_locations:
             abort(500)
 
-        errors = publish_site(location=config.deploy_locations[location]["location"], theme=config.theme)
+        errors = publish_site(
+            location = config.deploy_locations[location]["location"],
+            theme = config.theme,
+            image_service = image_service,
+        )
 
         if errors is not None:
             return errors

@@ -4,7 +4,7 @@ import shutil
 from .models import Game, Page, Event
 from .utils import make_directory_tree
 
-def publish_site(location=os.path.join(os.getcwd(), "_site"), theme="default"):
+def publish_site(location = os.path.join(os.getcwd(), "_site"), theme = "default", image_service = None):
     errors = []
 
     if os.path.exists(location):
@@ -61,5 +61,8 @@ def publish_site(location=os.path.join(os.getcwd(), "_site"), theme="default"):
     assets_dir = os.path.join(theme_dir, "assets")
     if os.path.exists(assets_dir):
         shutil.copytree(assets_dir, os.path.join(location, "assets"))
+
+    if image_service:
+        shutil.copytree(image_service.upload_path, os.path.join(location, "images"))
 
     return None
