@@ -26,3 +26,18 @@ class ImageServiceTest(TestCase):
             service.upload_image("square_logo.svg", test_file)
 
         expect(filecmp.cmp(service.images()[0].path, self.test_file_path)).to(be_true)
+
+    def test_find(self):
+        service = ImageService(upload_path = self.temp_dir.name)
+        with open(self.test_file_path, "rb") as test_file:
+            service.upload_image("square_logo.svg", test_file)
+
+        image = service.images()[0]
+        expect(image).not_to(be_none)
+        expect(service.find(image.name)).to(equal(image))
+
+    def test_no_directory(self):
+        directory = os.path.join(self.temp_dir.name, "foo")
+        service = ImageService(upload_path = directory)
+
+        expect(service.images()).to(equal([]))
