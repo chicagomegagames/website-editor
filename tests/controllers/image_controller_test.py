@@ -35,7 +35,37 @@ class ImageControllerTest(TestCase):
 
             expect(upload_response).to(be_successful)
             upload_response_body = json.loads(upload_response.get_data(as_text=True))
+            expect(upload_response_body).to(have_key("success"))
+            expect(upload_response_body["success"]).to(be_true)
+            expect(upload_response_body["filename"]).to(end_with(".svg"))
 
         index_response = self.app.get("/images/")
         expect(index_response.get_data(as_text=True)).to(contain(upload_response_body["filename"]))
 
+
+    def _upload_fixture(self):
+        with open(self.test_file_path, "rb") as test_file:
+            upload_response = self.app.post("/images/upload",
+                data = {"image": (test_file, "square_logo.svg")}
+            )
+
+            return json.loads(upload_response.get_data(as_text=True))["filename"]
+
+    def test_get_image(self):
+        image = self._upload_fixture()
+
+        response = self.app.get("/images/{}".format(image))
+        expect(response).to(be_successful)
+
+    def test_delete(self):
+        image = self._upload_fixture()
+        get_response = self.app.get("/images/")
+        expect(get_response).to(be_successful)
+        expect(get_response).to(have_in_body(image))
+
+        response = self.app.post("/images/{}".format(image), data={"_method": "DELETE"})
+        expect(response.status_code).to(equal(302))
+
+        get_response = self.app.get("/images/")
+        expect(get_response).to(be_successful)
+        expect(get_response).not_to(have_in_body(image))

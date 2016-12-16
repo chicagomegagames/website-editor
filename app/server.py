@@ -20,7 +20,7 @@ def create_app(config = None):
     config_function = site_config(config)
 
     image_service = ImageService(upload_path = config.upload_path)
-    app.register_blueprint(ImageController(image_service=image_service))
+    app.register_blueprint(ImageController(config_function, image_service=image_service))
     app.register_blueprint(GameController(config_function))
     app.register_blueprint(PageController(config_function))
     app.register_blueprint(EventController(config_function))

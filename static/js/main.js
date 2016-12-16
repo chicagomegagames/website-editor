@@ -4,6 +4,11 @@ document.addEventListener("DOMContentLoaded", function(evt) {
     load_model_form(edit_form);
   }
 
+  var image_upload_form = document.querySelector("form#upload_image");
+  if (image_upload_form) {
+    load_image_upload_form(image_upload_form);
+  }
+
   var delete_links = document.querySelectorAll("a[data-method=delete]");
   delete_links.forEach(function(link) {
     setup_delete_link(link);
@@ -93,6 +98,47 @@ function load_model_form(form) {
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
     xhr.overrideMimeType("application/json");
     xhr.send(model);
+
+    return false;
+  }, false);
+}
+
+function load_image_upload_form(form) {
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    var image_selector = document.querySelector("input#image");
+    if (image_selector.files.length === 0) {
+      page_alert("No image selected for upload.");
+      return;
+    }
+
+    var data = new FormData();
+    data.append("image", image_selector.files[0]);
+
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener("load", function(evt) {
+      // if (xhr.responseURL !== document.location.href) {
+      //   window.location = xhr.responseURL;
+      // }
+
+      console.log(xhr.response);
+      var response = JSON.parse(xhr.response);
+      if (response.success === true) {
+        page_alert("Image uploaded, refreshing");
+
+        window.setTimeout(function() {
+          window.location.reload()
+        }, 1500);
+      }
+    });
+
+    xhr.open("POST", form.action, true);
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xhr.overrideMimeType("application/json");
+    xhr.send(data);
+
+    page_alert("Uploading image... This may take some time.")
 
     return false;
   }, false);

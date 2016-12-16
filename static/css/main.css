@@ -7,6 +7,9 @@ body {
 a {
   color: #1b6ec2; }
 
+img {
+  max-width: 100%; }
+
 .sidebar {
   width: 300px;
   float: left; }
@@ -24,6 +27,7 @@ a {
     box-sizing: border-box;
     background: #8bff0f;
     overflow-y: hidden;
+    padding-bottom: 1vmin;
     transition: height 1s; }
     .page #notifications .notification p {
       padding: 10px 20px;

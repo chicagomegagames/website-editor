@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block main %}
+    <h1>Images</h1>
+    <ul class="actions">
+        <li>
+            <form id="upload_image" action="/images/upload" method="post">
+                Upload Image:<br />
+                <input type="file" name="image" id="image" accept="image/*" /><br />
+                <input type="submit" value="upload" />
+            </form>
+        </li>
+    </ul>
+
+    {% if images|length > 0 %}
+    <div class="image_gallery">
+        {% for image in images %}
+        <div class="image">
+            <img src="/images/{{image.name}}" /><br />
+            <a href="/images/{{image.name}}">/images/{{image.name}}</a><br />
+            <a href="/images/{{image.name}}" data-method="delete">delete</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>
+        No images uploaded
+    </p>
+    {% endif %}
+{% endblock %}
