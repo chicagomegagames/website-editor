@@ -61,10 +61,10 @@ function load_model_form(form) {
     e.preventDefault();
 
     var model = new FormData()
-    model.set("markdown", form.querySelector("textarea[name=content]").value);
+    model.append("markdown", form.querySelector("textarea[name=content]").value);
     var filename_input = form.querySelector("input[name=filename]");
     if (filename_input) {
-      model.set("filename", filename_input.value)
+      model.append("filename", filename_input.value)
     }
 
     required_meta_inputs = [...form.querySelectorAll("input[name^=meta]")]
@@ -72,8 +72,7 @@ function load_model_form(form) {
       var key = element.getAttribute("data-metadata-name");
       var value = element.value;
 
-      //model.metadata[key] = value;
-      model.set(`metadata[${key}]`, value)
+      model.append(`metadata[${key}]`, value)
     })
 
 
@@ -91,6 +90,7 @@ function load_model_form(form) {
     });
 
     xhr.open("POST", document.URL, true);
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
     xhr.overrideMimeType("application/json");
     xhr.send(model);
 
