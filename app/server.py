@@ -17,17 +17,15 @@ def create_app(config = None):
         }
         sentry = Sentry(app, dsn=config.sentry_dns)
 
-    config_function = site_config(config)
-
     image_service = ImageService(upload_path = config.upload_path)
-    app.register_blueprint(ImageController(config_function, image_service=image_service))
-    app.register_blueprint(GameController(config_function))
-    app.register_blueprint(PageController(config_function))
-    app.register_blueprint(EventController(config_function))
+    app.register_blueprint(ImageController(config, image_service=image_service))
+    app.register_blueprint(GameController(config))
+    app.register_blueprint(PageController(config))
+    app.register_blueprint(EventController(config))
 
 
     def template(name, **kwargs):
-        return render_template(name, site=config_function(), **kwargs)
+        return render_template(name, config=config, **kwargs)
 
     @app.route("/")
     def index():
@@ -71,16 +69,6 @@ def create_app(config = None):
             return "<pre>" + "\n".join(out) + "</pre>"
 
     return app
-
-def site_config(config):
-    def _config():
-        return {
-            "games": Game.all(),
-            "pages": Page.all(),
-            "config": config,
-        }
-
-    return _config
 
 def run_app(config=None):
     BaseModel.set_base_dir(config.content_directory)

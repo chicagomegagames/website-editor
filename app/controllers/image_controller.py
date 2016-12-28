@@ -2,8 +2,8 @@ from .base_controller import BaseController
 from flask import request, jsonify, send_file, redirect, url_for
 
 class ImageController(BaseController):
-    def __init__(self, site_config, image_service = None):
-        super().__init__("images", site_config)
+    def __init__(self, config, image_service = None):
+        super().__init__("images", config)
 
         self.image_service = image_service
 

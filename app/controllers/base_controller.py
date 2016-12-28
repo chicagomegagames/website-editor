@@ -2,20 +2,15 @@ from app.utils import form_to_dict
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 
 class BaseController(Blueprint):
-    def __init__(self, route_prefix, site_config):
+    def __init__(self, route_prefix, config):
         super().__init__(route_prefix, __name__, url_prefix="/{}".format(route_prefix))
         self.route_prefix = route_prefix
-        self.site_config = site_config
+        self.config = config
 
         self.errorhandler(FileNotFoundError)(self.file_not_found)
 
     def template(self, name, **kwargs):
-        if callable(self.site_config):
-            config = self.site_config()
-        else:
-            config = self.site_config
-
-        return render_template(name, site=config, prefix=self.route_prefix, **kwargs)
+        return render_template(name, config=self.config, prefix=self.route_prefix, **kwargs)
 
     def file_not_found(self, error):
         return self.template("404.html"), 404
@@ -27,8 +22,8 @@ class BaseController(Blueprint):
 
 
 class ModelController(BaseController):
-    def __init__(self, cls, route_prefix, site_config):
-        super().__init__(route_prefix, site_config)
+    def __init__(self, cls, route_prefix, config):
+        super().__init__(route_prefix, config)
         self.cls = cls
         self.model_name = cls.__name__
         self.view_options = {

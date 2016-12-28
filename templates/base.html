@@ -19,10 +19,10 @@
       <ul>
         <li><a href="/danger">Danger Zone</a></li>
 
-        {%- if site.config.deploy_locations is defined -%}
+        {%- if config.deploy_locations is defined -%}
         <li><strong>Live Versions</strong></li>
         <ul>
-          {%- for shortname, extras in site.config.deploy_locations.items() %}
+          {%- for shortname, extras in config.deploy_locations.items() %}
           <li><a href="{{extras.url}}">{{extras.name}}</a></li>
           {%- endfor %}
         </ul>
