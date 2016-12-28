@@ -57,17 +57,18 @@ def create_app(config = None):
 
         return redirect(url_for("danger_zone"))
 
-    @app.route("/routes")
-    def routes():
-        out = []
-        for rule in app.url_map.iter_rules():
-            options = {}
-            for arg in rule.arguments:
-                options[arg] = "[{}]".format(arg)
-            url = url_for(rule.endpoint, **options)
-            out.append("{}\t{}".format(rule.endpoint, url))
+    if config.environment == "development":
+        @app.route("/routes")
+        def routes():
+            out = []
+            for rule in app.url_map.iter_rules():
+                options = {}
+                for arg in rule.arguments:
+                    options[arg] = "[{}]".format(arg)
+                url = url_for(rule.endpoint, **options)
+                out.append("{}\t{}".format(rule.endpoint, url))
 
-        return "<pre>" + "\n".join(out) + "</pre>"
+            return "<pre>" + "\n".join(out) + "</pre>"
 
     return app
 
