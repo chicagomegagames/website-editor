@@ -35,7 +35,6 @@ class Config(object):
         else:
             args = options
 
-        #self.config = {**self.DEFAULT_OPTIONS, **args}
         config = dict(self.DEFAULT_OPTIONS)
         config.update(args)
         self.config = config
