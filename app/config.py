@@ -3,13 +3,7 @@ import os
 import yaml
 
 class Config(object):
-    REQUIRED_OPTIONS = [
-        "theme",
-    ]
-
     DEFAULT_OPTIONS = {
-        "aws_access_id": None,
-        "aws_secret_key": None,
         "content_directory": os.path.join(os.getcwd(), "content"),
         "debug": False,
         "default_template": "page.html",
@@ -18,6 +12,7 @@ class Config(object):
         "host": "0.0.0.0",
         "port": 5000,
         "sentry_dns": None,
+        "theme": "modern",
         "upload_path": os.path.join(os.getcwd(), "content", "image_uploads"),
     }
 
@@ -38,9 +33,6 @@ class Config(object):
         config = dict(self.DEFAULT_OPTIONS)
         config.update(args)
         self.config = config
-
-        if "theme" not in self.config:
-            raise KeyError("'theme' is a required configuration option")
 
         BaseModel.set_base_dir(self.config["content_directory"])
 

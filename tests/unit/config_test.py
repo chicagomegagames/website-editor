@@ -7,12 +7,8 @@ import tempfile
 import yaml
 
 class TestConfig(TestCase):
-    def test_required_options(self):
-        expect(lambda: Config()).to(raise_error(KeyError, "'theme' is a required configuration option"))
-        expect(lambda: Config(theme="foo")).not_to(raise_error)
-
     def test_getattr(self):
-        config = Config(theme="foo")
+        config = Config()
 
         expect(lambda: config.foo).to(raise_error(AttributeError))
         expect(lambda: config.theme).not_to(raise_error)
@@ -36,16 +32,16 @@ class TestConfig(TestCase):
         os.remove(path)
 
     def test_use_sentry(self):
-        no_sentry = Config(theme="foo", sentry_dns=None)
+        no_sentry = Config(sentry_dns=None)
         expect(no_sentry.use_sentry()).to(be_false)
 
-        has_sentry = Config(theme="foo", sentry_dns="https://user:pass@sentry.io/application_id")
+        has_sentry = Config(sentry_dns="https://user:pass@sentry.io/application_id")
         expect(has_sentry.use_sentry()).to(be_true)
 
     def test_content_directory_affects_content_directory(self):
-        default_config = Config(theme="foo")
+        default_config = Config()
         expect(default_config.content_directory).to(equal(BaseModel.BASE_CONTENT_DIR))
 
         tempdir = tempfile.TemporaryDirectory()
-        changed_config = Config(theme="foo", content_directory=tempdir.name)
+        changed_config = Config(content_directory=tempdir.name)
         expect(changed_config.content_directory).to(equal(BaseModel.BASE_CONTENT_DIR))
