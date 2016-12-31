@@ -60,7 +60,5 @@ def deploy():
         sudo("ln -sfT {} {}".format(revision_directory, current_directory), user="manager")
         sudo("service megagame_manager restart")
 
-        output = sudo("ls {}/revisions".format(deploy_location)).strip().split("\n")
-        output.reverse()
-        for directory in output[5:]:
-            sudo("rm -rf {}/revisions/{}".format(deploy_location, directory), user="manager")
+        with cd("{}/revisions".format(deploy_location)):
+            sudo('ls | sort -r | awk "NR > 6 {print}" | xargs rm -rf', user="manager")
