@@ -2,6 +2,7 @@ from .models import BaseModel
 from .generator_service import GeneratorService
 import os
 import traceback
+import sys
 import yaml
 
 class Config(object):
@@ -52,7 +53,7 @@ class Config(object):
             self.sentry.captureException()
         else:
             print(err)
-            traceback.print_tb(err.__traceback__)
+            traceback.print_tb(err.__traceback__, file=sys.stdout)
 
     def themes(self):
         if "theme_directory" in self.config:
