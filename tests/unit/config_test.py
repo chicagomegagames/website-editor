@@ -45,3 +45,22 @@ class TestConfig(TestCase):
         tempdir = tempfile.TemporaryDirectory()
         changed_config = Config(content_directory=tempdir.name)
         expect(changed_config.content_directory).to(equal(BaseModel.BASE_CONTENT_DIR))
+
+    def test_site_generators(self):
+        testdir = tempfile.TemporaryDirectory()
+        config = Config(deploy_locations = {
+            "test": {
+                "location": testdir.name,
+                "name": "Test",
+                "url": "http://example.com",
+            }
+        })
+
+        generators = config.site_generators()
+        expect(len(generators)).to(equal(1))
+
+        test_generator = generators[0]
+        expect(test_generator.location).to(equal(testdir.name))
+        expect(test_generator.name).to(equal("Test"))
+
+        testdir.cleanup()

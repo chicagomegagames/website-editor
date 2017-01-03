@@ -1,4 +1,5 @@
 from .models import BaseModel
+from .generator_service import GeneratorService
 import os
 import yaml
 
@@ -44,3 +45,12 @@ class Config(object):
 
     def use_sentry(self):
         return self.config["sentry_dns"] is not None
+
+    def site_generators(self):
+        return [
+            GeneratorService(
+                name = cfg["name"],
+                location = cfg["location"],
+                default_theme_path = os.path.join(self.config["content_directory"], "themes", self.config["theme"]),
+            ) for _, cfg in self.config["deploy_locations"].items()
+        ]
