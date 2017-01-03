@@ -6,7 +6,8 @@ import os
 import shutil
 
 class GeneratorService(object):
-    def __init__(self, name, location, default_theme_path = None):
+    def __init__(self, name, location, key = None, default_theme_path = None):
+        self.key = key
         self.name = name
         self.location = location
         self.default_theme_path = default_theme_path

@@ -4,6 +4,11 @@ document.addEventListener("DOMContentLoaded", function(evt) {
     load_model_form(edit_form);
   }
 
+  var deploy_form = document.querySelector("form#deploy")
+  if (deploy_form) {
+    load_deploy_form(deploy_form)
+  }
+
   var image_upload_form = document.querySelector("form#upload_image");
   if (image_upload_form) {
     load_image_upload_form(image_upload_form);
@@ -101,6 +106,30 @@ function load_model_form(form) {
 
     return false;
   }, false);
+}
+
+function load_deploy_form(form) {
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    var data = new FormData(form);
+
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener("load", function(evt) {
+      console.log(xhr.response);
+      var response = JSON.parse(xhr.response);
+      if (response.success === true) {
+        page_alert("successfully saved!");
+      } else {
+        page_alert("Error: " + response.message);
+      }
+    });
+
+    xhr.open("POST", form.action, true);
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
+    xhr.overrideMimeType("application/json");
+    xhr.send(data);
+  })
 }
 
 function load_image_upload_form(form) {

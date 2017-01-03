@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <h1>Danger Zone</h1>
+
+    <h2>Deploy</h2>
+    <form id="deploy" method="POST" action="/danger/deploy">
+        <p>
+            I would like to deploy the theme
+            <select id="theme" name="theme">
+                {% if default_theme != None -%}
+                <option value="{{ default_theme }}">{{ default_theme }}</option>
+                {%- elif themes|length > 1 -%}
+                <option value="null">--</option>
+                {%- endif -%}
+                {%- for theme in themes -%}
+                <option value="{{ theme }}">{{ theme }}</option>
+                {% endfor %}
+            </select>
+            to
+            <select id="location" name="location">
+                {% if generators|length > 1 %}
+                <option value="null">--</option>
+                {% endif %}
+                {% for generator in generators -%}
+                <option value="{{ generator.key }}">{{ generator.name }}</option>
+                {%- endfor %}
+            </select>.
+        </p>
+
+        <input type="submit" id="deploy" name="deploy" value="Deploy it!" />
+    </form>
+{% endblock main %}

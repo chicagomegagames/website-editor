@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from raven.contrib.flask import Sentry
-from .controllers import ImageController, GameController, PageController, EventController
+from .controllers import ImageController, GameController, PageController, EventController, DangerController
 from .image_service import ImageService
 from .models import BaseModel, Game, Page, Event
 from .static import publish_site
@@ -19,7 +19,8 @@ def create_app(config = None):
         config.config["sentry"] = sentry
 
     image_service = ImageService(upload_path = config.upload_path)
-    app.register_blueprint(ImageController(config, image_service=image_service))
+    app.register_blueprint(ImageController(config, image_service = image_service))
+    app.register_blueprint(DangerController(config, image_service = image_service))
     app.register_blueprint(GameController(config))
     app.register_blueprint(PageController(config))
     app.register_blueprint(EventController(config))
@@ -31,30 +32,6 @@ def create_app(config = None):
     @app.route("/")
     def index():
         return template("index.html")
-
-    @app.route("/danger")
-    def danger_zone():
-        return template("danger.html", title="Danger Zone")
-
-    @app.route("/danger/error")
-    def fake_error():
-        raise Exception("Purposefully raised error to confirm everything is working.")
-
-    @app.route("/deploy/<location>")
-    def deploy(location):
-        if location not in config.deploy_locations:
-            abort(500)
-
-        errors = publish_site(
-            location = config.deploy_locations[location]["location"],
-            theme = config.theme,
-            image_service = image_service,
-        )
-
-        if errors is not None:
-            return errors
-
-        return redirect(url_for("danger_zone"))
 
     if config.environment == "development":
         @app.route("/routes")
