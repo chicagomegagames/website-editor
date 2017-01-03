@@ -57,9 +57,9 @@ class TestConfig(TestCase):
         })
 
         generators = config.site_generators()
-        expect(len(generators)).to(equal(1))
+        expect(generators).to(have_key("test"))
 
-        test_generator = generators[0]
+        test_generator = generators["test"]
         expect(test_generator.location).to(equal(testdir.name))
         expect(test_generator.name).to(equal("Test"))
 
