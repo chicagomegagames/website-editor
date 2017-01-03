@@ -10,6 +10,7 @@ class DangerController(BaseController):
 
         self.route("/")(self.index)
         self.route("/deploy", methods=["POST"])(self.deploy)
+        self.route("/error")(self.error)
 
     def index(self):
         themes = list(self.config.themes().keys())
@@ -45,3 +46,6 @@ class DangerController(BaseController):
             return jsonify(success=False, message="An error occurred when trying to deploy the site. No changes have been made, and your friendly neighborhood administrator has been alerted."), 500
 
         return jsonify(success=True), 200
+
+    def error(self):
+        raise Exception("Test exception to confirm everything's working as intended")
