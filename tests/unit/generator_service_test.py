@@ -50,7 +50,7 @@ class TestGeneratorService(TestCase):
         expect(os.path.realpath(current_path)).to(equal(os.path.realpath(deploy_path)))
 
     def test_creates_content(self):
-        p = Page.create("test.md", markdown="foo!", slug="/", title="Test!")
+        p = Page.create("test.md", markdown="foo!", slug="/", name="Test!", layout="page.html")
         p.save()
 
         deploy_name = self.generator.deploy(theme_path = TestThemePath)
@@ -129,3 +129,15 @@ class TestGeneratorService(TestCase):
             "2016-12-27_000050",
             "2016-12-27_000100",
         ]))
+
+    def test_generate(self):
+        p = Page.create("test.md", markdown="foo!", slug="/", name="Test!", layout="page.html")
+        p.validate()
+        print(p.errors)
+        expect(p.save()).to(be_true)
+
+        generate_location = os.path.join(self.deploy_dir.name, "test_gen")
+        expect(lambda: self.generator.generate(theme_path = TestThemePath, path = generate_location)).not_to(raise_error)
+
+        f_path = os.path.join(generate_location, "index.html")
+        expect(os.path.exists(f_path)).to(be_true)
