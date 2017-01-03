@@ -45,7 +45,7 @@ class GeneratorService(object):
                 game.metadata["slug"] = os.path.join("games", slug)
                 pages_to_generate.append(game)
 
-            for page in pages:
+            for page in pages_to_generate:
                 slug = page.metadata["slug"]
                 while len(slug) > 0 and slug[0] == "/":
                     slug = slug[1:]
