@@ -1,6 +1,7 @@
 from .models import BaseModel
 from .generator_service import GeneratorService
 import os
+import traceback
 import yaml
 
 class Config(object):
@@ -45,6 +46,24 @@ class Config(object):
 
     def use_sentry(self):
         return self.config["sentry_dns"] is not None
+
+    def capture_exception(self, err = None):
+        if self.use_sentry() and "sentry" in self.config:
+            self.sentry.captureException()
+        else:
+            print(err)
+            traceback.print_tb(err.__traceback__)
+
+    def themes(self):
+        if "theme_directory" in self.config:
+            theme_dir = self.config["theme_directory"]
+        else:
+            theme_dir = os.path.join(self.config["content_directory"], "themes")
+
+        themes = filter(os.path.isdir, [os.path.join(theme_dir, name) for name in os.listdir(theme_dir)])
+        return {
+            os.path.basename(path): path for path in themes
+        }
 
     def site_generators(self):
         return {

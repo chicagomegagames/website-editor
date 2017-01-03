@@ -16,6 +16,7 @@ def create_app(config = None):
             "environment": config.environment,
         }
         sentry = Sentry(app, dsn=config.sentry_dns)
+        config.config["sentry"] = sentry
 
     image_service = ImageService(upload_path = config.upload_path)
     app.register_blueprint(ImageController(config, image_service=image_service))
