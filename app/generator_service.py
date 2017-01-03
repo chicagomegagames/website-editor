@@ -53,7 +53,7 @@ class GeneratorService(object):
                 layout = "page.html"
             template = template_environment.get_template(layout)
             with open(output_file, "w+") as writer:
-                writer.write(template.render(page=page))
+                writer.write(template.render(page=page, site=site))
 
         assets_dir = os.path.join(theme_path, "assets")
         if os.path.exists(assets_dir):
