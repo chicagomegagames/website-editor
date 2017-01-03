@@ -1,5 +1,5 @@
 from app import GeneratorService, ImageService
-from app.models import BaseModel, Page
+from app.models import BaseModel, Page, Game
 from expects import *
 from freezegun import freeze_time
 from unittest import TestCase
@@ -49,7 +49,6 @@ class TestGeneratorService(TestCase):
         current_path = os.path.join(self.generator.location, "current")
         expect(os.path.realpath(current_path)).to(equal(os.path.realpath(deploy_path)))
 
-    @freeze_time("2016-12-28 23:26:00")
     def test_creates_content(self):
         p = Page.create("test.md", markdown="foo!", slug="/", title="Test!")
         p.save()
@@ -58,6 +57,15 @@ class TestGeneratorService(TestCase):
 
         index_file = os.path.join(self.generator.location, deploy_name, "index.html")
         expect(os.path.exists(index_file)).to(be_true)
+
+    def test_creates_game_pages(self):
+        g = Game.create("foo.md", name="Foo", markdown="This is game")
+        expect(g.save()).to(be_true)
+
+        deploy_name = self.generator.deploy(theme_path = TestThemePath)
+
+        game_file = os.path.join(self.generator.location, deploy_name, "games", "foo", "index.html")
+        expect(os.path.exists(game_file)).to(be_true)
 
     def test_copy_assets(self):
         deploy_name = self.generator.deploy(theme_path = TestThemePath)
