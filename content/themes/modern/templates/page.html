@@ -1,5 +1,9 @@
 {% extends 'base_template.html' %}
-{% set header_title = page.metadata.name + " | Chicago MegaGames" %}
+
+{% if page.metadata.name is defined and page.metadata.name %}
+  {% set header_title = page.metadata.name + " | Chicago MegaGames" %}
+{% endif %}
+
 {% block main %}
 {{ page.content }}
 
