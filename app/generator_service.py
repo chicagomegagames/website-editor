@@ -15,6 +15,7 @@ class GeneratorService(object):
     def deploys(self):
         all_deploys = os.listdir(self.location)
         all_deploys.remove("current")
+        all_deploys.sort()
         return all_deploys
 
     def deploy(self, theme_path = None, image_service = None):
