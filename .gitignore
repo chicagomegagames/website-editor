@@ -16,3 +16,4 @@ content/pages
 content/events
 TODO.txt
 image_uploads
+*.pyc
