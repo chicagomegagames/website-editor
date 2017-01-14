@@ -58,10 +58,16 @@ class GeneratorService(object):
 
         assets_dir = os.path.join(theme_path, "assets")
         if os.path.exists(assets_dir):
-            shutil.copytree(assets_dir, os.path.join(path, "assets"))
+            copy_dir = os.path.join(path, "assets")
+            if os.path.exists(copy_dir):
+                shutil.rmtree(copy_dir)
+            shutil.copytree(assets_dir, copy_dir)
 
         if image_service:
-            shutil.copytree(image_service.upload_path, os.path.join(path, "images"))
+            img_dir = os.path.join(path, "images")
+            if os.path.exists(img_dir):
+                shutil.rmtree(img_dir)
+            shutil.copytree(image_service.upload_path, img_dir)
 
     def deploy(self, theme_path = None, image_service = None):
         now = datetime.now()
