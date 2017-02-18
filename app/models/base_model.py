@@ -32,7 +32,8 @@ class BaseModel():
         if not os.path.exists(path):
             os.mkdir(path)
 
-        return [cls(filename) for filename in os.listdir(path)]
+        files = filter(os.path.isfile, [os.path.join(path, name) for name in os.listdir(path)])
+        return list(map(cls, map(os.path.basename, files)))
 
 
     @classmethod
