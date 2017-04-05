@@ -1,0 +1,22 @@
+{% extends 'base_template.html' %}
+
+{% if page.metadata.name is defined and page.metadata.name %}
+    {% set header_title = page.metadata.name + " | Chicago MegaGames" %}
+{% endif %}
+
+{% block main %}
+<article class="page">
+    {{ page.content }}
+
+    {% if page.metadata.hero_image is defined %}
+    <figure>
+        <img src="{{ page.metadata.hero_image }}" {%- if page.metadata.hero_alt is defined %} alt="{{ page.metadata.hero_alt }}" {%- endif %} />
+        {% if page.metadata.hero_caption is defined %}
+        <figcaption>
+            <p>{{ page.metadata.hero_caption }}</p>
+        </figcaption>
+        {% endif %}
+    </figure>
+    {% endif %}
+</article>
+{% endblock %}

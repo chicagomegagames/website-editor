@@ -1,0 +1,43 @@
+{% extends 'base_template.html' %}
+{% block main %}
+<article class="index">
+    <section class="page">
+        {% if page.metadata.hero_image is defined and page.metadata.hero_image %}
+        <figure>
+            <img src="{{ page.metadata.hero_image }}" {%- if
+            page.metadata.hero_alt is defined and page.metadata.hero_alt %} alt="{{ page.metadata.hero_alt }}" {%- endif %} />
+            {% if page.metadata.hero_caption is defined and page.metadata.hero_caption %}
+            <figcaption>
+                <p>{{ page.metadata.hero_caption }}</p>
+            </figcaption>
+            {% endif %}
+        </figure>
+        {% endif %}
+
+        {{ page.content }}
+    </section>
+
+    <section id="events">
+        <h2>Upcoming Events</h2>
+
+        <table class="upcoming">
+            {% for event in site.calendar %}
+            <tr>
+                <td>
+                    {{ event.metadata.date }}
+                    {%- if event.metadata.time is defined %}<br />{{ event.metadata.time }}{%- endif %}
+                </td>
+                <td>
+                    <p>
+                        <strong>{{ event.metadata.name }}</strong> <br>
+                        {{ event.metadata.location }}
+                    </p>
+
+                    {{ event.content }}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
+</article>
+{% endblock %}

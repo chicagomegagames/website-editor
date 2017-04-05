@@ -1,0 +1,40 @@
+{%- if header_title is not defined or not header_title -%}
+  {%- set header_title = "Chicago Megagames" -%}
+{%- endif -%}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ header_title }}</title>
+  <link rel="stylesheet" href="/assets/css/base.css" />
+</head>
+<body>
+
+  <div id="body">
+    <header id="global-header">
+      <div id="logo">
+        <img src="/assets/images/cmg_square.png" alt="CMG"/>
+      </div>
+      <nav class="global-nav">
+        <a href="/">Home</a>
+        <a href="/games/">Games</a>
+        <a href="https://chicagomegagames.com/blog/">Blog</a>
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+
+      {% block main %}
+      {% endblock %}
+  </div>
+
+  <script>
+    if (document.domain == "chicagomegagames.com") {
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-80993204-1', 'auto');
+      ga('send', 'pageview');
+    }
+  </script>
+</body>

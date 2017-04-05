@@ -1,0 +1,130 @@
+@import url("https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700,900");
+html {
+  box-sizing: border-box; }
+
+*, *::after, *::before {
+  box-sizing: inherit; }
+
+body {
+  font-family: "Source Serif Pro", "Gentium Book Basic", serif;
+  font-size: 20px;
+  line-height: 1.5em; }
+
+h1, h2, h3 {
+  padding-top: 0;
+  margin-top: 0;
+  font-family: "Halis R", "Source Sans Pro", sans-serif;
+  font-weight: 900;
+  line-height: 1em;
+  color: #1e3756; }
+
+h1 {
+  font-size: 3em; }
+
+h2 {
+  font-size: 2em;
+  margin-top: 1em; }
+
+h3 {
+  font-size: 1.5em;
+  margin-top: 1em; }
+
+p {
+  line-height: 1.5em;
+  margin: 0 0 1.5em; }
+
+a {
+  color: #4dadf7; }
+
+article.index {
+  display: block; }
+  article.index::after {
+    clear: both;
+    content: "";
+    display: block; }
+  article.index section.page {
+    float: left;
+    display: block;
+    margin-right: 2.35765%;
+    width: 57.35098%; }
+    article.index section.page:last-child {
+      margin-right: 0; }
+    article.index section.page .big-text {
+      font-size: 1.5em; }
+  article.index section#events {
+    float: left;
+    display: block;
+    margin-right: 2.35765%;
+    width: 31.76157%;
+    margin-left: 8.5298%; }
+    article.index section#events:last-child {
+      margin-right: 0; }
+    article.index section#events h2 {
+      font-size: 1.5em;
+      margin-top: 0; }
+
+body {
+  background: #eff1f5;
+  color: #333; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0; }
+
+img {
+  max-width: 100%; }
+
+#body {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  background: white;
+  padding: 3.236em;
+  box-sizing: content-box;
+  margin-top: 4em; }
+  #body::after {
+    clear: both;
+    content: "";
+    display: block; }
+
+#global-header {
+  display: block;
+  margin-bottom: 4em;
+  text-align: center; }
+  #global-header::after {
+    clear: both;
+    content: "";
+    display: block; }
+  #global-header #logo {
+    margin-bottom: 1em; }
+    #global-header #logo img {
+      height: 10em; }
+  #global-header .global-nav {
+    float: left;
+    display: block;
+    margin-right: 2.35765%;
+    width: 65.88078%;
+    margin-left: 17.05961%; }
+    #global-header .global-nav:last-child {
+      margin-right: 0; }
+    #global-header .global-nav a {
+      float: left;
+      display: block;
+      margin-right: 3.57866%;
+      width: 22.316%;
+      display: block;
+      text-decoration: none;
+      color: #333;
+      border-bottom: 3px solid #333;
+      transition: color 1s, border 1s; }
+      #global-header .global-nav a:last-child {
+        margin-right: 0; }
+      #global-header .global-nav a:hover {
+        color: #853a2d;
+        border-bottom-color: #853a2d; }
+      #global-header .global-nav a:active {
+        color: #d74127;
+        border-bottom-color: #d74127; }
+
+/*# sourceMappingURL=base.css.map */

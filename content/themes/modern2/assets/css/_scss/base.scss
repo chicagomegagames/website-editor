@@ -1,0 +1,71 @@
+$blue: #1e3756;
+$red: #d74127;
+$black: #333;
+
+@import "neat/neat";
+@import "type";
+@import "index";
+
+body {
+    background: #eff1f5;
+    color: $black;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    max-width: 100%;
+}
+
+#body {
+    @include outer-container;
+    background: white;
+    padding: (2 * $gutter);
+    box-sizing: content-box;
+    margin-top: 4em;
+}
+
+#global-header {
+    @include row;
+    margin-bottom: 4em;
+    text-align: center;
+
+    #logo {
+        margin-bottom: 1em;
+
+        img {
+            height: 10em;
+        }
+    }
+
+    .global-nav {
+        @include span-columns(8);
+        @include shift(2);
+
+        a {
+            @include span-columns(2 of 8);
+            display: block;
+
+            text-decoration: none;
+
+            color: $black;
+            border-bottom: 3px solid $black;
+
+            transition: color 1s, border 1s;
+
+            &:hover {
+                color: mix($black, $red);
+                border-bottom-color: mix($black, $red);
+            }
+
+            &:active {
+                color: $red;
+                border-bottom-color: $red;
+            }
+        }
+    }
+}
