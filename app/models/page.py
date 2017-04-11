@@ -5,15 +5,25 @@ class Page(BaseModel):
     ROUTE_PREFIX = "page"
 
     REQUIRED_META = {
-        "name": {"type": "text"},
-        "slug": {"type": "text"},
-        "layout": {"type": "text"},
+        "name": {
+            "type": "text",
+            "hint": "Page name (also used as the title)",
+        },
+        "slug": {
+            "type": "text",
+            "hint": "URL slug for the page (ex '/' for the index, '/about/faq/', can be multi-level)",
+        },
+        "layout": {
+            "type": "text",
+            "hint": "layout to be used for the page (ex 'page.html')",
+        },
     }
 
     OPTIONAL_META = {
-        "hero_image": {"type": "image"},
-        "hero_alt": {"type": "text"},
-        "hero_caption": {"type": "text"},
+        "hero_image": {
+            "type": "image",
+            "hint": "Big, lead-in image",
+        },
     }
 
     @classmethod
