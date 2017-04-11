@@ -56,15 +56,18 @@ img {
     max-width: 800px; }
     .page table.meta input {
       width: 100%; }
+    .page table.meta textarea {
+      height: 10em; }
     .page table.meta td {
-      vertical-align: baseline; }
+      vertical-align: top;
+      padding-bottom: 1em; }
+      .page table.meta td img {
+        margin-top: 1em; }
     .page table.meta tr td:nth-child(2n -1) {
       text-align: right;
       box-sizing: border-box;
-      width: 30%; }
-      .page table.meta tr td:nth-child(2n -1) input {
-        text-align: right;
-        width: calc(100% - 20px); }
+      width: 30%;
+      padding-top: 5px; }
       .page table.meta tr td:nth-child(2n -1)::after {
         content: ":";
         width: 10px; }
