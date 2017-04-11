@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700,900");
+@import url("https://fonts.googleapis.com/css?family=PT+Sans:400,700|PT+Serif:400,400i,700,700i");
 html {
   box-sizing: border-box; }
 
@@ -6,16 +6,16 @@ html {
   box-sizing: inherit; }
 
 body {
-  font-family: "Source Serif Pro", "Gentium Book Basic", serif;
+  font-family: "PT Serif", "Source Serif Pro", "Gentium Book Basic", serif;
   font-size: 20px;
-  line-height: 1.5em; }
+  line-height: 30px; }
 
 h1, h2, h3 {
   padding-top: 0;
   margin-top: 0;
-  font-family: "Halis R", "Source Sans Pro", sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
   font-weight: 900;
-  line-height: 1em;
+  line-height: 30px;
   color: #1e3756; }
 
 h1 {
@@ -26,15 +26,22 @@ h2 {
   margin-top: 1em; }
 
 h3 {
-  font-size: 1.5em;
-  margin-top: 1em; }
+  font-size: 1.2em;
+  margin: 0em;
+  color: black; }
 
 p {
-  line-height: 1.5em;
-  margin: 0 0 1.5em; }
+  line-height: 30px;
+  margin: 0 0 30px; }
 
 a {
   color: #4dadf7; }
+
+html {
+  box-sizing: border-box; }
+
+*, *::after, *::before {
+  box-sizing: inherit; }
 
 article.index {
   display: block; }
@@ -62,6 +69,80 @@ article.index {
     article.index section#events h2 {
       font-size: 1.5em;
       margin-top: 0; }
+    article.index section#events .event {
+      border-bottom: 2px dashed #666;
+      margin-top: 2em; }
+      article.index section#events .event:first-child {
+        margin-top: 0; }
+      article.index section#events .event:last-child {
+        border-bottom-width: 0px; }
+      article.index section#events .event .description p {
+        font-size: .8em;
+        line-height: 30px; }
+
+html {
+  box-sizing: border-box; }
+
+*, *::after, *::before {
+  box-sizing: inherit; }
+
+article.game {
+  display: block; }
+  article.game::after {
+    clear: both;
+    content: "";
+    display: block; }
+  article.game section.content {
+    float: left;
+    display: block;
+    margin-right: 2.35765%;
+    width: 65.88078%; }
+    article.game section.content:last-child {
+      margin-right: 0; }
+  article.game section.aside {
+    float: left;
+    display: block;
+    margin-right: 2.35765%;
+    width: 31.76157%; }
+    article.game section.aside:last-child {
+      margin-right: 0; }
+    article.game section.aside .facts tbody tr td:first-child {
+      text-align: right;
+      font-weight: bold;
+      padding-right: 10px; }
+  article.game .header {
+    text-align: center;
+    margin-bottom: 2em; }
+    article.game .header h1 {
+      margin: 0 0 20px;
+      padding: 0; }
+    article.game .header .subtitle {
+      font-style: italic;
+      font-size: 1.5em;
+      margin: 0;
+      padding: 0; }
+    article.game .header.hero {
+      width: calc(100% + 6.472em);
+      margin-left: -3.236em;
+      padding: 10em 0 3em;
+      background-size: cover;
+      background-position: center center;
+      position: relative; }
+      article.game .header.hero h1 {
+        color: white;
+        position: relative; }
+      article.game .header.hero .subtitle {
+        color: #ccc;
+        position: relative; }
+      article.game .header.hero::before {
+        position: absolute;
+        display: block;
+        content: "";
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.3); }
 
 body {
   background: #eff1f5;
@@ -126,5 +207,11 @@ img {
       #global-header .global-nav a:active {
         color: #d74127;
         border-bottom-color: #d74127; }
+
+figure {
+  margin: 0; }
+  figure figcaption {
+    font-size: .8em;
+    color: #666; }
 
 /*# sourceMappingURL=base.css.map */

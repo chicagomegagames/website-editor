@@ -1,0 +1,47 @@
+{% extends 'base_template.html' %}
+
+{% if page.metadata.name is defined and page.metadata.name %}
+    {% set header_title = page.metadata.name + " | Chicago MegaGames" %}
+{% endif %}
+
+{% if page.metadata.hero_image is defined %}
+    {% set has_hero = True %}
+{% else %}
+    {% set has_hero = False %}
+{% endif %}
+
+{% block main %}
+<article class="game">
+    <div class="header {%- if has_hero %} hero{% endif %}" {%- if has_hero %} style="background-image: url('{{ page.metadata.hero_image }}');"{% endif %}>
+        <h1>{{ page.metadata.name }}</h1>
+        <p class="subtitle">{{ page.metadata.subtitle }}</p>
+    </div>
+
+    <section class="content">
+        {{ page.content }}
+    </section>
+
+    <section class="aside">
+        <h3 id="quick-facts">Quick Facts</h3>
+
+        <table class="facts">
+            <tr>
+                <td>Game Length</td>
+                <td>{{ page.metadata.game_length }}</td>
+            </tr>
+            <tr>
+                <td>Players</td>
+                <td>{{ page.metadata.player_count }}</td>
+            </tr>
+            <tr>
+                <td>Control</td>
+                <td>{{ page.metadata.control_count }}</td>
+            </tr>
+        </table>
+
+        <h3 id="credits">Credits</h3>
+        {{ page.metadata.credits|markdown }}
+    </section>
+
+</article>
+{% endblock %}

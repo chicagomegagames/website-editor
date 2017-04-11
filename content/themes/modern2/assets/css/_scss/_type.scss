@@ -1,10 +1,11 @@
-@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700,900');
+@import
+url('https://fonts.googleapis.com/css?family=PT+Sans:400,700|PT+Serif:400,400i,700,700i');
 
-$font-sans: "Halis R", "Source Sans Pro", sans-serif;
-$font-serif: "Source Serif Pro", "Gentium Book Basic", serif;
+$font-sans: "Source Sans Pro", sans-serif;
+$font-serif: "PT Serif", "Source Serif Pro", "Gentium Book Basic", serif;
 
 $font-size: 20px;
-$line-height: 1.5em;
+$line-height: ($font-size * 1.5);
 
 
 body {
@@ -18,7 +19,7 @@ h1, h2, h3 {
   margin-top: 0;
   font-family: $font-sans;
   font-weight: 900;
-  line-height: 1em;
+  line-height: $line-height;
   color: $blue;
 }
 
@@ -32,8 +33,9 @@ h2 {
 }
 
 h3 {
-  font-size: 1.5em;
-  margin-top: 1em;
+  font-size: 1.2em;
+  margin: 0em;
+  color: black;
 }
 
 p {

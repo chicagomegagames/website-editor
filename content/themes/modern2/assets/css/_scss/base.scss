@@ -5,6 +5,7 @@ $black: #333;
 @import "neat/neat";
 @import "type";
 @import "index";
+@import "game";
 
 body {
     background: #eff1f5;
@@ -67,5 +68,14 @@ img {
                 border-bottom-color: $red;
             }
         }
+    }
+}
+
+figure {
+    margin: 0;
+
+    figcaption {
+        font-size: .8em;
+        color: #666;
     }
 }

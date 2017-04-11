@@ -20,24 +20,21 @@
     <section id="events">
         <h2>Upcoming Events</h2>
 
-        <table class="upcoming">
-            {% for event in site.calendar %}
-            <tr>
-                <td>
-                    {{ event.metadata.date }}
-                    {%- if event.metadata.time is defined %}<br />{{ event.metadata.time }}{%- endif %}
-                </td>
-                <td>
-                    <p>
-                        <strong>{{ event.metadata.name }}</strong> <br>
-                        {{ event.metadata.location }}
-                    </p>
+        {% for event in site.calendar %}
+        <div class="event">
+            <div class="meta">
+                <h3>{{ event.metadata.name }}</h3>
+                <p>
+                    <strong>{{ event.metadata.date }}</strong><br />
+                    {{ event.metadata.location }}
+                </p>
+            </div>
 
-                    {{ event.content }}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
+            <div class="description">
+                {{ event.content }}
+            </div>
+        </div>
+        {% endfor %}
     </section>
 </article>
 {% endblock %}

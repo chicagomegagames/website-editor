@@ -1,0 +1,40 @@
+@import "neat/neat";
+
+article.index {
+    @include row;
+
+    section.page {
+        @include span-columns(7);
+
+        .big-text {
+            font-size: 1.5em;
+        }
+    }
+
+    section#events {
+        @include span-columns(4);
+        @include shift(1);
+
+        h2 {
+            font-size: 1.5em;
+            margin-top: 0;
+        }
+
+        .event {
+            border-bottom: 2px dashed #666;
+            margin-top: 2em;
+
+            &:first-child {
+                margin-top: 0;
+            }
+            &:last-child {
+                border-bottom-width: 0px;
+            }
+
+            .description p {
+                font-size: .8em;
+                line-height: ($font-size * 1.5);
+            }
+        }
+    }
+}
