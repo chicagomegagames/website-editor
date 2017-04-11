@@ -20,6 +20,10 @@ class Game(BaseModel):
         "preview_image": {"type": "image"},
     }
 
+    @classmethod
+    def _sort(cls, models):
+        return sorted(models, key=lambda m: m.metadata["name"])
+
     def generated_slug(self):
         return re.sub(r'\ +', '_', re.sub(r'\W+', ' ', self.name.lower()).strip())
 

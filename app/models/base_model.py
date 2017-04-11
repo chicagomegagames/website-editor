@@ -24,6 +24,10 @@ class BaseModel():
             make_directory_tree(cls.BASE_CONTENT_DIR)
 
     @classmethod
+    def _sort(cls, models):
+        return models
+
+    @classmethod
     def all(cls):
         path = os.path.join(cls.BASE_CONTENT_DIR, cls.CONTENT_DIR)
 
@@ -31,7 +35,7 @@ class BaseModel():
             os.mkdir(path)
 
         files = filter(os.path.isfile, [os.path.join(path, name) for name in os.listdir(path)])
-        return list(map(cls, map(os.path.basename, files)))
+        return cls._sort(list(map(cls, map(os.path.basename, files))))
 
 
     @classmethod

@@ -15,3 +15,7 @@ class Page(BaseModel):
         "hero_alt": {"type": "text"},
         "hero_caption": {"type": "text"},
     }
+
+    @classmethod
+    def _sort(cls, models):
+        return sorted(models, key=lambda m: m.metadata["slug"])
