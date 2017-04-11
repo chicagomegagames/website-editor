@@ -6,7 +6,6 @@ class Game(BaseModel):
     ROUTE_PREFIX = "game"
     REQUIRED_META = {
         "name": {"type": "text"},
-        "preview_image": {"type": "image"},
     }
 
     OPTIONAL_META = {
@@ -18,6 +17,7 @@ class Game(BaseModel):
         "hero_image": {"type": "image"},
         "layout": {"type": "text"},
         "player_count": {"type": "text"},
+        "preview_image": {"type": "image"},
     }
 
     def generated_slug(self):
