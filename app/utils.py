@@ -1,5 +1,6 @@
 import os
 import re
+import markdown2
 
 def make_directory_tree(path):
     if not os.path.exists(path):
@@ -32,3 +33,7 @@ def form_to_dict(form):
             container[key_to_use] = values
 
     return output
+
+def html_from_markdown(md_text):
+    parsed_html = markdown2.markdown(md_text.encode("ascii", "xmlcharrefreplace"), extras=["fenced-code-blocks", "smarty-pants", "header-ids", "cuddled-lists", "tables"])
+    return u"{}".format(parsed_html)

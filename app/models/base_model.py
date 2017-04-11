@@ -1,6 +1,4 @@
-from app.utils import make_directory_tree
-from flask import Blueprint, render_template, request, jsonify, redirect, url_for
-import markdown2
+from app.utils import make_directory_tree, html_from_markdown
 import os
 import yaml
 
@@ -139,8 +137,7 @@ class BaseModel():
         }
 
     def __regenerate_markdown(self):
-        parsed_html = markdown2.markdown(self.markdown.encode("ascii", "xmlcharrefreplace"), extras=["fenced-code-blocks", "smarty-pants", "header-ids", "cuddled-lists", "tables"])
-        self.content = u"{}".format(parsed_html)
+        self.content = html_from_markdown(self.markdown)
 
     def validate(self):
         self.errors = []

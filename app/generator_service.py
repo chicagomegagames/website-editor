@@ -1,6 +1,6 @@
 from datetime import datetime
 from app.models import Page, Game, Event
-from app.utils import make_directory_tree
+from app.utils import make_directory_tree, html_from_markdown
 import jinja2
 import os
 import shutil
@@ -25,6 +25,8 @@ class GeneratorService(object):
         template_environment = jinja2.Environment(
             loader=jinja2.FileSystemLoader(os.path.join(theme_path, "templates"))
         )
+
+        template_environment.filters["markdown"] = lambda x: html_from_markdown(str(x))
 
         pages = Page.all()
         games = Game.all()
