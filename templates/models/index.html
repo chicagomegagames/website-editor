@@ -24,7 +24,13 @@
       <tr>
         <td>
           {{ model.name }}<br />
-          <span class="filename">/{{ prefix }}/{{ model.filename }}</span>
+          <span class="filename">
+          {%- if model_name|lower == "page" -%}
+            {{ model.metadata['slug'] }}
+          {%- else -%}
+            /{{ prefix }}/{{ model.filename }}
+          {%- endif -%}
+          </span>
         </td>
         {% if hide_show_page is defined and hide_show_page %}
         {% else %}
