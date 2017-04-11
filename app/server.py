@@ -21,9 +21,9 @@ def create_app(config = None):
     image_service = ImageService(upload_path = config.upload_path)
     app.register_blueprint(ImageController(config, image_service = image_service))
     app.register_blueprint(DangerController(config, image_service = image_service))
-    app.register_blueprint(GameController(config))
-    app.register_blueprint(PageController(config))
-    app.register_blueprint(EventController(config))
+    app.register_blueprint(GameController(config, image_service = image_service))
+    app.register_blueprint(PageController(config, image_service = image_service))
+    app.register_blueprint(EventController(config, image_service = image_service))
 
 
     def template(name, **kwargs):
