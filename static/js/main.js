@@ -80,7 +80,16 @@ function load_model_form(form) {
     required_meta_inputs = [...form.querySelectorAll("input[name^=meta]")]
     required_meta_inputs.forEach(function(element) {
       var key = element.getAttribute("data-metadata-name");
-      var value = element.value;
+
+      var value;
+      if (element.type == "file") {
+        value = element.files[0];
+        if (value === undefined) {
+          return;
+        }
+      } else {
+        value = element.value;
+      }
 
       model.append(`metadata[${key}]`, value)
     })

@@ -3,8 +3,8 @@ from app.models import Event
 from flask import url_for
 
 class EventController(ModelController):
-    def __init__(self, config):
-        super().__init__(Event, "events", config)
+    def __init__(self, config, image_service):
+        super().__init__(Event, "events", config, image_service)
         self.view_options["edit_show_filename"] = False
 
     def index(self):

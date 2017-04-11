@@ -1,6 +1,17 @@
 from app.utils import form_to_dict
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 
+class NoImageServiceError(Exception):
+    def __init__(self, controller, cls, key):
+        self.controller = controller
+        self.cls = cls
+        self.key = key
+
+        super().__init__("Couldn't create {controller_class}, metadata {key} requires an image service".format(
+            controller_class=self.controller.__class__.__name__,
+            key=self.key
+        ))
+
 class BaseController(Blueprint):
     def __init__(self, route_prefix, config):
         super().__init__(route_prefix, __name__, url_prefix="/{}".format(route_prefix))
@@ -22,13 +33,23 @@ class BaseController(Blueprint):
 
 
 class ModelController(BaseController):
-    def __init__(self, cls, route_prefix, config):
+    def __init__(self, cls, route_prefix, config, image_service = None):
         super().__init__(route_prefix, config)
         self.cls = cls
         self.model_name = cls.__name__
+        self.image_service = image_service
         self.view_options = {
             "edit_show_filename": True,
         }
+
+        meta = dict(self.cls.REQUIRED_META)
+        meta.update(self.cls.OPTIONAL_META)
+        self.image_metadata = [
+            key for key, value in meta.items() if value["type"] == "image"
+        ]
+        if image_service is None and len(image_meta) == 0:
+            raise NoImageServiceError(controller = self, cls = cls, key = key)
+
         self._setup_routes()
 
 
@@ -61,6 +82,18 @@ class ModelController(BaseController):
             form = form_to_dict(request.form)
             if "filename" in form and form["filename"] == model.filename:
                 del form["filename"]
+
+            images = {}
+            for key in self.image_metadata:
+                file_key = "metadata[{key}]".format(key=key)
+                if file_key in request.files:
+                    img = request.files[file_key]
+                    uploaded_image = self.image_service.upload_image(
+                        img.filename,
+                        img.stream
+                    )
+                    image_path = "/images/{}".format(uploaded_image.name)
+                    form["metadata"][key] = image_path
 
             model.update(**form)
             if not model.validate():

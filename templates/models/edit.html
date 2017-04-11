@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% if model is defined and model %}
+    {% set has_model = True %}
+{% else %}
+    {% set has_model = False %}
+{% endif %}
+
 {% block main %}
     <form id="edit">
     {% if model is defined and model %}
@@ -45,17 +51,31 @@
 
         <h2>optional meta</h2>
         <table class="meta">
-            {% for key in optional_meta -%}
+            {% for key, details in optional_meta.items() -%}
             <tr>
                 <td>
                     <label for="meta[{{key}}]">{{key}}</label>
                 </td>
                 <td>
+                {% if details['type'] == "markdown" %}
+                    <textarea name="meta[{{key}}]" data-metadata-name="{{key}}">
+                        {%- if has_model -%}
+                            {{model.metadata[key]|safe}}
+                        {%- endif -%}
+                    </textarea>
+                {% elif details['type'] == "image" %}
+                    {% if has_model and model.metadata[key] %}
+                    <img src="{{ model.metadata[key] }}" />
+                    <br />
+                    {% endif %}
+                    <input type="file" data-metadata-name="{{key}}" name="meta[{{key}}]" accept="image/*" />
+                {% else %}
                     <input type="text" name="meta[{{key}}]"
                     {%- if model is defined and model -%}
                         value="{{model.metadata[key]|safe}}"
                     {% endif -%}
                     data-metadata-name="{{key}}" data-metadata-type="value" />
+                {% endif %}
                 </td>
             </tr>
             {% endfor -%}
