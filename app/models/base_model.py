@@ -48,16 +48,10 @@ class BaseModel():
         if os.path.exists(path):
             raise FileAlreadyExistsError(cls, filename)
 
-        dummy_meta = {}
-        for meta in cls.REQUIRED_META:
-            if meta in kwargs:
-                dummy_meta[meta] = kwargs[meta]
-            else:
-                dummy_meta[meta] = None
-
-        for meta in cls.OPTIONAL_META:
-            if meta in kwargs:
-                dummy_meta[meta] = kwargs[meta]
+        dummy_meta = cls._default_meta()
+        for key, value in kwargs.items():
+            if key in dummy_meta:
+                dummy_meta[key] = value
 
         with open(path, "w+") as writer:
             writer.write("---\n")
@@ -67,6 +61,20 @@ class BaseModel():
                 writer.write(kwargs["markdown"])
         model = cls(filename)
         return model
+
+    @classmethod
+    def _default_meta(cls):
+        all_meta = dict(cls.OPTIONAL_META)
+        all_meta.update(cls.REQUIRED_META)
+
+        meta = {}
+        for key, details in all_meta.items():
+            if "default" in details:
+                meta[key] = details["default"]
+            else:
+                meta[key] = None
+
+        return meta
 
     def __init__(self, filename, **kwargs):
         self.filename = filename
@@ -130,7 +138,8 @@ class BaseModel():
         self.markdown = markdown
         self.__regenerate_markdown()
 
-        self.metadata = yaml.load(metadata)
+        self.metadata = self._default_meta()
+        self.metadata.update(yaml.load(metadata))
 
     def serialize(self):
         return {
@@ -146,7 +155,7 @@ class BaseModel():
     def validate(self):
         self.errors = []
         for key in self.REQUIRED_META:
-            if key not in self.metadata or not self.metadata[key]:
+            if key not in self.metadata or self.metadata[key] is None:
                 self.errors.append("Metadata \"{key}\" is required".format(key=key))
 
         self.__valid = self.errors == []

@@ -96,3 +96,33 @@ class TestBaseModel(ModelTestCase):
     def test_header_ids(self):
         foo = Foo.create("foo.md", name="foo", markdown="# Foo")
         expect(foo.content).to(equal("<h1 id=\"foo\">Foo</h1>\n"))
+
+    def test_metadata_default(self):
+        class Bar(BaseModel):
+            CONTENT_DIR = "bar"
+            REQUIRED_META = {
+                "field": {
+                    "type": "text",
+                    "default": "default value",
+                },
+            }
+
+        bar1 = Bar.create("bar1.md")
+        expect(bar1.metadata).to(have_key("field"))
+        expect(bar1.metadata["field"]).to(equal("default value"))
+
+        bar2 = Bar.create("bar2.md", field="bar bar bar")
+        expect(bar2.metadata).to(have_key("field"))
+        expect(bar2.metadata["field"]).to(equal("bar bar bar"))
+
+    def test_boolean_required_meta(self):
+        class Bar(BaseModel):
+            CONTENT_DIR = "bar"
+            REQUIRED_META = {
+                "field": {
+                    "type": "boolean",
+                }
+            }
+
+        bar = Bar.create("bar.md", field=False)
+        expect(bar.validate()).to(be_true)
