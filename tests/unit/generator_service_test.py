@@ -132,8 +132,6 @@ class TestGeneratorService(TestCase):
 
     def test_generate(self):
         p = Page.create("test.md", markdown="foo!", slug="/", name="Test!", layout="page.html")
-        p.validate()
-        print(p.errors)
         expect(p.save()).to(be_true)
 
         generate_location = os.path.join(self.deploy_dir.name, "test_gen")

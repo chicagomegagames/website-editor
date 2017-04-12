@@ -25,7 +25,6 @@ class TestConfig(TestCase):
 
         config = Config.from_file(path)
 
-        print(config.config)
         expect(config.theme).to(equal("foo"))
         expect(config.debug).to(be_true)
 

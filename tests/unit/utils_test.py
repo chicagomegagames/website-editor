@@ -11,6 +11,5 @@ class TestUtils(TestCase):
         ])
 
         d_form = utils.form_to_dict(form)
-        print(d_form)
         expect(d_form["foo"]).to(equal(["bar", "baz"]))
         expect(d_form["bar"]).to(equal({"sub": "bit"}))

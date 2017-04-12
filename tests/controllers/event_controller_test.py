@@ -43,5 +43,4 @@ class EventControllerTest(TestCase):
         })
 
         expect(response.status_code).to(equal(302))
-        print(response.headers)
         expect(response.headers["Location"]).to(end_with("/events/"))
