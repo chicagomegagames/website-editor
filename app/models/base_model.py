@@ -13,8 +13,8 @@ class FileAlreadyExistsError(Exception):
 class BaseModel():
     BASE_CONTENT_DIR = "content"
     ROUTE_PREFIX = ""
-    REQUIRED_META = []
-    OPTIONAL_META = []
+    REQUIRED_META = {}
+    OPTIONAL_META = {}
 
     @classmethod
     def set_base_dir(cls, directory):
