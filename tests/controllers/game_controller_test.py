@@ -21,19 +21,14 @@ class GameControllerTest(TestCase):
         expect(response).to(have_in_body("No games created"))
 
     def test_index_with_models(self):
-        game_names = [
-            "my_kind_of_town.md",
-            "watch_the_skies.md",
-        ]
-
-        for game in game_names:
-            Game.create(game)
+        Game.create("watch_the_skies.md", name="Watch the Skies")
+        Game.create("my_kind_of_town.md", name="My Kind of Town")
 
         response = self.app.get("/games/")
         expect(response).to(be_successful)
 
-        for game in game_names:
-            expect(response).to(have_in_body("href=\"/games/{}\"".format(game)))
+        expect(response).to(have_in_body("href=\"/games/my_kind_of_town.md\""))
+        expect(response).to(have_in_body("href=\"/games/watch_the_skies.md\""))
 
     def test_show(self):
         game = Game.create("my_kind_of_town.md",
