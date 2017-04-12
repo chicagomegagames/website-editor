@@ -36,6 +36,7 @@ class Game(BaseModel):
         "layout": {
             "type": "text",
             "hint": "filename of the template this page should be rendered with (ex 'page.html', 'game.html')",
+            "default": "game.html",
         },
         "player_count": {
             "type": "text",
