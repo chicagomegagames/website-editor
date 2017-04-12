@@ -86,12 +86,6 @@ class BaseModel():
     def __str__(self):
         return "<{cls}: {path}>".format(cls=self.__class__.__name__, path=self.path)
 
-    def __getattr__(self, name):
-        if "metadata" in self.__dict__ and name in self.metadata:
-            return self.metadata[name]
-
-        raise AttributeError("'{}' is not an attribute of {}".format(name, self))
-
     def __eq__(self, other):
         return self.path == other.path
 

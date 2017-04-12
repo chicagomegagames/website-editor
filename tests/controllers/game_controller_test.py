@@ -87,7 +87,7 @@ class GameControllerTest(TestCase):
         expect(lambda: Game("mkot.md")).not_to(raise_error(FileNotFoundError))
 
         game2 = Game("mkot.md")
-        expect(game2.name).to(equal("My Kind of Town"))
+        expect(game2.metadata["name"]).to(equal("My Kind of Town"))
 
     def test_edit_filename_passed_no_change(self):
         game = Game.create("my_kind_of_town.md",

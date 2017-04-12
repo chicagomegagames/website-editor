@@ -56,10 +56,11 @@ class Game(BaseModel):
         return sorted(models, key=lambda m: m.metadata["name"])
 
     def generated_slug(self):
-        return re.sub(r'\ +', '_', re.sub(r'\W+', ' ', self.name.lower()).strip())
+        return re.sub(r'\ +', '_', re.sub(r'\W+', ' ', self.metadata["name"].lower()).strip())
 
-    def __getattr__(self, name):
-        if name == "slug":
+    @property
+    def slug(self):
+        if "slug" in self.metadata:
+            return self.metadata["slug"]
+        else:
             return self.generated_slug()
-
-        return super().__getattr__(name)
