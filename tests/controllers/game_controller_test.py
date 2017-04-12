@@ -116,3 +116,13 @@ class GameControllerTest(TestCase):
         show_response = self.app.get("/games/foo.md")
         expect(show_response).to(be_successful)
         expect(show_response).to(have_in_body("Foo, the game!"))
+
+    def test_edit_without_all_meta(self):
+        game = Game.create("my_kind_of_town.md",
+            name = "My Kind of Town",
+        )
+
+        edit_response = self.app.post("/games/my_kind_of_town.md/edit", data = {
+            "markdown": "Hello! Yes, this is dog.",
+        })
+        expect(edit_response).to(be_successful)

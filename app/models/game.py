@@ -9,6 +9,11 @@ class Game(BaseModel):
             "type": "text",
             "hint": "The name of the game",
         },
+        "show_quick_facts": {
+            "type": "boolean",
+            "hint": "Should the 'Quick Facts' block be visible?",
+            "default": False,
+        },
     }
 
     OPTIONAL_META = {
