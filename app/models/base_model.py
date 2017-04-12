@@ -80,7 +80,7 @@ class BaseModel():
         self.filename = filename
         self.path = os.path.join(self.BASE_CONTENT_DIR, self.CONTENT_DIR, filename)
         self.parse_page()
-        self.__valid = False
+        self._valid = False
         self.errors = []
 
     def __str__(self):
@@ -158,8 +158,8 @@ class BaseModel():
             if key not in self.metadata or self.metadata[key] is None:
                 self.errors.append("Metadata \"{key}\" is required".format(key=key))
 
-        self.__valid = self.errors == []
-        return self.__valid
+        self._valid = self.errors == []
+        return self._valid
 
     def update(self, **kwargs):
         if "metadata" in kwargs:
@@ -179,17 +179,18 @@ class BaseModel():
         self.parse_page()
         self.validate()
 
-    def save(self):
-        self.validate()
+    def save(self, force = False):
+        if not force:
+            self.validate()
 
-        if not self.__valid:
-            return False
+            if not self._valid:
+                return False
 
         with open(self.path, "r+") as f:
             f.seek(0)
             f.write("---\n")
             f.write(yaml.dump(
-                {key: value["value"] for key, value in self.meta().items()},
+                {key: value for key, value in self.metadata.items()},
                 default_flow_style=False)
             )
             f.write("---\n\n")

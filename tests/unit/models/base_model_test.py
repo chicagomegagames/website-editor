@@ -46,6 +46,20 @@ class TestBaseModel(ModelTestCase):
         foo2 = Foo("filename.md")
         expect(foo2.metadata["name"]).to(equal("foo?"))
 
+    def test_save_force(self):
+        class Bar(BaseModel):
+            CONTENT_DIR = "bar"
+            REQUIRED_META = {"field": {"type": "text"}}
+
+        bar = Bar.create("bar.md")
+        del bar.metadata["field"]
+
+        bar.validate()
+        expect(bar._valid).to(be_false)
+
+        expect(bar.save()).to(be_false)
+        expect(bar.save(force=True)).to(be_true)
+
     def test_create_with_optional_meta_args(self):
         expect(lambda: Foo.create("file.md", some_field="blargity")).not_to(raise_error)
         foo = Foo("file.md")
