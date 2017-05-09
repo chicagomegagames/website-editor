@@ -66,6 +66,28 @@ function page_alert(message) {
 
 }
 
+function get_metadata(form) {
+  meta_inputs = [...form.querySelectorAll("[name^=meta]")]
+  return _.reduce(meta_inputs, function(hash, element) {
+    var key = element.getAttribute("data-metadata-name");
+
+    var value;
+    if (element.type == "file") {
+      value = element.files[0];
+      if (value === undefined) {
+        return hash;
+      }
+    } else if (element.type == "checkbox") {
+      value = element.checked;
+    } else {
+      value = element.value;
+    }
+
+    hash[key] = value;
+    return hash;
+  }, {});
+}
+
 function load_model_form(form) {
   form.addEventListener("submit", function(e) {
     e.preventDefault();
@@ -77,23 +99,9 @@ function load_model_form(form) {
       model.append("filename", filename_input.value)
     }
 
-    required_meta_inputs = [...form.querySelectorAll("input[name^=meta]")]
-    required_meta_inputs.forEach(function(element) {
-      var key = element.getAttribute("data-metadata-name");
-
-      var value;
-      if (element.type == "file") {
-        value = element.files[0];
-        if (value === undefined) {
-          return;
-        }
-      } else {
-        value = element.value;
-      }
-
-      model.append(`metadata[${key}]`, value)
-    })
-
+    _.each(get_metadata(form), function(value, key) {
+      model.append(`metadata[${key}]`, value);
+    });
 
     var xhr = new XMLHttpRequest()
     xhr.addEventListener("load", function(evt) {
@@ -101,10 +109,12 @@ function load_model_form(form) {
         window.location = xhr.responseURL;
       }
 
-      console.log(xhr.response);
       var response = JSON.parse(xhr.response);
+      console.log(response);
       if (response.success === true) {
         page_alert("successfully saved!");
+      } else {
+        page_alert("Error: " + response.errors);
       }
     });
 
