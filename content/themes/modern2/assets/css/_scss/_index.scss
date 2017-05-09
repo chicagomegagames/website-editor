@@ -6,6 +6,10 @@ article.index {
     section.page {
         @include span-columns(7);
 
+        @include media(max-width $medium) {
+            @include span-columns(4 of 4);
+        }
+
         .big-text {
             font-size: 1.5em;
         }
@@ -14,6 +18,13 @@ article.index {
     section#events {
         @include span-columns(4);
         @include shift(1);
+
+        @include media(max-width $medium) {
+            @include span-columns(4 of 4);
+            @include shift(0);
+
+            margin-top: 2em;
+        }
 
         h2 {
             font-size: 1.5em;
@@ -31,9 +42,11 @@ article.index {
                 border-bottom-width: 0px;
             }
 
-            .description p {
-                font-size: .8em;
-                line-height: ($font-size * 1.5);
+            @include media(min-widht $medium) {
+                .description p {
+                    font-size: .8em;
+                    line-height: ($font-size * 1.5);
+                }
             }
         }
     }

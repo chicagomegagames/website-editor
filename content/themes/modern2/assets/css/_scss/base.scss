@@ -2,10 +2,14 @@ $blue: #1e3756;
 $red: #d74127;
 $black: #333;
 
+$medium: 900px;
+
 @import "neat/neat";
 @import "type";
 @import "index";
 @import "game";
+@import "games_we_play";
+@import "page";
 
 body {
     background: #eff1f5;
@@ -25,9 +29,16 @@ img {
 #body {
     @include outer-container;
     background: white;
-    padding: (2 * $gutter);
     box-sizing: content-box;
-    margin-top: 4em;
+
+    @include media(min-width $medium) {
+        margin-top: 4em;
+        padding: (2 * $gutter);
+    }
+
+    @include media(max-width $medium) {
+        padding: $gutter;
+    }
 }
 
 #global-header {
@@ -47,8 +58,23 @@ img {
         @include span-columns(8);
         @include shift(2);
 
+        @include media(max-width $medium) {
+            @include span-columns(4 of 4);
+            @include shift(0);
+        }
+
         a {
             @include span-columns(2 of 8);
+            @include media(max-width $medium) {
+                @include span-columns(2 of 4);
+                margin-top: .5em;
+
+                &:nth-child(2n) {
+                    margin-right: 0px;
+                }
+
+            }
+
             display: block;
 
             text-decoration: none;
@@ -67,6 +93,79 @@ img {
                 color: $red;
                 border-bottom-color: $red;
             }
+        }
+    }
+}
+
+#global-footer {
+    @include row;
+    margin-top: 2em;
+
+    font-size: 0.8em;
+
+    &:before {
+        content: "";
+        display: block;
+        border-top: 3px solid $black;
+        width: $column * 2;
+        margin-bottom: 2em;
+    }
+
+    .newsletter {
+        @include span-columns(6);
+
+        @include media(max-width $medium) {
+            @include span-columns(4 of 4);
+        }
+
+        p {
+            max-width: calc(350px + #{$column});
+        }
+
+        input {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+
+            margin: 0;
+            box-sizing: border-box;
+            padding: 3px 7px;
+
+            border-style: solid;
+            border-color: $black;
+            border-width: 2px;
+
+            font-size: ($font-size * 0.8);
+            line-height: $line-height;
+            font-family: $font-sans;
+        }
+
+        input[type=email], input[type=text] {
+            width: calc(100% - #{$column});
+            max-width: 350px;
+        }
+
+        input[type=submit] {
+            box-sizing: border-box;
+            width: $column;
+
+            text-align: center;
+
+            color: white;
+            background: $black;
+            margin-left: -5px;
+        }
+    }
+
+    .info {
+        @include span-columns(3);
+        @include shift(3);
+
+        @include media(max-width $medium) {
+            @include span-columns(4 of 4);
+            @include shift(0);
+
+            margin-top: 2em;
         }
     }
 }

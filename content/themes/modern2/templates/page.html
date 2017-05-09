@@ -6,17 +6,19 @@
 
 {% block main %}
 <article class="page">
-    {{ page.content }}
+    <section class="content centered">
+        {{ page.content }}
 
-    {% if page.metadata.hero_image is defined %}
-    <figure>
-        <img src="{{ page.metadata.hero_image }}" {%- if page.metadata.hero_alt is defined %} alt="{{ page.metadata.hero_alt }}" {%- endif %} />
-        {% if page.metadata.hero_caption is defined %}
-        <figcaption>
-            <p>{{ page.metadata.hero_caption }}</p>
-        </figcaption>
+        {% if page.metadata.hero_image is defined %}
+        <figure>
+            <img src="{{ page.metadata.hero_image }}" {%- if page.metadata.hero_alt is defined %} alt="{{ page.metadata.hero_alt }}" {%- endif %} />
+            {% if page.metadata.hero_caption is defined %}
+            <figcaption>
+                <p>{{ page.metadata.hero_caption }}</p>
+            </figcaption>
+            {% endif %}
+        </figure>
         {% endif %}
-    </figure>
-    {% endif %}
+    </section>
 </article>
 {% endblock %}

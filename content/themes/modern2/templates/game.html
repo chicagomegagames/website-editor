@@ -10,38 +10,54 @@
     {% set has_hero = False %}
 {% endif %}
 
+{% if page.metadata['show_quick_facts'] or page.metadata['credits'] %}
+    {% set center_content = False %}
+{% else %}
+    {% set center_content = True %}
+{% endif %}
+
 {% block main %}
 <article class="game">
     <div class="header {%- if has_hero %} hero{% endif %}" {%- if has_hero %} style="background-image: url('{{ page.metadata.hero_image }}');"{% endif %}>
-        <h1>{{ page.metadata.name }}</h1>
+        <h1>{{ page.logo_or_title }}</h1>
         <p class="subtitle">{{ page.metadata.subtitle }}</p>
     </div>
 
-    <section class="content">
+    <section class="content {%- if center_content %} centered {%- endif -%}">
         {{ page.content }}
     </section>
 
+    {%- if not center_content %}
     <section class="aside">
-        <h3 id="quick-facts">Quick Facts</h3>
+        {%- if page.metadata['show_quick_facts'] -%}
+        <div class="block">
+            <h3 id="quick-facts">Quick Facts</h3>
 
-        <table class="facts">
-            <tr>
-                <td>Game Length</td>
-                <td>{{ page.metadata.game_length }}</td>
-            </tr>
-            <tr>
-                <td>Players</td>
-                <td>{{ page.metadata.player_count }}</td>
-            </tr>
-            <tr>
-                <td>Control</td>
-                <td>{{ page.metadata.control_count }}</td>
-            </tr>
-        </table>
+            <table class="facts">
+                <tr>
+                    <td>Game Length</td>
+                    <td>{{ page.metadata.game_length }}</td>
+                </tr>
+                <tr>
+                    <td>Players</td>
+                    <td>{{ page.metadata.player_count }}</td>
+                </tr>
+                <tr>
+                    <td>Control</td>
+                    <td>{{ page.metadata.control_count }}</td>
+                </tr>
+            </table>
+        </div>
+        {%- endif -%}
 
-        <h3 id="credits">Credits</h3>
-        {{ page.metadata.credits|markdown }}
+        {%- if page.metadata['credits'] -%}
+        <div class="block credits">
+            <h3 id="credits">Credits</h3>
+            {{ page.metadata.credits|markdown }}
+        </div>
+        {%- endif -%}
     </section>
+    {%- endif %}
 
 </article>
 {% endblock %}

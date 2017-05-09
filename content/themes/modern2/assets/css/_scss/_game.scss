@@ -5,10 +5,28 @@ article.game {
 
     section.content {
         @include span-columns(8);
+
+        @include media(max-width $medium) {
+            @include span-columns(4 of 4);
+        }
+
+        &.centered {
+            @include media(min-width $medium) {
+                @include shift(2);
+            }
+        }
     }
 
     section.aside {
         @include span-columns(4);
+
+        @include media(max-width $medium) {
+            @include span-columns(4 of 4);
+
+            .block {
+                margin-top: 2em;
+            }
+        }
 
         .facts tbody tr {
             td {
@@ -28,6 +46,10 @@ article.game {
         h1 {
             margin: 0 0 20px;
             padding: 0;
+
+            img {
+                max-height: 1em;
+            }
         }
         .subtitle {
             font-style: italic;
@@ -37,10 +59,19 @@ article.game {
         }
 
         &.hero {
-            width: calc(100% + #{4 * $gutter});
-            margin-left: -(2 * $gutter);
+            width: 100%;
 
-            padding: 10em 0 3em;
+            @include media(max-width $medium) {
+                margin-left: -1 * $gutter;
+                margin-right: $gutter;
+                padding: 4em $gutter;
+            }
+
+            @include media(min-width $medium) {
+                margin-left: -(2 * $gutter);
+                margin-right: 2 * $gutter;
+                padding: 10em (2 * $gutter) 3em;
+            }
 
             background-size: cover;
             background-position: center center;
@@ -49,6 +80,10 @@ article.game {
             h1 {
                 color: white;
                 position: relative;
+
+                img {
+                    filter: invert(100%);
+                }
             }
             .subtitle {
                 color: #ccc;

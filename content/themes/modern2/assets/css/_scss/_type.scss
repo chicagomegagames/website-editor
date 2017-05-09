@@ -9,40 +9,44 @@ $line-height: ($font-size * 1.5);
 
 
 body {
-  font-family: $font-serif;
-  font-size: $font-size;
-  line-height: $line-height;
+    font-family: $font-serif;
+    font-size: $font-size;
+    line-height: $line-height;
 }
 
 h1, h2, h3 {
-  padding-top: 0;
-  margin-top: 0;
-  font-family: $font-sans;
-  font-weight: 900;
-  line-height: $line-height;
-  color: $blue;
+    padding-top: 0;
+    margin-top: 0;
+    font-family: $font-sans;
+    font-weight: 900;
+    // line-height: $line-height;
+    line-height: 1.1em;
+    color: $blue;
 }
 
 h1 {
-  font-size: 3em;
+    font-size: 3em;
 }
 
 h2 {
-  font-size: 2em;
-  margin-top: 1em;
+    font-size: 2em;
+    margin-top: 1em;
 }
 
 h3 {
-  font-size: 1.2em;
-  margin: 0em;
-  color: black;
+    font-size: 1.2em;
+    margin: 0em;
+    color: black;
 }
 
 p {
-  line-height: $line-height;
-  margin: 0 0 $line-height;
+    line-height: $line-height;
+    margin: 0 0 $line-height;
 }
 
 a {
-  color: #4dadf7;
+    $color: #4dadf7;
+    color: $color;
+    text-decoration: none;
+    border-bottom: $color 2px solid;
 }

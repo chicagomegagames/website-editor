@@ -1,0 +1,26 @@
+{% extends 'base_template.html' %}
+
+{% block main %}
+<article class="games-we-play">
+    <h1>Games we Play</h1>
+    {% for game in site.games if not game.metadata.hidden -%}
+    {%- if game.metadata.preview_image is defined -%}
+        {%- set has_image = True -%}
+    {%- else -%}
+        {%- set has_image = False -%}
+    {%- endif -%}
+    <section class="game">
+        <a href="/{{ game.slug }}" class="title {%- if has_image %} hero {%- endif %}" {%- if has_image %} style="background-image: url('{{ game.metadata.preview_image }}');"{% endif %}>
+            <h2>{{ game.logo_or_title }}</h2>
+        </a>
+        <div class="description">
+            {%- if game.metadata.blurb is defined %}
+            {{ game.metadata.blurb|markdown }}
+            {%- elif game.metadata.subtitle is defined %}
+            {{ game.metadata.subtitle }}
+            {%- endif %}
+        </div>
+    </section>
+    {% endfor %}
+</article>
+{% endblock %}

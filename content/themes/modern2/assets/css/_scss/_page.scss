@@ -1,0 +1,11 @@
+article.page {
+    @include row();
+
+    section.content {
+        @include span-columns(8);
+
+        &.centered {
+            @include shift(2);
+        }
+    }
+}
