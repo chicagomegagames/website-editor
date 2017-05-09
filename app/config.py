@@ -16,7 +16,7 @@ class Config(object):
         "port": 5000,
         "sentry_dns": None,
         "theme": "modern",
-        "upload_path": os.path.join(os.getcwd(), "content", "image_uploads"),
+        "upload_path": None,
     }
 
     @classmethod
@@ -36,6 +36,9 @@ class Config(object):
         config = dict(self.DEFAULT_OPTIONS)
         config.update(args)
         self.config = config
+
+        if not self.config.upload_path:
+            self.config.upload_path = os.path.join(self.config["content_directory"], "image_uploads")
 
         BaseModel.set_base_dir(self.config["content_directory"])
 
