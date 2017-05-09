@@ -1,6 +1,6 @@
 deploy_locations:
     staging:
-        location: "/Users/don/code/megagame/website_editor/deploy/staging"
+        location: "/tmp/_deploy/staging"
         name: Staging
         url: "http://localhost:8000"
 
@@ -8,4 +8,4 @@ theme: modern
 debug: true
 host: 0.0.0.0
 
-content_directory: "/Users/don/code/megagame/website_editor/content"
+content_directory: "./content"
