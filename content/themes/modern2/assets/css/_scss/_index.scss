@@ -42,7 +42,7 @@ article.index {
                 border-bottom-width: 0px;
             }
 
-            @include media(min-widht $medium) {
+            @include media(min-width $medium) {
                 .description p {
                     font-size: .8em;
                     line-height: ($font-size * 1.5);

@@ -96,7 +96,7 @@ article.index {
         margin-top: 0; }
       article.index section#events .event:last-child {
         border-bottom-width: 0px; }
-      @media screen and (min-widht: 900px) {
+      @media screen and (min-width: 900px) {
         article.index section#events .event .description p {
           font-size: .8em;
           line-height: 30px; } }
