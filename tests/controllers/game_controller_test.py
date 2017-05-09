@@ -29,6 +29,8 @@ class GameControllerTest(TestCase):
 
         expect(response).to(have_in_body("href=\"/games/my_kind_of_town.md\""))
         expect(response).to(have_in_body("href=\"/games/watch_the_skies.md\""))
+        expect(response).to(have_in_body("Watch the Skies"))
+        expect(response).to(have_in_body("My Kind of Town"))
 
     def test_show(self):
         game = Game.create("my_kind_of_town.md",
