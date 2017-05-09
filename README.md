@@ -2,7 +2,7 @@
 
 `website-editor` intends to be an easy-to-use web frontend for managing and creating static websites.
 
-This project is currently maintained by Chicago MegaGames.
+This project is currently maintained by Chicago Megagames.
 Because of this, most new development around it goes towards making it easier to manage [chicagomegagames.com](https://chicagomegagames.com).
 
 Development and feature requests are currently managed in Trello.
