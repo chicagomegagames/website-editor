@@ -24,6 +24,32 @@ class BaseModel():
             make_directory_tree(cls.BASE_CONTENT_DIR)
 
     @classmethod
+    def _all_meta(cls):
+        if not hasattr(cls, '_all_meta_dict'):
+            cls._all_meta_dict = {}
+
+        if cls.__name__ not in cls._all_meta_dict:
+            all_meta = dict(cls.OPTIONAL_META)
+            all_meta.update(cls.REQUIRED_META)
+            cls._all_meta_dict[cls.__name__] = all_meta
+
+        return cls._all_meta_dict[cls.__name__]
+
+    @classmethod
+    def _convert_form(cls, form):
+        new_form = {}
+        for key, info in cls._all_meta().items():
+            if key not in form:
+                continue
+            value = form[key]
+            if info["type"] == "boolean":
+                value = value in ["true", "True", True]
+            new_form[key] = value
+
+        return new_form
+
+
+    @classmethod
     def _sort(cls, models):
         return models
 
@@ -49,9 +75,11 @@ class BaseModel():
             raise FileAlreadyExistsError(cls, filename)
 
         dummy_meta = cls._default_meta()
+
         for key, value in kwargs.items():
-            if key in dummy_meta:
+            if key in cls._all_meta():
                 dummy_meta[key] = value
+
 
         with open(path, "w+") as writer:
             writer.write("---\n")
@@ -60,20 +88,20 @@ class BaseModel():
             if "markdown" in kwargs:
                 writer.write(kwargs["markdown"])
         model = cls(filename)
+
+        for key in cls.REQUIRED_META:
+            if key not in model.metadata:
+                model.metadata[key] = None
+
+        model.save(force=True)
         return model
 
     @classmethod
     def _default_meta(cls):
-        all_meta = dict(cls.OPTIONAL_META)
-        all_meta.update(cls.REQUIRED_META)
-
         meta = {}
-        for key, details in all_meta.items():
-            if "default" in details:
+        for key, details in cls._all_meta().items():
+            if "default" in details and not callable(details["default"]):
                 meta[key] = details["default"]
-            else:
-                meta[key] = None
-
         return meta
 
     def __init__(self, filename, **kwargs):
@@ -88,6 +116,10 @@ class BaseModel():
 
     def __eq__(self, other):
         return self.path == other.path
+
+    @property
+    def name(self):
+        return self.metadata["name"]
 
     def set_path(self, filename):
         if "path" in self.__dict__:
@@ -107,19 +139,6 @@ class BaseModel():
 
         if old_path and os.path.exists(old_path):
             os.rename(old_path, self.path)
-
-
-    def meta(self):
-        meta = {}
-        for name, info in self.REQUIRED_META.items():
-            meta[name] = {"value": self.metadata[name], "type": info["type"]}
-
-        for name, info in self.OPTIONAL_META.items():
-            if name not in self.metadata or not self.metadata[name]:
-                continue
-            meta[name] = {"value": self.metadata[name], "type": info["type"]}
-
-        return meta
 
     def parse_page(self):
         contents = ""
@@ -157,9 +176,7 @@ class BaseModel():
 
     def update(self, **kwargs):
         if "metadata" in kwargs:
-            for meta, value in kwargs["metadata"].items():
-                if meta in self.REQUIRED_META or meta in self.OPTIONAL_META:
-                    self.metadata[meta] = value
+            self.metadata.update(self._convert_form(kwargs["metadata"]))
 
         if "markdown" in kwargs:
             if self.markdown != kwargs["markdown"]:
