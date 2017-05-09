@@ -38,7 +38,7 @@ class Config(object):
         self.config = config
 
         if "upload_path" not in self.config or not self.config["upload_path"]:
-            self.config.upload_path = os.path.join(self.config["content_directory"], "image_uploads")
+            self.config["upload_path"] = os.path.join(self.config["content_directory"], "image_uploads")
 
         BaseModel.set_base_dir(self.config["content_directory"])
 
