@@ -1,6 +1,69 @@
-article.page {
+article {
     @include row();
 
+    .header {
+        text-align: center;
+        margin-bottom: 2em;
+
+        h1 {
+            margin: 0 0 20px;
+            padding: 0;
+
+            img {
+                max-height: 1em;
+            }
+        }
+        .subtitle {
+            font-style: italic;
+            font-size: 1.5em;
+            margin: 0;
+            padding: 0;
+        }
+
+        &.hero {
+            width: 100%;
+            margin-left: -(2 * $gutter);
+            margin-right: 2 * $gutter;
+            padding: 10em (2 * $gutter) 3em;
+
+            @include media-medium {
+                margin-left: -1 * $gutter;
+                margin-right: $gutter;
+                padding: 4em $gutter;
+            }
+
+            background-size: cover;
+            background-position: center center;
+            position: relative;
+
+            h1 {
+                color: white;
+                position: relative;
+
+                img {
+                    filter: invert(100%);
+                }
+            }
+            .subtitle {
+                color: #ccc;
+                position: relative;
+            }
+
+            &::before {
+                position: absolute;
+                display: block;
+                content: "";
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, .3);
+            }
+        }
+    }
+}
+
+article.page {
     section.content {
         @include span-columns(8);
 

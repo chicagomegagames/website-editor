@@ -60,4 +60,8 @@ a {
     color: $color;
     text-decoration: none;
     border-bottom: $color 2px solid;
+
+    @include media-retina-medium {
+        border-bottom-width: 4px;
+    }
 }

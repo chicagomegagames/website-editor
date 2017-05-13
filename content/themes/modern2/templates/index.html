@@ -1,19 +1,18 @@
 {% extends 'base_template.html' %}
+
+{% if page.metadata.hero_image is defined %}
+    {% set has_hero = True %}
+{% else %}
+    {% set has_hero = False %}
+{% endif %}
+
 {% block main %}
 <article class="index">
-    <section class="page">
-        {% if page.metadata.hero_image is defined and page.metadata.hero_image %}
-        <figure>
-            <img src="{{ page.metadata.hero_image }}" {%- if
-            page.metadata.hero_alt is defined and page.metadata.hero_alt %} alt="{{ page.metadata.hero_alt }}" {%- endif %} />
-            {% if page.metadata.hero_caption is defined and page.metadata.hero_caption %}
-            <figcaption>
-                <p>{{ page.metadata.hero_caption }}</p>
-            </figcaption>
-            {% endif %}
-        </figure>
-        {% endif %}
+    <div class="header {%- if has_hero %} hero{% endif %}" {%- if has_hero %} style="background-image: url('{{ page.metadata.hero_image }}');"{% endif %}>
+        <h1>{{ page.name }}</h1>
+    </div>
 
+    <section class="content">
         {{ page.content }}
     </section>
 

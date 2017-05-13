@@ -51,6 +51,11 @@ img {
     #logo {
         margin-bottom: 1em;
 
+        a {
+            text-decoration: none;
+            border-bottom-width: 0px;
+        }
+
         img {
             height: 10em;
         }
@@ -117,6 +122,10 @@ img {
         border-top: 3px solid $black;
         width: $column * 2;
         margin-bottom: 2em;
+
+        @include media-retina-medium {
+            border-top-width: 6px;
+        }
     }
 
     .newsletter {

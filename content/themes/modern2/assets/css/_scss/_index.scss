@@ -1,10 +1,8 @@
 @import "neat/neat";
 
 article.index {
-    @include row;
-
-    section.page {
-        @include span-columns(7);
+    section.content {
+        @include span-columns(8);
 
         @include media-medium {
             @include span-columns(4 of 4);
@@ -17,12 +15,9 @@ article.index {
 
     section#events {
         @include span-columns(4);
-        @include shift(1);
 
         @include media-medium {
             @include span-columns(4 of 4);
-            @include shift(0);
-
             margin-top: 2em;
         }
 
@@ -34,6 +29,10 @@ article.index {
         .event {
             border-bottom: 2px dashed #666;
             margin-top: 2em;
+
+            @include media-retina-medium {
+                border-bottom-width: 4px;
+            }
 
             &:first-child {
                 margin-top: 0;
@@ -48,6 +47,7 @@ article.index {
                     line-height: 1.875em;
                 }
             }
+
         }
     }
 }

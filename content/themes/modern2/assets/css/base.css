@@ -41,6 +41,9 @@ a {
   color: #4dadf7;
   text-decoration: none;
   border-bottom: #4dadf7 2px solid; }
+  @media screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
+    a {
+      border-bottom-width: 4px; } }
 
 html {
   box-sizing: border-box; }
@@ -48,160 +51,106 @@ html {
 *, *::after, *::before {
   box-sizing: inherit; }
 
-article.index {
-  display: block; }
-  article.index::after {
-    clear: both;
-    content: "";
-    display: block; }
-  article.index section.page {
-    float: left;
-    display: block;
-    margin-right: 2.35765%;
-    width: 57.35098%; }
-    article.index section.page:last-child {
-      margin-right: 0; }
-    @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
-      article.index section.page {
-        float: left;
-        display: block;
-        margin-right: 7.42297%;
-        width: 100%; }
-        article.index section.page:last-child {
-          margin-right: 0; } }
-    article.index section.page .big-text {
-      font-size: 1.5em; }
-  article.index section#events {
-    float: left;
-    display: block;
-    margin-right: 2.35765%;
-    width: 31.76157%;
-    margin-left: 8.5298%; }
-    article.index section#events:last-child {
-      margin-right: 0; }
-    @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
-      article.index section#events {
-        float: left;
-        display: block;
-        margin-right: 7.42297%;
-        width: 100%;
-        margin-left: 0%;
-        margin-top: 2em; }
-        article.index section#events:last-child {
-          margin-right: 0; } }
-    article.index section#events h2 {
-      font-size: 1.5em;
-      margin-top: 0; }
-    article.index section#events .event {
-      border-bottom: 2px dashed #666;
-      margin-top: 2em; }
-      article.index section#events .event:first-child {
-        margin-top: 0; }
-      article.index section#events .event:last-child {
-        border-bottom-width: 0px; }
-      @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
-        article.index section#events .event .description p {
-          font-size: .8em;
-          line-height: 1.875em; } }
-
-html {
-  box-sizing: border-box; }
-
-*, *::after, *::before {
-  box-sizing: inherit; }
-
-article.game {
-  display: block; }
-  article.game::after {
-    clear: both;
-    content: "";
-    display: block; }
-  article.game section.content {
-    float: left;
-    display: block;
-    margin-right: 2.35765%;
-    width: 65.88078%; }
-    article.game section.content:last-child {
-      margin-right: 0; }
-    @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
-      article.game section.content {
-        float: left;
-        display: block;
-        margin-right: 7.42297%;
-        width: 100%; }
-        article.game section.content:last-child {
-          margin-right: 0; } }
-    article.game section.content.centered {
-      margin-left: 53.71149%; }
-      @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
-        article.game section.content.centered {
-          margin-left: 0%; } }
-  article.game section.aside {
-    float: left;
-    display: block;
-    margin-right: 2.35765%;
-    width: 31.76157%; }
-    article.game section.aside:last-child {
-      margin-right: 0; }
-    @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
-      article.game section.aside {
-        float: left;
-        display: block;
-        margin-right: 7.42297%;
-        width: 100%; }
-        article.game section.aside:last-child {
-          margin-right: 0; }
-        article.game section.aside .block {
-          margin-top: 2em; } }
-    article.game section.aside .facts tbody tr td:first-child {
-      text-align: right;
-      font-weight: bold;
-      padding-right: 10px; }
-    article.game section.aside h3 {
-      margin-bottom: .5em; }
-  article.game .header {
-    text-align: center;
-    margin-bottom: 2em; }
-    article.game .header h1 {
-      margin: 0 0 20px;
-      padding: 0; }
-      article.game .header h1 img {
-        max-height: 1em; }
-    article.game .header .subtitle {
-      font-style: italic;
-      font-size: 1.5em;
-      margin: 0;
-      padding: 0; }
-    article.game .header.hero {
+article.index section.content {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 65.88078%; }
+  article.index section.content:last-child {
+    margin-right: 0; }
+  @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
+    article.index section.content {
+      float: left;
+      display: block;
+      margin-right: 7.42297%;
+      width: 100%; }
+      article.index section.content:last-child {
+        margin-right: 0; } }
+  article.index section.content .big-text {
+    font-size: 1.5em; }
+article.index section#events {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 31.76157%; }
+  article.index section#events:last-child {
+    margin-right: 0; }
+  @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
+    article.index section#events {
+      float: left;
+      display: block;
+      margin-right: 7.42297%;
       width: 100%;
-      margin-left: -3.236em;
-      margin-right: 3.236em;
-      padding: 10em 3.236em 3em;
-      background-size: cover;
-      background-position: center center;
-      position: relative; }
-      @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
-        article.game .header.hero {
-          margin-left: -1.618em;
-          margin-right: 1.618em;
-          padding: 4em 1.618em; } }
-      article.game .header.hero h1 {
-        color: white;
-        position: relative; }
-        article.game .header.hero h1 img {
-          filter: invert(100%); }
-      article.game .header.hero .subtitle {
-        color: #ccc;
-        position: relative; }
-      article.game .header.hero::before {
-        position: absolute;
-        display: block;
-        content: "";
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.3); }
+      margin-top: 2em; }
+      article.index section#events:last-child {
+        margin-right: 0; } }
+  article.index section#events h2 {
+    font-size: 1.5em;
+    margin-top: 0; }
+  article.index section#events .event {
+    border-bottom: 2px dashed #666;
+    margin-top: 2em; }
+    @media screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
+      article.index section#events .event {
+        border-bottom-width: 4px; } }
+    article.index section#events .event:first-child {
+      margin-top: 0; }
+    article.index section#events .event:last-child {
+      border-bottom-width: 0px; }
+    @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
+      article.index section#events .event .description p {
+        font-size: .8em;
+        line-height: 1.875em; } }
+
+html {
+  box-sizing: border-box; }
+
+*, *::after, *::before {
+  box-sizing: inherit; }
+
+article.game section.content {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 65.88078%; }
+  article.game section.content:last-child {
+    margin-right: 0; }
+  @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
+    article.game section.content {
+      float: left;
+      display: block;
+      margin-right: 7.42297%;
+      width: 100%; }
+      article.game section.content:last-child {
+        margin-right: 0; } }
+  article.game section.content.centered {
+    margin-left: 53.71149%; }
+    @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
+      article.game section.content.centered {
+        margin-left: 0%; } }
+article.game section.aside {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 31.76157%; }
+  article.game section.aside:last-child {
+    margin-right: 0; }
+  @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
+    article.game section.aside {
+      float: left;
+      display: block;
+      margin-right: 7.42297%;
+      width: 100%; }
+      article.game section.aside:last-child {
+        margin-right: 0; }
+      article.game section.aside .block {
+        margin-top: 2em; } }
+  article.game section.aside .facts tbody tr td:first-child {
+    text-align: right;
+    font-weight: bold;
+    padding-right: 10px; }
+  article.game section.aside h3 {
+    margin-bottom: .5em; }
 
 .games-we-play section.game {
   display: block;
@@ -288,21 +237,65 @@ article.game {
         .games-we-play section.game .description:last-child {
           margin-right: 0; } }
 
-article.page {
+article {
   display: block; }
-  article.page::after {
+  article::after {
     clear: both;
     content: "";
     display: block; }
-  article.page section.content {
-    float: left;
-    display: block;
-    margin-right: 2.35765%;
-    width: 65.88078%; }
-    article.page section.content:last-child {
-      margin-right: 0; }
-    article.page section.content.centered {
-      margin-left: 17.05961%; }
+  article .header {
+    text-align: center;
+    margin-bottom: 2em; }
+    article .header h1 {
+      margin: 0 0 20px;
+      padding: 0; }
+      article .header h1 img {
+        max-height: 1em; }
+    article .header .subtitle {
+      font-style: italic;
+      font-size: 1.5em;
+      margin: 0;
+      padding: 0; }
+    article .header.hero {
+      width: 100%;
+      margin-left: -3.236em;
+      margin-right: 3.236em;
+      padding: 10em 3.236em 3em;
+      background-size: cover;
+      background-position: center center;
+      position: relative; }
+      @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
+        article .header.hero {
+          margin-left: -1.618em;
+          margin-right: 1.618em;
+          padding: 4em 1.618em; } }
+      article .header.hero h1 {
+        color: white;
+        position: relative; }
+        article .header.hero h1 img {
+          filter: invert(100%); }
+      article .header.hero .subtitle {
+        color: #ccc;
+        position: relative; }
+      article .header.hero::before {
+        position: absolute;
+        display: block;
+        content: "";
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.3); }
+
+article.page section.content {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 65.88078%; }
+  article.page section.content:last-child {
+    margin-right: 0; }
+  article.page section.content.centered {
+    margin-left: 17.05961%; }
 
 body {
   background: #eff1f5;
@@ -344,6 +337,9 @@ img {
     display: block; }
   #global-header #logo {
     margin-bottom: 1em; }
+    #global-header #logo a {
+      text-decoration: none;
+      border-bottom-width: 0px; }
     #global-header #logo img {
       height: 10em; }
   #global-header .global-nav {
@@ -411,6 +407,9 @@ img {
     border-top: 3px solid #333;
     width: 8.4716em;
     margin-bottom: 2em; }
+    @media screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
+      #global-footer:before {
+        border-top-width: 6px; } }
   #global-footer .newsletter {
     float: left;
     display: block;
