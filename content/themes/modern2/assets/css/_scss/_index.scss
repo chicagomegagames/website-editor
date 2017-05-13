@@ -6,7 +6,7 @@ article.index {
     section.page {
         @include span-columns(7);
 
-        @include media(max-width $medium) {
+        @include media-medium {
             @include span-columns(4 of 4);
         }
 
@@ -19,7 +19,7 @@ article.index {
         @include span-columns(4);
         @include shift(1);
 
-        @include media(max-width $medium) {
+        @include media-medium {
             @include span-columns(4 of 4);
             @include shift(0);
 
@@ -42,10 +42,10 @@ article.index {
                 border-bottom-width: 0px;
             }
 
-            @include media(min-width $medium) {
+            @include media-medium {
                 .description p {
                     font-size: .8em;
-                    line-height: ($font-size * 1.5);
+                    line-height: 1.875em;
                 }
             }
         }

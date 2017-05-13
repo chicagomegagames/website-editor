@@ -6,13 +6,15 @@ article.game {
     section.content {
         @include span-columns(8);
 
-        @include media(max-width $medium) {
+        @include media-medium {
             @include span-columns(4 of 4);
         }
 
         &.centered {
-            @include media(min-width $medium) {
-                @include shift(2);
+            @include shift(2);
+
+            @include media-medium {
+                @include shift(0);
             }
         }
     }
@@ -20,7 +22,7 @@ article.game {
     section.aside {
         @include span-columns(4);
 
-        @include media(max-width $medium) {
+        @include media-medium {
             @include span-columns(4 of 4);
 
             .block {
@@ -36,6 +38,10 @@ article.game {
                     padding-right: 10px;
                 }
             }
+        }
+
+        h3 {
+            margin-bottom: .5em;
         }
     }
 
@@ -60,17 +66,14 @@ article.game {
 
         &.hero {
             width: 100%;
+            margin-left: -(2 * $gutter);
+            margin-right: 2 * $gutter;
+            padding: 10em (2 * $gutter) 3em;
 
-            @include media(max-width $medium) {
+            @include media-medium {
                 margin-left: -1 * $gutter;
                 margin-right: $gutter;
                 padding: 4em $gutter;
-            }
-
-            @include media(min-width $medium) {
-                margin-left: -(2 * $gutter);
-                margin-right: 2 * $gutter;
-                padding: 10em (2 * $gutter) 3em;
             }
 
             background-size: cover;
