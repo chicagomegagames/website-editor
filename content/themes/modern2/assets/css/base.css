@@ -97,10 +97,13 @@ article.index section#events {
       margin-top: 0; }
     article.index section#events .event:last-child {
       border-bottom-width: 0px; }
-    @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
-      article.index section#events .event .description p {
-        font-size: .8em;
-        line-height: 1.875em; } }
+    article.index section#events .event .description p {
+      font-size: .8em;
+      line-height: 1.875em; }
+      @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
+        article.index section#events .event .description p {
+          font-size: 1em;
+          line-height: 1.5em; } }
 
 html {
   box-sizing: border-box; }

@@ -41,13 +41,15 @@ article.index {
                 border-bottom-width: 0px;
             }
 
-            @include media-medium {
-                .description p {
-                    font-size: .8em;
-                    line-height: 1.875em;
+            .description p {
+                font-size: .8em;
+                line-height: 1.875em;
+
+                @include media-medium {
+                    font-size: 1em;
+                    line-height: 1.5em;
                 }
             }
-
         }
     }
 }
