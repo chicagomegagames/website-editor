@@ -116,8 +116,6 @@ article.game section.content {
   display: block;
   margin-right: 2.35765%;
   width: 65.88078%; }
-  article.game section.content:last-child {
-    margin-right: 0; }
   @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
     article.game section.content {
       float: left;
@@ -126,8 +124,10 @@ article.game section.content {
       width: 100%; }
       article.game section.content:last-child {
         margin-right: 0; } }
+  article.game section.content:last-child {
+    margin-right: 0; }
   article.game section.content.centered {
-    margin-left: 53.71149%; }
+    margin-left: 17.05961%; }
     @media screen and (max-width: 900px), screen and (max-device-width: 900px) and (max-width: 1800px) and (-webkit-min-device-pixel-ratio: 2) {
       article.game section.content.centered {
         margin-left: 0%; } }
