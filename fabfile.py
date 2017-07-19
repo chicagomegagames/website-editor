@@ -12,7 +12,7 @@ env.hosts = [
 env.forward_agent = True
 
 git_checkout_path = "/tmp/git_repos/website-editor"
-git_repo = "git@gitlab.com:megagames/website-editor.git"
+git_repo = "git@github.com:chicagomegagames/website-editor.git"
 deploy_location = "/home/manager/megagame_manager"
 
 def recent_git_tags():
