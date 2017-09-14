@@ -1,4 +1,4 @@
-from app import GeneratorService, ImageService
+from app import GeneratorService, ImageService, Config
 from app.models import BaseModel, Page, Game
 from expects import *
 from freezegun import freeze_time
@@ -7,6 +7,7 @@ from unittest.mock import Mock
 import filecmp
 import tempfile
 import os
+import yaml
 
 TestThemePath = os.path.join(
     os.path.dirname(__file__),
@@ -26,11 +27,20 @@ class TestGeneratorService(TestCase):
         )
 
         self.content_dir = tempfile.TemporaryDirectory()
-        BaseModel.set_base_dir(self.content_dir.name)
+
+        config = {'content_directory': self.content_dir.name}
+        self.config_dir = tempfile.TemporaryDirectory()
+        os.environ['CONFIG_DIR'] = self.config_dir.name
+        with open(os.path.join(self.config_dir.name, 'application.yaml'), 'w') as handler:
+            handler.write(yaml.dump(config, default_flow_style = False))
+
+        Config._full_reload()
+
 
     def tearDown(self):
         self.deploy_dir.cleanup()
         self.content_dir.cleanup()
+        self.config_dir.cleanup()
 
     def test_creates_new_deploy_dir(self):
         with freeze_time("2016-12-27 19:00:20"):
@@ -77,15 +87,13 @@ class TestGeneratorService(TestCase):
 
     def test_copy_image_service(self):
         image_upload_path = tempfile.TemporaryDirectory()
-        image_service = ImageService(upload_path = image_upload_path.name)
         image_to_upload = os.path.join(os.path.dirname(__file__), "..", "fixtures", "square_logo.svg")
         upload_image = None
         with open(image_to_upload, "rb") as upload_file:
-            upload_image = image_service.upload_image("square_logo.svg", upload_file)
+            upload_image = ImageService.upload_image("square_logo.svg", upload_file)
 
         deploy_name = self.generator.deploy(
             theme_path = TestThemePath,
-            image_service = image_service,
         )
 
         image_path = upload_image.path
@@ -139,3 +147,6 @@ class TestGeneratorService(TestCase):
 
         f_path = os.path.join(generate_location, "index.html")
         expect(os.path.exists(f_path)).to(be_true)
+
+    def test_generate_no_upload_path(self):
+        pass

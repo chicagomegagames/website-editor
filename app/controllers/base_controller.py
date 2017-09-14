@@ -1,27 +1,16 @@
+from app.config import Config
 from app.utils import form_to_dict
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 
-class NoImageServiceError(Exception):
-    def __init__(self, controller, cls, key):
-        self.controller = controller
-        self.cls = cls
-        self.key = key
-
-        super().__init__("Couldn't create {controller_class}, metadata {key} requires an image service".format(
-            controller_class=self.controller.__class__.__name__,
-            key=self.key
-        ))
-
 class BaseController(Blueprint):
-    def __init__(self, route_prefix, config):
+    def __init__(self, route_prefix):
         super().__init__(route_prefix, __name__, url_prefix="/{}".format(route_prefix))
         self.route_prefix = route_prefix
-        self.config = config
 
         self.errorhandler(FileNotFoundError)(self.file_not_found)
 
     def template(self, name, **kwargs):
-        return render_template(name, config=self.config, prefix=self.route_prefix, **kwargs)
+        return render_template(name, config=Config, prefix=self.route_prefix, **kwargs)
 
     def file_not_found(self, error):
         return self.template("404.html"), 404
@@ -33,11 +22,10 @@ class BaseController(Blueprint):
 
 
 class ModelController(BaseController):
-    def __init__(self, cls, route_prefix, config, image_service = None):
-        super().__init__(route_prefix, config)
+    def __init__(self, cls, route_prefix):
+        super().__init__(route_prefix)
         self.cls = cls
         self.model_name = cls.__name__
-        self.image_service = image_service
         self.view_options = {
             "edit_show_filename": True,
         }
@@ -47,8 +35,6 @@ class ModelController(BaseController):
         self.image_metadata = [
             key for key, value in meta.items() if value["type"] == "image"
         ]
-        if image_service is None and len(image_meta) == 0:
-            raise NoImageServiceError(controller = self, cls = cls, key = key)
 
         self._setup_routes()
 
@@ -88,7 +74,7 @@ class ModelController(BaseController):
                 file_key = "metadata[{key}]".format(key=key)
                 if file_key in request.files:
                     img = request.files[file_key]
-                    uploaded_image = self.image_service.upload_image(
+                    uploaded_image = ImageService.upload_image(
                         img.filename,
                         img.stream
                     )

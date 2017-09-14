@@ -13,19 +13,11 @@ class Foo(BaseModel):
     }
 
 class TestBaseModel(ModelTestCase):
-    def setUp(self):
-        self.content_dir = tempfile.TemporaryDirectory()
-        BaseModel.set_base_dir(self.content_dir.name)
-
-    def tearDown(self):
-        self.content_dir.cleanup()
-
     def test_all_no_directory(self):
         expect(lambda: Foo.all()).not_to(raise_error)
 
     def test_base_dir_not_exist(self):
         new_content_dir = os.path.join(self.content_dir.name, "notcreated")
-        BaseModel.set_base_dir(new_content_dir)
 
         expect(lambda: Foo.create("base_model")).not_to(raise_error)
 

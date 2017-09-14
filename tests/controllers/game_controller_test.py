@@ -1,20 +1,9 @@
 from .test_helper import *
 
-from app import Config, create_app
 from app.models import Game, BaseModel
 import tempfile
 
-class GameControllerTest(TestCase):
-    def setUp(self):
-        self.base_dir = tempfile.TemporaryDirectory()
-
-        app = create_app(Config(theme = "foo", content_directory = self.base_dir.name))
-        app.testing = True
-        self.app = app.test_client()
-
-    def tearDown(self):
-        self.base_dir.cleanup()
-
+class GameControllerTest(ControllerTest):
     def test_index_no_models(self):
         response = self.app.get("/games/")
         expect(response).to(be_successful)

@@ -1,46 +1,25 @@
-from .models import BaseModel
-from .generator_service import GeneratorService
+from app import utils
 import os
 import traceback
 import sys
 import yaml
 
-class Config(object):
-    DEFAULT_OPTIONS = {
-        "content_directory": os.path.join(os.getcwd(), "content"),
-        "debug": False,
-        "default_template": "page.html",
-        "deploy_locations": {},
-        "environment": "development",
-        "host": "0.0.0.0",
-        "port": 5000,
-        "sentry_dns": None,
-        "theme": "modern",
-        "upload_path": None,
-    }
-
+class _Config(object):
     @classmethod
-    def from_file(cls, file_path):
-        with open(file_path) as stream:
-            config = yaml.load(stream)
-
-        return cls(**config)
-
-
-    def __init__(self, options={}, **kwargs):
-        if options == {}:
-            args = kwargs
+    def load(cls):
+        if 'CONFIG_DIR' in os.environ:
+            config_dir = os.environ['CONFIG_DIR']
         else:
-            args = options
+            config_dir = os.path.join(os.path.dirname(__file__), '..', 'config')
 
-        config = dict(self.DEFAULT_OPTIONS)
-        config.update(args)
-        self.config = config
+        path = os.path.join(config_dir, 'application.yaml')
+        return cls(path)
 
-        if "upload_path" not in self.config or not self.config["upload_path"]:
-            self.config["upload_path"] = os.path.join(self.config["content_directory"], "image_uploads")
+    def __init__(self, path):
+        self.path = path
+        self.config = {}
 
-        BaseModel.set_base_dir(self.config["content_directory"])
+        self.reload()
 
     def __getattr__(self, name):
         if name in self.config:
@@ -48,8 +27,12 @@ class Config(object):
 
         raise AttributeError("'{}' is not an attribute of {}".format(name, self))
 
+    @property
+    def upload_path(self):
+        return os.path.join(self.config["content_directory"], "image_uploads")
+
     def use_sentry(self):
-        return self.config["sentry_dns"] is not None
+        return 'sentry_dns' in self.config
 
     def capture_exception(self, err = None):
         if self.use_sentry() and "sentry" in self.config:
@@ -69,12 +52,30 @@ class Config(object):
             os.path.basename(path): path for path in themes
         }
 
-    def site_generators(self):
-        return {
-            key: GeneratorService(
-                key = key,
-                name = cfg["name"],
-                location = cfg["location"],
-                default_theme_path = os.path.join(self.config["content_directory"], "themes", self.config["theme"]),
-            ) for key, cfg in self.config["deploy_locations"].items()
-        }
+    def reload(self):
+        if 'path' not in self.__dict__ and 'CONFIG_DIR' in os.environ:
+            config_dir = os.environ['CONFIG_DIR']
+            self.path = os.path.join(config_dir, 'application.yaml')
+
+        if os.path.exists(self.path):
+            with open(self.path) as stream:
+                from_file = yaml.load(stream)
+        else:
+            from_file = {}
+
+        self.config.update(from_file)
+
+        if 'content_directory' in self.config:
+            utils.make_directory_tree(self.upload_path)
+
+
+
+    def _full_reload(self):
+        if 'CONFIG_DIR' not in os.environ:
+            return
+
+        self.path = os.path.join(os.environ['CONFIG_DIR'], 'application.yaml')
+        self.config = {}
+        self.reload()
+
+Config = _Config.load()

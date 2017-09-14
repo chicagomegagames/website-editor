@@ -1,65 +1,75 @@
 from unittest import TestCase
 from app import Config
-from app.models import BaseModel
 from expects import *
 import os
 import tempfile
 import yaml
 
 class TestConfig(TestCase):
+    def setUp(self):
+        self.config = {}
+        self.config_dir = tempfile.TemporaryDirectory()
+
+        os.environ['CONFIG_DIR'] = self.config_dir.name
+
+        self.write_config()
+
+        Config._full_reload()
+
+    def tearDown(self):
+        del os.environ['CONFIG_DIR']
+        self.config_dir.cleanup()
+
+    def write_config(self):
+        with open(os.path.join(self.config_dir.name, 'application.yaml'), 'w') as handler:
+            handler.write(yaml.dump(self.config, default_flow_style = False))
+
     def test_getattr(self):
-        config = Config()
+        self.config = {
+            "theme": "foo",
+        }
+        self.write_config()
+        Config.reload()
 
-        expect(lambda: config.foo).to(raise_error(AttributeError))
-        expect(lambda: config.theme).not_to(raise_error)
+        expect(lambda: Config.foo).to(raise_error(AttributeError))
+        expect(lambda: Config.theme).not_to(raise_error)
 
-    def test_from_file(self):
-        test_config = {
+    def test_reload(self):
+        self.config = {
             "theme": "foo",
             "debug": True,
         }
+        self.write_config()
 
-        os_file_handle, path = tempfile.mkstemp()
-        with os.fdopen(os_file_handle, 'w') as file_handle:
-            file_handle.write(yaml.dump(test_config, default_flow_style=False))
+        Config.reload()
 
-        config = Config.from_file(path)
+        expect(Config.theme).to(equal("foo"))
+        expect(Config.debug).to(be_true)
 
-        expect(config.theme).to(equal("foo"))
-        expect(config.debug).to(be_true)
+    def test_reload_creates_image_upload_directory(self):
+        content_dir = tempfile.TemporaryDirectory()
 
-        os.remove(path)
+        self.config = {
+            'content_directory': content_dir.name
+        }
+        self.write_config()
+        Config.reload()
+
+        expect(os.path.exists(os.path.join(content_dir.name, 'image_uploads'))).to(be_true)
+
+        content_dir.cleanup()
+
+    def test_no_file(self):
+        os.environ['CONFIG_DIR'] = os.path.join(self.config_dir.name, 'not_a_dir')
+        expect(
+            lambda: Config._full_reload()
+        ).not_to(raise_error)
 
     def test_use_sentry(self):
-        no_sentry = Config(sentry_dns=None)
-        expect(no_sentry.use_sentry()).to(be_false)
+        expect(Config.use_sentry()).to(be_false)
 
-        has_sentry = Config(sentry_dns="https://user:pass@sentry.io/application_id")
-        expect(has_sentry.use_sentry()).to(be_true)
+        self.config['sentry_dns'] = "https://user:pass@sentry.io/application_id"
+        self.write_config()
+        Config.reload()
 
-    def test_content_directory_affects_content_directory(self):
-        default_config = Config()
-        expect(default_config.content_directory).to(equal(BaseModel.BASE_CONTENT_DIR))
-
-        tempdir = tempfile.TemporaryDirectory()
-        changed_config = Config(content_directory=tempdir.name)
-        expect(changed_config.content_directory).to(equal(BaseModel.BASE_CONTENT_DIR))
-
-    def test_site_generators(self):
-        testdir = tempfile.TemporaryDirectory()
-        config = Config(deploy_locations = {
-            "test": {
-                "location": testdir.name,
-                "name": "Test",
-                "url": "http://example.com",
-            }
-        })
-
-        generators = config.site_generators()
-        expect(generators).to(have_key("test"))
-
-        test_generator = generators["test"]
-        expect(test_generator.location).to(equal(testdir.name))
-        expect(test_generator.name).to(equal("Test"))
-
-        testdir.cleanup()
+        expect(Config.use_sentry()).to(be_true)

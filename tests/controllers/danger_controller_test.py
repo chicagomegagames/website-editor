@@ -1,23 +1,21 @@
 from .test_helper import *
-from app import create_app, Config
+from app.config import Config
 from app.models import Page
 from unittest.mock import Mock
 import json
-import os
 import tempfile
 
-class DangerControllerTest(TestCase):
-    def setUp(self):
+class DangerControllerTest(ControllerTest):
+    def _setup(self):
         self.deploy_dir = tempfile.TemporaryDirectory()
-        self.content_dir = tempfile.TemporaryDirectory()
-        self.config = Config(
+
+        self.write_config(
             theme_directory = os.path.join(
                 os.path.dirname(__file__),
                 "..",
                 "fixtures",
                 "themes",
             ),
-            content_directory = self.content_dir.name,
             theme = "test_theme",
             deploy_locations = {
                 "test": {
@@ -27,13 +25,11 @@ class DangerControllerTest(TestCase):
                 },
             },
         )
-        app = create_app(self.config)
-        app.testing = True
-        self.app = app.test_client()
 
-    def tearDown(self):
+        Config.reload()
+
+    def _teardown(self):
         self.deploy_dir.cleanup()
-        self.content_dir.cleanup()
 
     def test_index(self):
         response = self.app.get("/danger/")

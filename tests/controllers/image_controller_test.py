@@ -1,24 +1,15 @@
 from .test_helper import *
 
-from app import create_app, Config
 import json
 import os
 import tempfile
 
-
-class ImageControllerTest(TestCase):
-    def setUp(self):
-        self.upload_dir = tempfile.TemporaryDirectory()
+class ImageControllerTest(ControllerTest):
+    def _setup(self):
+        self.upload_dir = os.path.join(self.content_dir.name, 'image_uploads')
 
         current_dir = os.path.dirname(__file__)
         self.test_file_path = os.path.join(current_dir, "..", "fixtures", "square_logo.svg")
-
-        app = create_app(Config(theme="foo", upload_path=self.upload_dir.name))
-        app.testing = True
-        self.app = app.test_client()
-
-    def tearDown(self):
-        self.upload_dir.cleanup()
 
     def test_index_no_images(self):
         response = self.app.get("/images/")

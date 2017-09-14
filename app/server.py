@@ -1,55 +1,54 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from raven.contrib.flask import Sentry
 from .controllers import ImageController, GameController, PageController, EventController, DangerController
-from .image_service import ImageService
 from .models import BaseModel, Game, Page, Event
 from .static import publish_site
+from .config import Config
 import os
 import raven
 import sys
 
-def create_app(config = None):
-    app = Flask("megagame editor")
-    if config.use_sentry():
-        app.config["SENTRY_CONFIG"] = {
-            "release": raven.fetch_git_sha(os.getcwd()),
-            "environment": config.environment,
-        }
-        sentry = Sentry(app, dsn=config.sentry_dns)
-        config.config["sentry"] = sentry
+if 'APP_ENV' in os.environ:
+    APP_ENV = os.environ['APP_ENV']
+else:
+    APP_ENV = 'development'
 
-    image_service = ImageService(upload_path = config.upload_path)
-    app.register_blueprint(ImageController(config, image_service = image_service))
-    app.register_blueprint(DangerController(config, image_service = image_service))
-    app.register_blueprint(GameController(config, image_service = image_service))
-    app.register_blueprint(PageController(config, image_service = image_service))
-    app.register_blueprint(EventController(config, image_service = image_service))
+Config._full_reload()
+
+app = Flask("megagame editor")
+
+if Config.use_sentry():
+    app.config["SENTRY_CONFIG"] = {
+        "release": raven.fetch_git_sha(os.getcwd()),
+        "environment": Config.environment,
+    }
+    sentry = Sentry(app, dsn=Config.sentry_dns)
+    Config.config["sentry"] = sentry
+
+app.register_blueprint(ImageController())
+app.register_blueprint(DangerController())
+app.register_blueprint(GameController())
+app.register_blueprint(PageController())
+app.register_blueprint(EventController())
 
 
-    def template(name, **kwargs):
-        return render_template(name, config=config, **kwargs)
+def template(name, **kwargs):
+    return render_template(name, config=Config, **kwargs)
 
-    @app.route("/")
-    def index():
-        return template("index.html")
+@app.route("/")
+def index():
+    return template("index.html")
 
-    if config.environment == "development":
-        @app.route("/routes")
-        def routes():
-            out = []
-            for rule in app.url_map.iter_rules():
-                options = {}
-                for arg in rule.arguments:
-                    options[arg] = "[{}]".format(arg)
-                url = url_for(rule.endpoint, **options)
-                out.append("{}\t{}".format(rule.endpoint, url))
+if APP_ENV == 'development':
+    @app.route("/routes")
+    def routes():
+        out = []
+        for rule in app.url_map.iter_rules():
+            options = {}
+            for arg in rule.arguments:
+                options[arg] = "[{}]".format(arg)
+            url = url_for(rule.endpoint, **options)
+            out.append("{}\t{}".format(rule.endpoint, url))
 
-            return "<pre>" + "\n".join(out) + "</pre>"
+        return "<pre>" + "\n".join(out) + "</pre>"
 
-    return app
-
-def run_app(config=None):
-    BaseModel.set_base_dir(config.content_directory)
-
-    app = create_app(config)
-    app.run(debug=config.debug, host=config.host, port=config.port)

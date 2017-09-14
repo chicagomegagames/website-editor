@@ -1,6 +1,6 @@
 # website-editor
 
-![travis-ci](https://travis-ci.org/chicagomegagames/website-editor.svg?branch=master)
+[![travis-ci](https://travis-ci.org/chicagomegagames/website-editor.svg?branch=master)](https://travis-ci.org/chicagomegagames/website-editor)
 
 `website-editor` intends to be an easy-to-use web frontend for managing and creating static websites.
 

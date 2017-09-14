@@ -18,3 +18,4 @@ content/pages
 env/
 image_uploads
 venv
+config/application.yaml

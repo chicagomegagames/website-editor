@@ -1,3 +1,4 @@
+from app import Config
 from app.utils import make_directory_tree, html_from_markdown
 import os
 import yaml
@@ -6,22 +7,14 @@ class FileAlreadyExistsError(Exception):
     def __init__(self, cls, filename):
         self.class_name = cls.__name__
         self.filename = filename
-        self.path = os.path.join(cls.BASE_CONTENT_DIR, cls.CONTENT_DIR, filename)
+        self.path = os.path.join(Config.content_directory, cls.CONTENT_DIR, filename)
 
         super().__init__("Couldn't create {cls}, file already exists <{path}>".format(cls=self.class_name, path=self.path))
 
 class BaseModel():
-    BASE_CONTENT_DIR = "content"
     ROUTE_PREFIX = ""
     REQUIRED_META = {}
     OPTIONAL_META = {}
-
-    @classmethod
-    def set_base_dir(cls, directory):
-        cls.BASE_CONTENT_DIR = directory
-
-        if not os.path.exists(cls.BASE_CONTENT_DIR):
-            make_directory_tree(cls.BASE_CONTENT_DIR)
 
     @classmethod
     def _all_meta(cls):
@@ -55,7 +48,7 @@ class BaseModel():
 
     @classmethod
     def all(cls):
-        path = os.path.join(cls.BASE_CONTENT_DIR, cls.CONTENT_DIR)
+        path = os.path.join(Config.content_directory, cls.CONTENT_DIR)
 
         if not os.path.exists(path):
             os.mkdir(path)
@@ -66,7 +59,7 @@ class BaseModel():
 
     @classmethod
     def create(cls, filename, **kwargs):
-        base_path = os.path.join(cls.BASE_CONTENT_DIR, cls.CONTENT_DIR)
+        base_path = os.path.join(Config.content_directory, cls.CONTENT_DIR)
         if not os.path.exists(base_path):
             make_directory_tree(base_path)
 
@@ -106,7 +99,7 @@ class BaseModel():
 
     def __init__(self, filename, **kwargs):
         self.filename = filename
-        self.path = os.path.join(self.BASE_CONTENT_DIR, self.CONTENT_DIR, filename)
+        self.path = os.path.join(Config.content_directory, self.CONTENT_DIR, filename)
         self.parse_page()
         self._valid = False
         self.errors = []
@@ -127,7 +120,7 @@ class BaseModel():
         else:
             old_path = None
 
-        new_path = os.path.join(self.BASE_CONTENT_DIR, self.CONTENT_DIR, filename)
+        new_path = os.path.join(Config.content_directory, self.CONTENT_DIR, filename)
         if old_path == new_path:
             return
 

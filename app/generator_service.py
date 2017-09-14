@@ -1,4 +1,5 @@
 from datetime import datetime
+from app import Config, ImageService
 from app.models import Page, Game, Event
 from app.utils import make_directory_tree, html_from_markdown
 import jinja2
@@ -6,6 +7,17 @@ import os
 import shutil
 
 class GeneratorService(object):
+    @classmethod
+    def all(cls):
+        return {
+            key: cls(
+                key = key,
+                name = cfg["name"],
+                location = cfg["location"],
+                default_theme_path = os.path.join(Config.content_directory, "themes", Config.theme),
+            ) for key, cfg in Config.deploy_locations.items()
+        }
+
     def __init__(self, name, location, key = None, default_theme_path = None):
         self.key = key
         self.name = name
@@ -18,7 +30,7 @@ class GeneratorService(object):
         all_deploys.sort()
         return all_deploys
 
-    def generate(self, path, theme_path = None, image_service = None):
+    def generate(self, path, theme_path = None):
         if theme_path is None:
             theme_path = self.default_theme_path
 
@@ -65,13 +77,13 @@ class GeneratorService(object):
                 shutil.rmtree(copy_dir)
             shutil.copytree(assets_dir, copy_dir)
 
-        if image_service:
+        if ImageService:
             img_dir = os.path.join(path, "images")
             if os.path.exists(img_dir):
                 shutil.rmtree(img_dir)
-            shutil.copytree(image_service.upload_path, img_dir)
+            shutil.copytree(Config.upload_path, img_dir)
 
-    def deploy(self, theme_path = None, image_service = None):
+    def deploy(self, theme_path = None):
         now = datetime.now()
         directory_name = now.strftime("%Y-%m-%d_%H%M%S")
 
@@ -79,7 +91,7 @@ class GeneratorService(object):
         os.mkdir(path)
 
         try:
-            self.generate(path, theme_path=theme_path, image_service=image_service)
+            self.generate(path, theme_path=theme_path)
             self.symlink_deploy(directory_name)
             self.cleanup_old_deploys()
 
