@@ -16,6 +16,7 @@ class Page(DatabaseModel):
         "layout": {
             "type": "text",
             "hint": "layout to be used for the page (ex 'page.html')",
+            "default": "page.html",
         },
     }
 
