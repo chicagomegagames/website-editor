@@ -12,7 +12,7 @@ class Foo(BaseModel):
         "some_field": {"type": "text"},
     }
 
-class TestBaseModel(ModelTestCase):
+class TestBaseModel(ApplicationTest):
     def test_all_no_directory(self):
         expect(lambda: Foo.all()).not_to(raise_error)
 

@@ -1,5 +1,7 @@
 from app import GeneratorService, ImageService, Config
 from app.models import BaseModel, Page, Game
+
+from .. import FakeDatabase
 from expects import *
 from freezegun import freeze_time
 from unittest import TestCase
@@ -148,5 +150,6 @@ class TestGeneratorService(TestCase):
         f_path = os.path.join(generate_location, "index.html")
         expect(os.path.exists(f_path)).to(be_true)
 
-    def test_generate_no_upload_path(self):
-        pass
+class TestDeploy(TestCase):
+    def setUp(self):
+        self.deploy_dir = tempfile.TemporaryDirectory()
