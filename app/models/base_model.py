@@ -1,5 +1,7 @@
 from app import Config
 from app.utils import make_directory_tree, html_from_markdown
+import inflection
+import orator
 import os
 import yaml
 
@@ -11,7 +13,7 @@ class FileAlreadyExistsError(Exception):
 
         super().__init__("Couldn't create {cls}, file already exists <{path}>".format(cls=self.class_name, path=self.path))
 
-class BaseModel():
+class _Model():
     ROUTE_PREFIX = ""
     REQUIRED_META = {}
     OPTIONAL_META = {}
@@ -41,11 +43,16 @@ class BaseModel():
 
         return new_form
 
-
     @classmethod
     def _sort(cls, models):
         return models
 
+    @property
+    def content(self):
+        return html_from_markdown(self.markdown)
+
+
+class FileModel(_Model):
     @classmethod
     def all(cls):
         path = os.path.join(Config.content_directory, cls.CONTENT_DIR)
@@ -142,7 +149,6 @@ class BaseModel():
         metadata = content_splits[1]
         markdown = ("---".join(content_splits[2:])).strip()
         self.markdown = markdown
-        self.__regenerate_markdown()
 
         self.metadata = self._default_meta()
         self.metadata.update(yaml.load(metadata))
@@ -155,8 +161,6 @@ class BaseModel():
             "optional_meta": self.OPTIONAL_META,
         }
 
-    def __regenerate_markdown(self):
-        self.content = html_from_markdown(self.markdown)
 
     def validate(self):
         self.errors = []
@@ -174,7 +178,6 @@ class BaseModel():
         if "markdown" in kwargs:
             if self.markdown != kwargs["markdown"]:
                 self.markdown = kwargs["markdown"]
-                self.__regenerate_markdown()
 
         if "filename" in kwargs:
             self.set_path(kwargs["filename"])
@@ -205,3 +208,24 @@ class BaseModel():
 
     def delete(self):
         os.remove(self.path)
+
+
+class DatabaseModel(orator.Model, _Model):
+    __primary_key__ = 'pk'
+    __guarded__ = []
+
+    @classmethod
+    def _table_name(cls):
+        return cls.__table__ or inflection.tableize(cls.__name__)
+
+    # HACK!!!
+    #   Done to allow templates to use column names as a variable
+    #       {% set column = 'pk' %}
+    #       {{ user[column] }}
+    def __getitem__(self, item):
+        return getattr(self, item)
+
+DatabaseModel.set_connection_resolver(Config.database())
+
+class BaseModel(FileModel):
+    pass

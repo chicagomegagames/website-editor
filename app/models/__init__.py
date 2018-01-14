@@ -1,4 +1,4 @@
-from .base_model import BaseModel, FileAlreadyExistsError
+from .base_model import BaseModel, FileAlreadyExistsError, FileModel, DatabaseModel
 from .game import Game
 from .page import Page
 from .event import Event
