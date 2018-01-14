@@ -10,24 +10,24 @@
     {%- if details['type'] == "markdown" %}
         <textarea name="meta[{{key}}]" data-metadata-name="{{key}}">
             {%- if has_model -%}
-                {{model[key]|safe}}
+                {{model.metadata[key]|safe}}
             {%- endif -%}
         </textarea>
     {%- elif details['type'] == "image" %}
         <input type="file" data-metadata-name="{{key}}" name="meta[{{key}}]" accept="image/*" />
-        {%- if has_model and model[key] %}
+        {%- if has_model and model.metadata[key] %}
         <br />
-        <img src="{{ model[key] }}" />
+        <img src="{{ model.metadata[key] }}" />
         {%- endif %}
     {%- elif details['type'] == "boolean" %}
         <input type="checkbox" data-metadata-name="{{key}}" name="meta[{{key}}]"
             {%- if has_model -%}
-                {%- if model[key] is defined and model[key] %} checked {% endif -%}
+                {%- if model.metadata[key] is defined and model.metadata[key] %} checked {% endif -%}
             {%- endif -%}
         />
     {%- else %}
         <input type="text" name="meta[{{key}}]"
-        {%- if has_model %} value="{{model[key]|safe}}" {% endif -%}
+        {%- if has_model %} value="{{model.metadata[key]|safe}}" {% endif -%}
         data-metadata-name="{{key}}" data-metadata-type="value" />
     {%- endif %}
     </td>

@@ -7,9 +7,9 @@
 {% endif %}
 
 {% block main %}
-    <form id="edit">
+    <form id="file_edit">
     {% if has_model %}
-        <h1>edit: {{model.name}}</h1>
+        <h1>edit: {{model.filename}}</h1>
     {% else %}
         <h1>new {{ model_name|lower }}</h1>
     {% endif %}
@@ -18,6 +18,19 @@
         </p>
 
         <input type="submit" value="save page" />
+
+        {% if show_filename %}
+        <table class="meta"><tr>
+            <td><label for="filename">Filename</label></td>
+            <td>
+                <input type="text" name="filename"
+                {%- if has_model -%}
+                    value="{{model.filename|safe}}"
+                {%- endif -%}
+                />
+            </td>
+        </tr></table>
+        {% endif %}
 
         <h2>required meta</h2>
         <table class="meta">

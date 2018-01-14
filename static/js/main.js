@@ -1,7 +1,12 @@
 document.addEventListener("DOMContentLoaded", function(evt) {
   var edit_form = document.querySelector("#edit");
   if (edit_form) {
-    load_model_form(edit_form);
+    load_model_form(edit_form, false);
+  }
+
+  var file_edit_form = document.querySelector("#file_edit");
+  if (file_edit_form) {
+    load_model_form(file_edit_form, true);
   }
 
   var deploy_form = document.querySelector("form#deploy")
@@ -88,7 +93,8 @@ function get_metadata(form) {
   }, {});
 }
 
-function load_model_form(form) {
+
+function load_model_form(form, meta_dict) {
   form.addEventListener("submit", function(e) {
     e.preventDefault();
 
@@ -100,7 +106,11 @@ function load_model_form(form) {
     }
 
     _.each(get_metadata(form), function(value, key) {
-      model.append(`metadata[${key}]`, value);
+      if (meta_dict) {
+        model.append(`metadata[${key}]`, value);
+      } else {
+        model.append(key, value);
+      }
     });
 
     var xhr = new XMLHttpRequest()
