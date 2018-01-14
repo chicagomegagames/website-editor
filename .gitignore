@@ -19,3 +19,4 @@ env/
 image_uploads
 venv
 config/application.yaml
+config/*.db

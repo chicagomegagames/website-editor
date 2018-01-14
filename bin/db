@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+from app import Config
+
+from orator.commands.application import application as orator_application
+from orator.commands.command import Command
+from cleo import Application
+
+if __name__ == '__main__':
+    db = Config.database()
+
+    # mostly 100% stolen from flask-orator
+    app = Application(
+        orator_application.get_name(),
+        orator_application.get_version(),
+        complete = True,
+    )
+
+    for command in orator_application.all().values():
+        if isinstance(command, Command):
+            app.add(command.__class__(db))
+        else:
+            app.add(command)
+
+    app.run()
