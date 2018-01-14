@@ -1,7 +1,7 @@
-from . import BaseModel
+from . import DatabaseModel
 import re
 
-class Game(BaseModel):
+class Game(DatabaseModel):
     CONTENT_DIR = "games"
     ROUTE_PREFIX = "game"
     REQUIRED_META = {
@@ -65,23 +65,14 @@ class Game(BaseModel):
         },
     }
 
-    @classmethod
-    def _sort(cls, models):
-        return sorted(models, key=lambda m: m.metadata["name"])
-
-    def generated_slug(self):
-        return re.sub(r'\ +', '_', re.sub(r'\W+', ' ', self.metadata["name"].lower()).strip())
-
-    @property
-    def slug(self):
-        if "slug" in self.metadata:
-            return self.metadata["slug"]
-        else:
-            return self.generated_slug()
-
     @property
     def logo_or_title(self):
-        if "logo_image" in self.metadata and self.metadata["logo_image"]:
-            return "<img src='{}' alt='{}' />".format(self.metadata["logo_image"], self.metadata["name"])
+        if self.logo_image:
+            return "<img src='{}' alt='{}' />".format(self.logo_image, self.name)
         else:
-            return self.metadata["name"]
+            return self.name
+
+    def save(self, **kwargs):
+        if self.name:
+            self.slug = re.sub(r'\ +', '_', re.sub(r'\W+', ' ', self.name.lower()).strip())
+        return super().save(**kwargs)
