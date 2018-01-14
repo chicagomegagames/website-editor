@@ -18,7 +18,12 @@ class Game(BaseModel):
             "type": "boolean",
             "hint": "Should this game be shown on the All Games page?",
             "default": True,
-        }
+        },
+        "layout": {
+            "type": "text",
+            "hint": "filename of the template this page should be rendered with (ex 'page.html', 'game.html')",
+            "default": "game.html",
+        },
     }
 
     OPTIONAL_META = {
@@ -41,11 +46,6 @@ class Game(BaseModel):
         "hero_image": {
             "type": "image",
             "hint": "The big image that goes behind the name and subtitle",
-        },
-        "layout": {
-            "type": "text",
-            "hint": "filename of the template this page should be rendered with (ex 'page.html', 'game.html')",
-            "default": "game.html",
         },
         "logo_image": {
             "type": "image",
