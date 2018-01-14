@@ -6,6 +6,60 @@ import jinja2
 import os
 import shutil
 
+class Deploy():
+    def __init__(self, deploy_dir = None, theme_path = None):
+        self.path = deploy_dir
+        self.theme_path = theme_path
+
+        self.template_environment = jinja2.Environment(
+            loader = jinja2.FileSystemLoader(os.path.join(theme_path, 'templates'))
+        )
+        self.template_environment.filters["markdown"] = lambda x: html_from_markdown(str(x))
+
+    def deploy(self):
+        pages = Page.all()
+        games = Game.all()
+        calendar = Event.future_events()
+
+        self.site = {"games": games, "pages": pages, "calendar": calendar}
+
+        for page in pages:
+            self._create_page(page, page.slug, page.layout)
+
+        for game in games:
+            slug = game.slug
+            while len(slug) > 0 and slug[0] == "/":
+                slug = slug[1:]
+            slug = os.path.join("games", slug)
+
+            self._create_page(game, slug, game.layout)
+
+        assets_dir = os.path.join(self.theme_path, "assets")
+        if os.path.exists(assets_dir):
+            copy_dir = os.path.join(self.path, "assets")
+            if os.path.exists(copy_dir):
+                shutil.rmtree(copy_dir)
+            shutil.copytree(assets_dir, copy_dir)
+
+        if ImageService:
+            img_dir = os.path.join(self.path, "images")
+            if os.path.exists(img_dir):
+                shutil.rmtree(img_dir)
+            shutil.copytree(Config.upload_path, img_dir)
+
+    def _create_page(self, model, slug, template_name):
+        while len(slug) > 0 and slug[0] == "/":
+            slug = slug[1:]
+
+        output_dir = os.path.join(self.path, slug)
+        output_file = os.path.join(output_dir, "index.html")
+        make_directory_tree(output_dir)
+
+        template = self.template_environment.get_template(template_name)
+        with open(output_file, "w+") as writer:
+            writer.write(template.render(page=model, site=self.site))
+
+
 class GeneratorService(object):
     @classmethod
     def all(cls):
@@ -24,62 +78,21 @@ class GeneratorService(object):
         self.location = location
         self.default_theme_path = default_theme_path
 
+        self.template_environment = None
+
     def deploys(self):
         all_deploys = os.listdir(self.location)
         all_deploys.remove("current")
         all_deploys.sort()
         return all_deploys
 
-    def generate(self, path, theme_path = None):
-        if theme_path is None:
-            theme_path = self.default_theme_path
-
-        template_environment = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(os.path.join(theme_path, "templates"))
-        )
-
-        template_environment.filters["markdown"] = lambda x: html_from_markdown(str(x))
-
-        pages = Page.all()
-        games = Game.all()
-        calendar = Event.future_events()
-        site = {"games": games, "pages": pages, "calendar": calendar}
-
-        pages_to_generate = list(pages)
-        for game in games:
-            slug = game.slug
-            while len(slug) > 0 and slug[0] == "/":
-                slug = slug[1:]
-            game.metadata["slug"] = os.path.join("games", slug)
-            pages_to_generate.append(game)
-
-        for page in pages_to_generate:
-            slug = page.slug
-            while len(slug) > 0 and slug[0] == "/":
-                slug = slug[1:]
-
-            output_dir = os.path.join(path, slug)
-            output_file = os.path.join(output_dir, "index.html")
-            make_directory_tree(output_dir)
-
-            template = template_environment.get_template(page.layout)
-            with open(output_file, "w+") as writer:
-                writer.write(template.render(page=page, site=site))
-
-        assets_dir = os.path.join(theme_path, "assets")
-        if os.path.exists(assets_dir):
-            copy_dir = os.path.join(path, "assets")
-            if os.path.exists(copy_dir):
-                shutil.rmtree(copy_dir)
-            shutil.copytree(assets_dir, copy_dir)
-
-        if ImageService:
-            img_dir = os.path.join(path, "images")
-            if os.path.exists(img_dir):
-                shutil.rmtree(img_dir)
-            shutil.copytree(Config.upload_path, img_dir)
 
     def deploy(self, theme_path = None):
+        if not theme_path:
+            if not self.default_theme_path:
+                raise NameError("No theme_path or default_theme_path set")
+            theme_path = self.default_theme_path
+
         now = datetime.now()
         directory_name = now.strftime("%Y-%m-%d_%H%M%S")
 
@@ -87,7 +100,12 @@ class GeneratorService(object):
         os.mkdir(path)
 
         try:
-            self.generate(path, theme_path=theme_path)
+            deploy = Deploy(
+                deploy_dir = path,
+                theme_path = theme_path
+            )
+            deploy.deploy()
+
             self.symlink_deploy(directory_name)
             self.cleanup_old_deploys()
 

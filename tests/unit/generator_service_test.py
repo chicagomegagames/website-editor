@@ -1,7 +1,7 @@
-from app import GeneratorService, ImageService, Config
+from app import GeneratorService, ImageService, Config, Deploy
 from app.models import BaseModel, Page, Game
 
-from .. import FakeDatabase
+from .. import ApplicationTest, factory
 from expects import *
 from freezegun import freeze_time
 from unittest import TestCase
@@ -19,8 +19,10 @@ TestThemePath = os.path.join(
     "test_theme",
 )
 
-class TestGeneratorService(TestCase):
+class TestGeneratorService(ApplicationTest):
     def setUp(self):
+        super().setUp()
+
         self.deploy_dir = tempfile.TemporaryDirectory()
         self.generator = GeneratorService(
             name = "test",
@@ -28,21 +30,10 @@ class TestGeneratorService(TestCase):
             default_theme_path = TestThemePath,
         )
 
-        self.content_dir = tempfile.TemporaryDirectory()
-
-        config = {'content_directory': self.content_dir.name}
-        self.config_dir = tempfile.TemporaryDirectory()
-        os.environ['CONFIG_DIR'] = self.config_dir.name
-        with open(os.path.join(self.config_dir.name, 'application.yaml'), 'w') as handler:
-            handler.write(yaml.dump(config, default_flow_style = False))
-
-        Config._full_reload()
-
-
     def tearDown(self):
+        super().tearDown()
+
         self.deploy_dir.cleanup()
-        self.content_dir.cleanup()
-        self.config_dir.cleanup()
 
     def test_creates_new_deploy_dir(self):
         with freeze_time("2016-12-27 19:00:20"):
@@ -52,57 +43,35 @@ class TestGeneratorService(TestCase):
         expect(self.generator.deploys()).to(equal(["2016-12-27_190020", "2016-12-27_203000"]))
 
     def test_deploy_returns_path(self):
-        deploy_path = self.generator.deploy()
+        deploy_path = self.generator.deploy(theme_path = TestThemePath)
         expect(self.generator.deploys()).to(equal([deploy_path]))
+
+    def test_deploy_uses_default_theme_path(self):
+        generator1 = GeneratorService(
+            name = "test1",
+            location = os.path.join(self.deploy_dir.name, "test1"),
+            default_theme_path = TestThemePath,
+        )
+
+        expect(
+            lambda: generator1.deploy()
+        ).not_to(raise_error(NameError))
+
+
+        generator2 = GeneratorService(
+            name = "test2",
+            location = os.path.join(self.deploy_dir.name, "test2"),
+        )
+
+        expect(
+            lambda: generator2.deploy()
+        ).to(raise_error(NameError))
 
     def test_symlinks_to_current(self):
         deploy_name = self.generator.deploy()
         deploy_path = os.path.join(self.generator.location, deploy_name)
         current_path = os.path.join(self.generator.location, "current")
         expect(os.path.realpath(current_path)).to(equal(os.path.realpath(deploy_path)))
-
-    def test_creates_content(self):
-        p = Page.create("test.md", markdown="foo!", slug="/", name="Test!", layout="page.html")
-        p.save()
-
-        deploy_name = self.generator.deploy(theme_path = TestThemePath)
-
-        index_file = os.path.join(self.generator.location, deploy_name, "index.html")
-        expect(os.path.exists(index_file)).to(be_true)
-
-    def test_creates_game_pages(self):
-        g = Game.create("foo.md", name="Foo", markdown="This is game")
-        expect(g.save()).to(be_true)
-
-        deploy_name = self.generator.deploy(theme_path = TestThemePath)
-
-        game_file = os.path.join(self.generator.location, deploy_name, "games", "foo", "index.html")
-        expect(os.path.exists(game_file)).to(be_true)
-
-    def test_copy_assets(self):
-        deploy_name = self.generator.deploy(theme_path = TestThemePath)
-        deployed_logo = os.path.join(self.generator.location, deploy_name, "assets", "logo.svg")
-        expect(os.path.exists(deployed_logo)).to(be_true)
-
-        test_logo = os.path.join(TestThemePath, "assets", "logo.svg")
-        expect(filecmp.cmp(deployed_logo, test_logo)).to(be_true)
-
-    def test_copy_image_service(self):
-        image_upload_path = tempfile.TemporaryDirectory()
-        image_to_upload = os.path.join(os.path.dirname(__file__), "..", "fixtures", "square_logo.svg")
-        upload_image = None
-        with open(image_to_upload, "rb") as upload_file:
-            upload_image = ImageService.upload_image("square_logo.svg", upload_file)
-
-        deploy_name = self.generator.deploy(
-            theme_path = TestThemePath,
-        )
-
-        image_path = upload_image.path
-        expect(os.path.exists(image_path)).to(be_true)
-        expect(filecmp.cmp(image_path, image_to_upload))
-
-        image_upload_path.cleanup()
 
     def test_rollsback_failures(self):
         all_mock = Mock()
@@ -140,16 +109,79 @@ class TestGeneratorService(TestCase):
             "2016-12-27_000100",
         ]))
 
-    def test_generate(self):
-        p = Page.create("test.md", markdown="foo!", slug="/", name="Test!", layout="page.html")
-        expect(p.save()).to(be_true)
 
-        generate_location = os.path.join(self.deploy_dir.name, "test_gen")
-        expect(lambda: self.generator.generate(theme_path = TestThemePath, path = generate_location)).not_to(raise_error)
-
-        f_path = os.path.join(generate_location, "index.html")
-        expect(os.path.exists(f_path)).to(be_true)
-
-class TestDeploy(TestCase):
+class TestDeploy(ApplicationTest):
     def setUp(self):
+        super().setUp()
+
         self.deploy_dir = tempfile.TemporaryDirectory()
+        self.theme_path = TestThemePath
+
+    def tearDown(self):
+        super().tearDown()
+
+        self.deploy_dir.cleanup()
+
+    def test_creates_content(self):
+        deployer = Deploy(
+            deploy_dir = self.deploy_dir.name,
+            theme_path = self.theme_path,
+        )
+
+        p = factory(Page).create(slug = "/")
+        p.save()
+
+        deployer.deploy()
+
+        index_file = os.path.join(deployer.path, "index.html")
+        expect(os.path.exists(index_file)).to(be_true)
+
+    def test_creates_game_pages(self):
+        deployer = Deploy(
+            deploy_dir = self.deploy_dir.name,
+            theme_path = self.theme_path,
+        )
+
+        g = factory(Game).create(name = "Foo", markdown = "This is game")
+        g.save()
+
+        deployer.deploy()
+
+        game_file = os.path.join(deployer.path, "games", "foo", "index.html")
+        expect(os.path.exists(game_file)).to(be_true)
+
+    def test_copy_assets(self):
+        deployer = Deploy(
+            deploy_dir = self.deploy_dir.name,
+            theme_path = self.theme_path,
+        )
+
+        deployer.deploy()
+
+        deployed_logo = os.path.join(deployer.path, "assets", "logo.svg")
+        expect(os.path.exists(deployed_logo)).to(be_true)
+
+        test_logo = os.path.join(self.theme_path, "assets", "logo.svg")
+        expect(filecmp.cmp(deployed_logo, test_logo)).to(be_true)
+
+    def test_copy_image_service(self):
+        image_upload_path = tempfile.TemporaryDirectory()
+        self.config['upload_path'] = image_upload_path
+        self.write_config()
+
+        image_to_upload = os.path.join(os.path.dirname(__file__), "..", "fixtures", "square_logo.svg")
+        upload_image = None
+        with open(image_to_upload, "rb") as upload_file:
+            upload_image = ImageService.upload_image("square_logo.svg", upload_file)
+
+        deployer = Deploy(
+            deploy_dir = self.deploy_dir.name,
+            theme_path = self.theme_path,
+        )
+        deployer.deploy()
+
+        image_path = os.path.join(deployer.path, "images", upload_image.name)
+        expect(os.path.exists(image_path)).to(be_true)
+        expect(filecmp.cmp(image_path, image_to_upload))
+
+        image_upload_path.cleanup()
