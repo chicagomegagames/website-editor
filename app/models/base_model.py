@@ -117,6 +117,12 @@ class FileModel(_Model):
     def __eq__(self, other):
         return self.path == other.path
 
+    def __getattr__(self, attr):
+        if attr in self.metadata:
+            return self.metadata[attr]
+        else:
+            super().__getattr__(attr)
+
     @property
     def name(self):
         return self.metadata["name"]
