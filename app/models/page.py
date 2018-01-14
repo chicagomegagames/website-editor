@@ -26,7 +26,3 @@ class Page(DatabaseModel):
             "hint": "Big, lead-in image",
         },
     }
-
-    @classmethod
-    def _sort(cls, models):
-        return sorted(models, key=lambda m: m.metadata["slug"])
