@@ -78,7 +78,7 @@ class TestConfig(TestCase):
     def test_use_database(self):
         expect(Config.use_database()).to(be_false)
 
-        self.config['database'] = {
+        self.config['databases'] = {
             "connection": {
                 "driver": "sqlite",
                 "database": ":memory:",
@@ -90,7 +90,7 @@ class TestConfig(TestCase):
         expect(Config.use_database()).to(be_true)
 
     def test_get_database(self):
-        self.config['database'] = {
+        self.config['databases'] = {
             "connection": {
                 "driver": "sqlite",
                 "database": ":memory:",
@@ -108,7 +108,7 @@ class TestConfig(TestCase):
         ).to(raise_error(AttributeError))
 
     def test_database_is_memoized(self):
-        self.config['database'] = {
+        self.config['databases'] = {
             "connection": {
                 "driver": "sqlite",
                 "database": ":memory:",
