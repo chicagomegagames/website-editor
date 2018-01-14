@@ -43,10 +43,6 @@ class _Model():
 
         return new_form
 
-    @classmethod
-    def _sort(cls, models):
-        return models
-
     @property
     def content(self):
         return html_from_markdown(self.markdown)
@@ -63,6 +59,9 @@ class FileModel(_Model):
         files = filter(os.path.isfile, [os.path.join(path, name) for name in os.listdir(path)])
         return cls._sort(list(map(cls, map(os.path.basename, files))))
 
+    @classmethod
+    def _sort(cls, models):
+        return models
 
     @classmethod
     def create(cls, filename, **kwargs):
@@ -79,7 +78,6 @@ class FileModel(_Model):
         for key, value in kwargs.items():
             if key in cls._all_meta():
                 dummy_meta[key] = value
-
 
         with open(path, "w+") as writer:
             writer.write("---\n")
