@@ -1,7 +1,7 @@
 {% extends 'base_template.html' %}
 
-{% if page.metadata.name is defined and page.metadata.name %}
-    {% set header_title = page.metadata.name + " | Chicago MegaGames" %}
+{% if page.name is defined and page.name %}
+    {% set header_title = page.name + " | Chicago MegaGames" %}
 {% endif %}
 
 {% block main %}
@@ -9,12 +9,12 @@
     <section class="content centered">
         {{ page.content }}
 
-        {% if page.metadata.hero_image is defined %}
+        {% if page.hero_image %}
         <figure>
-            <img src="{{ page.metadata.hero_image }}" {%- if page.metadata.hero_alt is defined %} alt="{{ page.metadata.hero_alt }}" {%- endif %} />
-            {% if page.metadata.hero_caption is defined %}
+            <img src="{{ page.hero_image }}" {%- if page.hero_alt is defined %} alt="{{ page.hero_alt }}" {%- endif %} />
+            {% if page.hero_caption is defined %}
             <figcaption>
-                <p>{{ page.metadata.hero_caption }}</p>
+                <p>{{ page.hero_caption }}</p>
             </figcaption>
             {% endif %}
         </figure>
