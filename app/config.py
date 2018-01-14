@@ -55,14 +55,14 @@ class _Config(object):
         }
 
     def use_database(self):
-        return 'database' in self.config
+        return 'databases' in self.config
 
     def database(self):
         if not self.use_database():
             raise AttributeError("No database configuration")
 
         if not self._database:
-            self._database = DatabaseManager(self.config['database'])
+            self._database = DatabaseManager(self.config['databases'])
 
         return self._database
 
