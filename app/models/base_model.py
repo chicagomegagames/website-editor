@@ -57,11 +57,15 @@ class FileModel(_Model):
             os.mkdir(path)
 
         files = filter(os.path.isfile, [os.path.join(path, name) for name in os.listdir(path)])
-        return cls._sort(list(map(cls, map(os.path.basename, files))))
+        return list(map(cls, map(os.path.basename, files)))
 
     @classmethod
     def _sort(cls, models):
         return models
+
+    @classmethod
+    def all_sorted(cls):
+        return cls._sort(cls.all())
 
     @classmethod
     def create(cls, filename, **kwargs):
@@ -221,6 +225,10 @@ class DatabaseModel(orator.Model, _Model):
     @classmethod
     def _table_name(cls):
         return cls.__table__ or inflection.tableize(cls.__name__)
+
+    @classmethod
+    def all_sorted(cls):
+        return cls.all().order_by("name", "asc")
 
     # HACK!!!
     #   Done to allow templates to use column names as a variable

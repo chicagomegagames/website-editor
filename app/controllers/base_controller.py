@@ -45,7 +45,7 @@ class BaseModelController(BaseController):
 
 
     def index(self):
-        all_models = self.cls.all()
+        all_models = self.cls.all_sorted()
         return self.template("index.html", models=all_models)
 
     def show(self, slug):
