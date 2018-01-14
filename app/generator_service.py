@@ -54,7 +54,7 @@ class GeneratorService(object):
             pages_to_generate.append(game)
 
         for page in pages_to_generate:
-            slug = page.metadata["slug"]
+            slug = page.slug
             while len(slug) > 0 and slug[0] == "/":
                 slug = slug[1:]
 
@@ -62,11 +62,7 @@ class GeneratorService(object):
             output_file = os.path.join(output_dir, "index.html")
             make_directory_tree(output_dir)
 
-            if "layout" in page.metadata and page.metadata["layout"]:
-                layout = page.metadata["layout"]
-            else:
-                layout = "page.html"
-            template = template_environment.get_template(layout)
+            template = template_environment.get_template(page.layout)
             with open(output_file, "w+") as writer:
                 writer.write(template.render(page=page, site=site))
 
