@@ -1,20 +1,17 @@
-from .base_controller import ModelController
+from .base_controller import DatabaseModelController
 from app.models import Event
 from flask import url_for
 
-class EventController(ModelController):
+class EventController(DatabaseModelController):
     def __init__(self):
         super().__init__(Event, "events")
-        self.view_options["edit_show_filename"] = False
 
     def index(self):
-        events = Event.all()
+        events = Event.all_sorted()
         return self.template("events/index.html", events=events)
-
-    def _model_create(self, form):
-        event = self.cls.create(markdown=form["markdown"], **form["metadata"])
-        form["filename"] = event.filename
-        return event
 
     def _new_redirect_location(self, model):
         return url_for(".index")
+
+    def get(self, slug):
+        return self.cls.where('pk', '=', slug).first_or_fail()

@@ -16,24 +16,24 @@
                 <p><strong>PAST EVENT</strong></p>
                 {% endif %}
                 <p>
-                    {{ event.metadata.date }}
-                    {%- if event.metadata.time is defined %}<br />
-                    {{ event.metadata.time }}
+                    {{ event.date }}
+                    {%- if event.time is defined %}<br />
+                    {{ event.time }}
                     {%- endif -%}
                 </p>
             </td>
             <td>
                 <p>
-                    <strong>{{ event.metadata.name }}</strong><br />
-                    {{ event.metadata.location }}
+                    <strong>{{ event.name }}</strong><br />
+                    {{ event.location }}
                 </p>
 
                 {{ event.content|safe }}
             </td>
             <td>
                 <ul>
-                    <li><a href="/{{prefix}}/{{event.filename}}/edit">edit</a></li>
-                    <li><a href="/{{prefix}}/{{event.filename}}" data-method="delete">delete</a></li>
+                    <li><a href="/{{prefix}}/{{event.pk}}/edit">edit</a></li>
+                    <li><a href="/{{prefix}}/{{event.pk}}" data-method="delete">delete</a></li>
                 </ul>
         </tr>
         {% endfor %}

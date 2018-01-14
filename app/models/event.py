@@ -1,12 +1,13 @@
 from flask import render_template, Blueprint, url_for, request, redirect, jsonify
-from . import BaseModel
+from . import DatabaseModel
 from dateutil.parser import parse as date_parse
 from datetime import date, datetime
 import re
+import orator
 
 import inspect
 
-class Event(BaseModel):
+class Event(DatabaseModel):
     CONTENT_DIR = "events"
     ROUTE_PREFIX = "events"
     REQUIRED_META = {
@@ -32,39 +33,19 @@ class Event(BaseModel):
     }
 
     @classmethod
-    def all(cls):
-        return sorted(super().all(), key=lambda event: event.date)
+    def all_sorted(cls):
+        return cls.order_by("date", "asc").get()
 
     @classmethod
     def future_events(cls):
-        return [event for event in cls.all() if event.future_event]
+        today = date.today()
+        return cls.where("date", ">", today).get()
 
-    @classmethod
-    def create(cls, **kwargs):
-        if "filename" in kwargs:
-            filename = kwargs["filename"]
-            del kwargs["filename"]
-        elif "date" in kwargs:
-            date = date_parse(kwargs["date"])
-            date_str = date.strftime("%Y-%m-%d")
+    @property
+    def future_event(self):
+        today = date.today()
 
-            if "name" in kwargs:
-                formated_name = re.sub(r'\ +', '_', re.sub(r'\W+', ' ', kwargs["name"].lower()).strip())
-                filename = "{}-{}.md".format(date_str, formated_name)
-            else:
-                filename = "{}.md".format(date_str)
-        else:
-            filename = datetime.now().strftime("%Y-%m-%d-%H%M.md")
+        if isinstance(self.date, str):
+            return today <= date_parse(self.date).date()
 
-        return super().create(filename, **kwargs)
-
-    def __init__(self, filename):
-        super().__init__(filename)
-        if "date" in self.metadata and self.metadata["date"]:
-            self.date = date_parse(self.metadata["date"]).date()
-            today = date.today()
-
-            self.future_event = today <= self.date
-        else:
-            self.date = date.today()
-            self.future_event = False
+        return today <= self.date
