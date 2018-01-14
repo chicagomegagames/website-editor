@@ -1,4 +1,5 @@
 from app import utils
+from orator import DatabaseManager
 import os
 import traceback
 import sys
@@ -18,6 +19,7 @@ class _Config(object):
     def __init__(self, path):
         self.path = path
         self.config = {}
+        self._database = None
 
         self.reload()
 
@@ -52,6 +54,19 @@ class _Config(object):
             os.path.basename(path): path for path in themes
         }
 
+    def use_database(self):
+        return 'database' in self.config
+
+    def database(self):
+        if not self.use_database():
+            raise AttributeError("No database configuration")
+
+        if not self._database:
+            self._database = DatabaseManager(self.config['database'])
+
+        return self._database
+
+
     def reload(self):
         if 'path' not in self.__dict__ and 'CONFIG_DIR' in os.environ:
             config_dir = os.environ['CONFIG_DIR']
@@ -67,6 +82,8 @@ class _Config(object):
 
         if 'content_directory' in self.config:
             utils.make_directory_tree(self.upload_path)
+
+        self._database = None
 
 
 

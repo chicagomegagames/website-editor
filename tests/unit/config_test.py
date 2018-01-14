@@ -1,6 +1,7 @@
 from unittest import TestCase
 from app import Config
 from expects import *
+import orator
 import os
 import tempfile
 import yaml
@@ -73,3 +74,55 @@ class TestConfig(TestCase):
         Config.reload()
 
         expect(Config.use_sentry()).to(be_true)
+
+    def test_use_database(self):
+        expect(Config.use_database()).to(be_false)
+
+        self.config['database'] = {
+            "connection": {
+                "driver": "sqlite",
+                "database": ":memory:",
+            },
+        }
+        self.write_config()
+        Config.reload()
+
+        expect(Config.use_database()).to(be_true)
+
+    def test_get_database(self):
+        self.config['database'] = {
+            "connection": {
+                "driver": "sqlite",
+                "database": ":memory:",
+            },
+        }
+        self.write_config()
+        Config.reload()
+
+        db = Config.database()
+        expect(db).to(be_an(orator.DatabaseManager))
+
+    def test_get_database_no_config(self):
+        expect(
+            lambda: Config.database()
+        ).to(raise_error(AttributeError))
+
+    def test_database_is_memoized(self):
+        self.config['database'] = {
+            "connection": {
+                "driver": "sqlite",
+                "database": ":memory:",
+            },
+        }
+        self.write_config()
+        Config.reload()
+
+        db1 = Config.database()
+        db2 = Config.database()
+
+        expect(db1).to(be(db2))
+
+        Config.reload()
+        db3 = Config.database()
+
+        expect(db1).not_to(be(db3))
