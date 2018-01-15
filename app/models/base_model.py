@@ -237,7 +237,8 @@ class DatabaseModel(orator.Model, _Model):
     def __getitem__(self, item):
         return getattr(self, item)
 
-DatabaseModel.set_connection_resolver(Config.database())
+if Config.use_database():
+    DatabaseModel.set_connection_resolver(Config.database())
 
 class BaseModel(FileModel):
     pass
