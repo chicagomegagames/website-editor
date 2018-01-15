@@ -26,8 +26,6 @@ class DangerControllerTest(ControllerTest):
             },
         )
 
-        Config.reload()
-
     def _teardown(self):
         self.deploy_dir.cleanup()
 
@@ -39,8 +37,8 @@ class DangerControllerTest(ControllerTest):
         expect(response).to(have_in_body("<option value=\"test\">Test</option>"))
 
     def test_deploy(self):
-        p = Page.create("foo.md", markdown="FOO!!", slug="/", name="Test Page!", layout="page.html")
-        expect(p.save()).to(be_true)
+        p = factory(Page).create(slug = "/", markdown = "FOO!!")
+        p.save()
 
         response = self.app.post("/danger/deploy",
             data = {"theme": "test_theme", "location": "test"}

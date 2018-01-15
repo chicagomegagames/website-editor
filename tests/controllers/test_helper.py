@@ -1,4 +1,5 @@
 from app.config import Config
+from .. import ApplicationTest, factory
 from expects import *
 from expects.matchers import Matcher
 from unittest import TestCase
@@ -29,19 +30,9 @@ class have_in_body(Matcher):
         else:
             return False, ["'{}' not in '{}'".format(self.content, body)]
 
-class ControllerTest(TestCase):
+class ControllerTest(ApplicationTest):
     def setUp(self):
-        self.content_dir = tempfile.TemporaryDirectory()
-        self.config_dir = tempfile.TemporaryDirectory()
-
-        os.environ['CONFIG_DIR'] = self.config_dir.name
-
-        self.config = {
-            "content_directory": self.content_dir.name
-        }
-
-        self.write_config()
-        Config._full_reload()
+        super().setUp()
 
         from app import server
         server.testing = True
@@ -51,9 +42,7 @@ class ControllerTest(TestCase):
             self._setup()
 
     def tearDown(self):
-        del os.environ['CONFIG_DIR']
-        self.content_dir.cleanup()
-        self.config_dir.cleanup()
+        super().tearDown()
 
         if hasattr(self, '_teardown'):
             self._teardown()
@@ -62,3 +51,5 @@ class ControllerTest(TestCase):
         self.config.update(kwargs)
         with open(os.path.join(self.config_dir.name, 'application.yaml'), 'w') as handler:
             handler.write(yaml.dump(self.config, default_flow_style = False))
+
+        Config._full_reload()
