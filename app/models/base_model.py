@@ -228,7 +228,7 @@ class DatabaseModel(orator.Model, _Model):
 
     @classmethod
     def all_sorted(cls):
-        return cls.all().order_by("name", "asc")
+        return cls.order_by("name", "asc").get()
 
     # HACK!!!
     #   Done to allow templates to use column names as a variable
