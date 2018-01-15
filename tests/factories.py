@@ -18,3 +18,12 @@ def page_factory(faker):
         'slug': faker.slug(),
         'layout': 'page.html',
     }
+
+@factory.define(models.Event)
+def event_factory(faker):
+    return {
+        'name': faker.sentence(),
+        'date': faker.date(),
+        'location': faker.city(),
+        'markdown': faker.text(),
+    }
