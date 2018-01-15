@@ -9,12 +9,17 @@ class BaseController(Blueprint):
         self.route_prefix = route_prefix
 
         self.errorhandler(FileNotFoundError)(self.file_not_found)
+        self.errorhandler(orator.exceptions.orm.ModelNotFound)(self.file_not_found)
 
     def template(self, name, **kwargs):
         return render_template(name, config=Config, prefix=self.route_prefix, **kwargs)
 
+    def _template(self, name, **kwargs):
+        return render_template(name, config=Config, prefix=self.route_prefix, **kwargs)
+
+
     def file_not_found(self, error):
-        return self.template("404.html"), 404
+        return self._template("404.html"), 404
 
     def is_delete_request(self):
         if request.method == "POST" and "_method" in request.form:
