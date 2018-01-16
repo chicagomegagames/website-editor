@@ -227,6 +227,12 @@ class DatabaseModel(orator.Model, _Model):
         return cls.__table__ or inflection.tableize(cls.__name__)
 
     @classmethod
+    def _columns(cls):
+        connection = cls.resolve_connection()
+        columns = connection.get_schema_manager().list_table_columns(cls._table_name())
+        return {name: column.get_type() for name, column in columns.items()}
+
+    @classmethod
     def all_sorted(cls):
         return cls.order_by("name", "asc").get()
 

@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+from app.models import ModelConverter, Page, Game, Event
+
+if __name__ == '__main__':
+    ModelConverter.convert(Page)
+    ModelConverter.convert(Game)
+    ModelConverter.convert(Event)
