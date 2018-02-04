@@ -1,5 +1,5 @@
 from flask import render_template, Blueprint, url_for, request, redirect, jsonify
-from . import DatabaseModel
+from . import BaseModel
 from dateutil.parser import parse as date_parse
 from datetime import date, datetime
 import re
@@ -7,7 +7,7 @@ import orator
 
 import inspect
 
-class Event(DatabaseModel):
+class Event(BaseModel):
     CONTENT_DIR = "events"
     ROUTE_PREFIX = "events"
     REQUIRED_META = {

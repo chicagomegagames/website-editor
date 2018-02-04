@@ -1,9 +1,9 @@
 from .test_helper import *
-from app.models import BaseModel, FileAlreadyExistsError
+from app.models import FileModel, FileAlreadyExistsError
 import os
 import tempfile
 
-class Foo(BaseModel):
+class Foo(FileModel):
     CONTENT_DIR = "foo"
     REQUIRED_META = {
         "name": {"type": "text"},
@@ -12,7 +12,7 @@ class Foo(BaseModel):
         "some_field": {"type": "text"},
     }
 
-class TestBaseModel(ApplicationTest):
+class TestFileModel(ApplicationTest):
     def test_all_no_directory(self):
         expect(lambda: Foo.all()).not_to(raise_error)
 
@@ -39,7 +39,7 @@ class TestBaseModel(ApplicationTest):
         expect(foo2.metadata["name"]).to(equal("foo?"))
 
     def test_save_force(self):
-        class Bar(BaseModel):
+        class Bar(FileModel):
             CONTENT_DIR = "bar"
             REQUIRED_META = {"field": {"type": "text"}}
 
@@ -104,7 +104,7 @@ class TestBaseModel(ApplicationTest):
         expect(foo.content).to(equal("<h1 id=\"foo\">Foo</h1>\n"))
 
     def test_metadata_default(self):
-        class Bar(BaseModel):
+        class Bar(FileModel):
             CONTENT_DIR = "bar"
             REQUIRED_META = {
                 "field": {
@@ -122,7 +122,7 @@ class TestBaseModel(ApplicationTest):
         expect(bar2.metadata["field"]).to(equal("bar bar bar"))
 
     def test_boolean_required_meta(self):
-        class Bar(BaseModel):
+        class Bar(FileModel):
             CONTENT_DIR = "bar"
             REQUIRED_META = {
                 "field": {

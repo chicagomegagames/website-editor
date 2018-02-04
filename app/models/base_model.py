@@ -246,5 +246,5 @@ class DatabaseModel(orator.Model, _Model):
 if Config.use_database():
     DatabaseModel.set_connection_resolver(Config.database())
 
-class BaseModel(FileModel):
+class BaseModel(DatabaseModel):
     pass

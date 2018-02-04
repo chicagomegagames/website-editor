@@ -1,8 +1,8 @@
-from . import BaseModel
+from . import FileModel
 from dateutil.parser import parse as date_parse
 import datetime
 
-class BlogPost(BaseModel):
+class BlogPost(FileModel):
     CONTENT_DIR = "blog"
     ROUTE_PREFIX = "blog"
 

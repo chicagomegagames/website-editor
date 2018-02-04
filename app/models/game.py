@@ -1,7 +1,7 @@
-from . import DatabaseModel
+from . import BaseModel
 import re
 
-class Game(DatabaseModel):
+class Game(BaseModel):
     CONTENT_DIR = "games"
     ROUTE_PREFIX = "game"
     REQUIRED_META = {

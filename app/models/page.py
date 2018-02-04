@@ -1,6 +1,6 @@
-from . import DatabaseModel
+from . import BaseModel
 
-class Page(DatabaseModel):
+class Page(BaseModel):
     CONTENT_DIR = "pages"
     ROUTE_PREFIX = "page"
 
