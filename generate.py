@@ -1,4 +1,4 @@
-from app import GeneratorService, ImageService
+from app import Deploy
 from app.models import BaseModel
 import argparse
 import os.path
@@ -14,9 +14,12 @@ def main():
     BaseModel.set_base_dir(args.content)
     image_service = ImageService(os.path.join(args.content, "image_uploads"))
     theme_path = os.path.join(args.content, "themes", args.theme)
-    generator = GeneratorService(None, None, default_theme_path = theme_path)
 
-    generator.generate(args.location, theme_path = theme_path, image_service = image_service)
+    deployer = Deploy(
+        deploy_dir = args.location,
+        theme_path = theme_path,
+    )
+    deployer.deploy()
 
 if __name__ == "__main__":
     main()
