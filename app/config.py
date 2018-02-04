@@ -1,5 +1,6 @@
-from app import utils
 from orator import DatabaseManager
+from app import utils
+import boto3
 import os
 import traceback
 import sys
@@ -20,6 +21,7 @@ class _Config(object):
         self.path = path
         self.config = {}
         self._database = None
+        self._aws_session = None
 
         self.reload()
 
@@ -66,6 +68,14 @@ class _Config(object):
 
         return self._database
 
+    def aws_session(self):
+        if not self._aws_session:
+            creds = {}
+            if 'aws_credentials' in self.config:
+                creds = self.config['aws_credentials']
+            self._aws_session = boto3.Session(**creds)
+
+        return self._aws_session
 
     def reload(self):
         if 'path' not in self.__dict__ and 'CONFIG_DIR' in os.environ:
@@ -84,7 +94,7 @@ class _Config(object):
             utils.make_directory_tree(self.upload_path)
 
         self._database = None
-
+        self._session = None
 
 
     def _full_reload(self):
