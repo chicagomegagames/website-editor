@@ -57,6 +57,9 @@ class _Config(object):
         }
 
     def database(self):
+        if not 'databases' in self.config
+            return None
+
         if not self._database:
             self._database = DatabaseManager(self.config['databases'])
 
