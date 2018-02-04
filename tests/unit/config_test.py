@@ -88,6 +88,11 @@ class TestConfig(TestCase):
         db = Config.database()
         expect(db).to(be_an(orator.DatabaseManager))
 
+    def test_get_database_no_config(self):
+        expect(
+            lambda: Config.database()
+        ).to(raise_error(AttributeError))
+
     def test_database_is_memoized(self):
         self.config['databases'] = {
             "connection": {
