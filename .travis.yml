@@ -1,3 +1,7 @@
+env:
+    global:
+        - CONFIG_DIR=tests
+
 language: python
 python:
     - "3.4" # version in Debian Jesse

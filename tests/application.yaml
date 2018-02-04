@@ -1,0 +1,7 @@
+databases:
+    default: development
+    development:
+        driver: sqlite
+        database: "/tmp/test.db"
+
+image_bucket: upload_test
