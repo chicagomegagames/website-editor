@@ -75,6 +75,20 @@ class TestConfig(TestCase):
 
         expect(Config.use_sentry()).to(be_true)
 
+    def test_use_database(self):
+        expect(Config.use_database()).to(be_false)
+
+        self.config['databases'] = {
+            "connection": {
+                "driver": "sqlite",
+                "database": ":memory:",
+            },
+        }
+        self.write_config()
+        Config.reload()
+
+        expect(Config.use_database()).to(be_true)
+
     def test_get_database(self):
         self.config['databases'] = {
             "connection": {
