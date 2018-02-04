@@ -1,6 +1,7 @@
 language: python
 python:
-    - "3.4" # version running on Debian Jesse
+    - "3.4" # version in Debian Jesse
+    - "3.5" # version in Debian Stretch
     - "3.6" # version in Homebrew / latest
 install: pip install -r requirements.txt
 script: nosetests
