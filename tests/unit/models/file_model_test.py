@@ -1,5 +1,5 @@
 from .test_helper import *
-from app.models import FileModel, FileAlreadyExistsError
+from app.models.base_model import _FileModel as FileModel, FileAlreadyExistsError
 import os
 import tempfile
 

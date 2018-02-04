@@ -1,16 +1,17 @@
 from .test_helper import *
 
-from app.models import ModelConverter, FileModel, DatabaseModel, Page, Game, Event
+from app.models import ModelConverter, Page, Game, Event
+from app.models.base_model import _FileModel
 
 from datetime import date
 import orator
 
-class PageFile(FileModel):
+class PageFile(_FileModel):
     CONTENT_DIR = Page.CONTENT_DIR
     REQUIRED_META = Page.REQUIRED_META
     OPTIONAL_META = Page.OPTIONAL_META
 
-class GameFile(FileModel):
+class GameFile(_FileModel):
     CONTENT_DIR = Game.CONTENT_DIR
     REQUIRED_META = Game.REQUIRED_META
     OPTIONAL_META = Game.OPTIONAL_META
@@ -45,7 +46,7 @@ class TestModelConverter(ApplicationTest):
             'hint': 'who cares?',
         }
 
-        class BadEvent(FileModel):
+        class BadEvent(_FileModel):
             CONTENT_DIR = Event.CONTENT_DIR
             REQUIRED_META = Event.REQUIRED_META
             OPTIONAL_META = optional_meta

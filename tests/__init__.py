@@ -1,5 +1,5 @@
 from app import Config
-from app.models import DatabaseModel
+from app.models import BaseModel
 
 from orator import DatabaseManager
 from orator.migrations import Migrator, DatabaseMigrationRepository
@@ -30,7 +30,7 @@ class FakeDatabase():
         migrator.reset(migrations_directory)
         migrator.run(migrations_directory)
 
-        DatabaseModel.set_connection_resolver(self.db_manager)
+        BaseModel.set_connection_resolver(self.db_manager)
 
     def database_configuration(self):
         return {
@@ -43,7 +43,7 @@ class FakeDatabase():
 
     def cleanup(self):
         self.db_directory.cleanup()
-        DatabaseModel.set_connection_resolver(None)
+        BaseModel.set_connection_resolver(None)
 
 
 class ApplicationTest(TestCase):

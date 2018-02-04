@@ -1,3 +1,4 @@
+from . import _Model
 from app import Config
 from app.utils import make_directory_tree, html_from_markdown
 import inflection
@@ -13,7 +14,7 @@ class FileAlreadyExistsError(Exception):
 
         super().__init__("Couldn't create {cls}, file already exists <{path}>".format(cls=self.class_name, path=self.path))
 
-class _Model():
+class _ContentModel():
     ROUTE_PREFIX = ""
     REQUIRED_META = {}
     OPTIONAL_META = {}
@@ -48,7 +49,7 @@ class _Model():
         return html_from_markdown(self.markdown)
 
 
-class FileModel(_Model):
+class _FileModel(_ContentModel):
     @classmethod
     def all(cls):
         path = os.path.join(Config.content_directory, cls.CONTENT_DIR)
@@ -218,33 +219,10 @@ class FileModel(_Model):
         os.remove(self.path)
 
 
-class DatabaseModel(orator.Model, _Model):
-    __primary_key__ = 'pk'
-    __guarded__ = []
-
-    @classmethod
-    def _table_name(cls):
-        return cls.__table__ or inflection.tableize(cls.__name__)
-
-    @classmethod
-    def _columns(cls):
-        connection = cls.resolve_connection()
-        columns = connection.get_schema_manager().list_table_columns(cls._table_name())
-        return {name: column.get_type() for name, column in columns.items()}
-
+class _DatabaseModel(_Model, _ContentModel):
     @classmethod
     def all_sorted(cls):
         return cls.order_by("name", "asc").get()
 
-    # HACK!!!
-    #   Done to allow templates to use column names as a variable
-    #       {% set column = 'pk' %}
-    #       {{ user[column] }}
-    def __getitem__(self, item):
-        return getattr(self, item)
-
-if Config.use_database():
-    DatabaseModel.set_connection_resolver(Config.database())
-
-class BaseModel(DatabaseModel):
+class BaseModel(_DatabaseModel):
     pass

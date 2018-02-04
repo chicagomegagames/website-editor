@@ -1,9 +1,9 @@
-from . import FileModel
+from .base_model import _FileModel
 
 class ModelConverter():
     @classmethod
     def convert(cls, model_class):
-        class TempFileModel(FileModel):
+        class TempFileModel(_FileModel):
             CONTENT_DIR = model_class.CONTENT_DIR
             REQUIRED_META = model_class.REQUIRED_META
             OPTIONAL_META = model_class.OPTIONAL_META
