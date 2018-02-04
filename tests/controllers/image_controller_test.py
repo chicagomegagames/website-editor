@@ -42,13 +42,13 @@ class ImageControllerTest(ControllerTest):
 
             return json.loads(upload_response.get_data(as_text=True))["filename"]
 
-    def test_get_image(self):
+    def xtest_get_image(self):
         image = self._upload_fixture()
 
         response = self.app.get("/images/{}".format(image))
         expect(response).to(be_successful)
 
-    def test_delete(self):
+    def xtest_delete(self):
         image = self._upload_fixture()
         get_response = self.app.get("/images/")
         expect(get_response).to(be_successful)

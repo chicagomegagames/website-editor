@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from raven.contrib.flask import Sentry
-from .controllers import ImageController, GameController, PageController, EventController, DangerController
+from .controllers import BaseController, ImageController, GameController, PageController, EventController, DangerController
 from .models import BaseModel, Game, Page, Event
 from .static import publish_site
 from .config import Config
+from .image_service import ImageService
 import os
 import raven
 import sys
@@ -24,6 +25,9 @@ if Config.use_sentry():
     }
     sentry = Sentry(app, dsn=Config.sentry_dns)
     Config.config["sentry"] = sentry
+
+image_service = ImageService(Config.image_bucket)
+BaseController.set_image_service(image_service)
 
 app.register_blueprint(ImageController())
 app.register_blueprint(DangerController())

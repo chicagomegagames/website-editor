@@ -31,4 +31,6 @@ from .game import Game
 from .page import Page
 from .event import Event
 
+from .image import Image
+
 from .model_converter import ModelConverter

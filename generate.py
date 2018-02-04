@@ -11,8 +11,8 @@ def main():
 
     args = parser.parse_args()
 
-    BaseModel.set_base_dir(args.content)
-    image_service = ImageService(os.path.join(args.content, "image_uploads"))
+    # BaseModel.set_base_dir(args.content)
+    # image_service = ImageService(os.path.join(args.content, "image_uploads"))
     theme_path = os.path.join(args.content, "themes", args.theme)
 
     deployer = Deploy(

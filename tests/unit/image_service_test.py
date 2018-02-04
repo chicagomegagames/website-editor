@@ -1,14 +1,13 @@
-from .. import ApplicationTest
-from app import ImageService, Config
-# from app.image_service import _ImageService
+from .. import ApplicationTest, factory
+from app import ImageService
+from app.models import Image
 from moto import mock_s3
 from expects import *
-from unittest import TestCase
+import boto3
 import filecmp
 import os
-import tempfile
-import yaml
 
+@mock_s3
 class ImageServiceTest(ApplicationTest):
     def setUp(self):
         super().setUp()
@@ -16,20 +15,29 @@ class ImageServiceTest(ApplicationTest):
         current_dir = os.path.dirname(__file__)
         self.test_file_path = os.path.join(current_dir, "..", "fixtures", "square_logo.svg")
 
-        # self.config['image_bucket'] = 'upload_test'
-        # self.write_config()
+        self.service = ImageService('upload_test')
+        self.resource = boto3.resource('s3')
+        self.resource.create_bucket(Bucket = 'upload_test')
+
+
+    def test_generate_filename(self):
+        expect(ImageService._generate_upload_filename("foo.jpg")).to(equal("foo.jpg"))
+
+        factory(Image).create(name = "foo.jpg")
+        expect(ImageService._generate_upload_filename("foo.jpg")).not_to(equal("foo.jpg"))
+        expect(ImageService._generate_upload_filename("foo.jpg")).to(start_with("foo"))
+        expect(ImageService._generate_upload_filename("foo.jpg")).to(end_with(".jpg"))
+
+        expect(ImageService._generate_upload_filename("bar.JPG")).to(equal("bar.jpg"))
 
     def test_local_upload_image(self):
-
         with open(self.test_file_path, "rb") as test_file:
-            ImageService.upload_image("square_logo.svg", test_file)
+            image = self.service.upload_image("square_logo.svg", test_file)
 
-        expect(filecmp.cmp(ImageService.images()[0].path, self.test_file_path)).to(be_true)
+            test_file.seek(0)
+            blob = test_file.read()
 
-    def test_find(self):
-        with open(self.test_file_path, "rb") as test_file:
-            ImageService.upload_image("square_logo.svg", test_file)
+        upload_file = self.resource.Object('upload_test', image.name)
+        upload_blob = upload_file.get()['Body'].read()
 
-        image = ImageService.images()[0]
-        expect(image).not_to(be_none)
-        expect(ImageService.find(image.name)).to(equal(image))
+        expect(blob).to(equal(upload_blob))

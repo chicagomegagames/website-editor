@@ -1,5 +1,5 @@
 from datetime import datetime
-from app import Config, ImageService
+from app import Config
 from app.models import Page, Game, Event
 from app.utils import make_directory_tree, html_from_markdown
 import jinja2
@@ -40,12 +40,6 @@ class Deploy():
             if os.path.exists(copy_dir):
                 shutil.rmtree(copy_dir)
             shutil.copytree(assets_dir, copy_dir)
-
-        if ImageService:
-            img_dir = os.path.join(self.path, "images")
-            if os.path.exists(img_dir):
-                shutil.rmtree(img_dir)
-            shutil.copytree(Config.upload_path, img_dir)
 
     def _create_page(self, model, slug, template_name):
         while len(slug) > 0 and slug[0] == "/":

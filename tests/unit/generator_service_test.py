@@ -1,9 +1,10 @@
-from app import GeneratorService, ImageService, Config, Deploy
+from app import GeneratorService, Config, Deploy
 from app.models import BaseModel, Page, Game
 
 from .. import ApplicationTest, factory
 from expects import *
 from freezegun import freeze_time
+from moto import mock_s3
 from unittest import TestCase
 from unittest.mock import Mock
 import filecmp
@@ -19,6 +20,7 @@ TestThemePath = os.path.join(
     "test_theme",
 )
 
+@mock_s3
 class TestGeneratorService(ApplicationTest):
     def setUp(self):
         super().setUp()
@@ -163,25 +165,3 @@ class TestDeploy(ApplicationTest):
 
         test_logo = os.path.join(self.theme_path, "assets", "logo.svg")
         expect(filecmp.cmp(deployed_logo, test_logo)).to(be_true)
-
-    def test_copy_image_service(self):
-        image_upload_path = tempfile.TemporaryDirectory()
-        self.config['upload_path'] = image_upload_path
-        self.write_config()
-
-        image_to_upload = os.path.join(os.path.dirname(__file__), "..", "fixtures", "square_logo.svg")
-        upload_image = None
-        with open(image_to_upload, "rb") as upload_file:
-            upload_image = ImageService.upload_image("square_logo.svg", upload_file)
-
-        deployer = Deploy(
-            deploy_dir = self.deploy_dir.name,
-            theme_path = self.theme_path,
-        )
-        deployer.deploy()
-
-        image_path = os.path.join(deployer.path, "images", upload_image.name)
-        expect(os.path.exists(image_path)).to(be_true)
-        expect(filecmp.cmp(image_path, image_to_upload))
-
-        image_upload_path.cleanup()

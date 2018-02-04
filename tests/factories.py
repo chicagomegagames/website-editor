@@ -27,3 +27,9 @@ def event_factory(faker):
         'location': faker.city(),
         'markdown': faker.text(),
     }
+
+@factory.define(models.Image)
+def image_factory(faker):
+    return {
+        'bucket': 'test_bucket',
+    }

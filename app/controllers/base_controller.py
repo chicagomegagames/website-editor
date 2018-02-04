@@ -4,6 +4,12 @@ from flask import Blueprint, render_template, request, redirect, url_for, jsonif
 import orator
 
 class BaseController(Blueprint):
+    image_service = None
+
+    @classmethod
+    def set_image_service(cls, service):
+        cls.image_service = service
+
     def __init__(self, route_prefix):
         super().__init__(route_prefix, __name__, url_prefix="/{}".format(route_prefix))
         self.route_prefix = route_prefix
@@ -75,7 +81,7 @@ class BaseModelController(BaseController):
                 file_key = "metadata[{key}]".format(key=key)
                 if file_key in request.files:
                     img = request.files[file_key]
-                    uploaded_image = ImageService.upload_image(
+                    uploaded_image = self.image_service.upload_image(
                         img.filename,
                         img.stream
                     )

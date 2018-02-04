@@ -1,39 +1,46 @@
-from app import Config, utils
+from app import Config
+from app.models import Image
+import boto3
 import os
 import shutil
-import uuid
+import shortuuid
 
-class _ImageService(object):
+shortuuid.set_alphabet('abcdefghijklmnopqrstuvwxyz')
+
+class ImageService(object):
     @staticmethod
     def _generate_upload_filename(filename):
-        extension = os.path.splitext(filename)[1]
-        return "{}{}".format(uuid.uuid4(), extension)
+        filename = filename.lower()
+
+        name, extension = os.path.splitext(filename)
+        while Image.where('name', '=', filename).count() == 1:
+            uid = shortuuid.uuid()[0:7]
+            filename = "{}-{}.{}".format(name, uid, extension)
+
+        return filename
+
+    def __init__(self, bucket_name):
+        self.bucket_name = bucket_name
+        self._client = Config.aws_session().client('s3')
+        self.s3 = Config.aws_session().resource('s3')
+
+        self.bucket = self.s3.Bucket(self.bucket_name)
+
 
     def upload_image(self, filename, stream):
         upload_filename = self._generate_upload_filename(filename)
-        new_file_path = os.path.join(Config.upload_path, upload_filename)
 
-        with open(new_file_path, "wb+", buffering=0) as new_file:
-            shutil.copyfileobj(stream, new_file)
+        self.bucket.put_object(
+            Key = filename,
+            Body = stream,
+        )
 
-        return ImageFile(Config.upload_path, upload_filename)
+        image = Image.create(
+            name = filename,
+            bucket = self.bucket_name,
+        )
+
+        return image
 
     def images(self):
-        return [ImageFile(Config.upload_path, file) for file in os.listdir(Config.upload_path)]
-
-    def find(self, name):
-        return ImageFile(Config.upload_path, name)
-
-class ImageFile(object):
-    def __init__(self, directory, name):
-        self.directory = directory
-        self.name = name
-        self.path = os.path.join(self.directory, self.name)
-
-    def __eq__(self, other):
-        return other.path == self.path
-
-    def delete(self):
-        os.remove(self.path)
-
-ImageService = _ImageService()
+        Image.where('bucket_name', '=', self.bucket_name)
