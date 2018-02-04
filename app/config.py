@@ -56,13 +56,7 @@ class _Config(object):
             os.path.basename(path): path for path in themes
         }
 
-    def use_database(self):
-        return 'databases' in self.config
-
     def database(self):
-        if not self.use_database():
-            raise AttributeError("No database configuration")
-
         if not self._database:
             self._database = DatabaseManager(self.config['databases'])
 
