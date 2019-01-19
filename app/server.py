@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from raven.contrib.flask import Sentry
-from .controllers import BaseController, ImageController, GameController, PageController, EventController, DangerController
+from .controllers import BaseController, ImageController, GameController, PageController, EventController, DangerController, PreviewController
 from .models import BaseModel, Game, Page, Event
 from .static import publish_site
 from .config import Config
 from .image_service import ImageService
+from .preview_service import PreviewService
 import os
 import raven
 import sys
@@ -34,6 +35,7 @@ app.register_blueprint(DangerController())
 app.register_blueprint(GameController())
 app.register_blueprint(PageController())
 app.register_blueprint(EventController())
+app.register_blueprint(PreviewController(PreviewService(Config.theme)))
 
 
 def template(name, **kwargs):
