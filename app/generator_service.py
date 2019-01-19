@@ -53,6 +53,14 @@ class Deploy():
         with open(output_file, "w+") as writer:
             writer.write(template.render(page=model, site=self.site))
 
+    def _render(self, template_name, **context):
+        template = self.template_environment.get_template(template_name)
+        return template.render(
+            asset=lambda x: "{base}/{asset}".format(base = "/assets", asset = x),
+            url=lambda x: "/{url}".format(url=x),
+            **context,
+        )
+
 
 class GeneratorService(object):
     @classmethod

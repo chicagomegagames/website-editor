@@ -5,19 +5,19 @@
 <html>
 <head>
     <title>{{ header_title }}</title>
-    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="stylesheet" href="{{asset("css/base.css")}}" />
 </head>
 <body>
     <div id="body">
         <header id="global-header">
             <div id="logo">
-                <a href="/"><img src="/assets/images/cmg_square.png" alt="CMG"/></a>
+                <a href="{{url("")}}"><img src="{{asset("images/cmg_square.png")}}" alt="CMG"/></a>
             </div>
             <nav class="global-nav">
-                <a href="/">Home</a>
-                <a href="/games/">Games</a>
+                <a href="{{url("")}}">Home</a>
+                <a href="{{url("games")}}">Games</a>
                 <a href="https://chicagomegagames.com/blog/">Blog</a>
-                <a href="/about/">About</a>
+                <a href="{{url("about")}}">About</a>
             </nav>
         </header>
 

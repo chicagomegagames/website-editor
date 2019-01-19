@@ -2,11 +2,11 @@
 
 article.game {
     section.content {
+        @include span-columns(8);
+
         @include media-medium {
             @include span-columns(4 of 4);
         }
-
-        @include span-columns(8);
 
         &.centered {
             @include shift(2);

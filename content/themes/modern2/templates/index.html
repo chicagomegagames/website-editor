@@ -1,6 +1,6 @@
 {% extends 'base_template.html' %}
 
-{% if page.metadata.hero_image is defined %}
+{% if page.hero_image %}
     {% set has_hero = True %}
 {% else %}
     {% set has_hero = False %}
@@ -8,7 +8,7 @@
 
 {% block main %}
 <article class="index">
-    <div class="header {%- if has_hero %} hero{% endif %}" {%- if has_hero %} style="background-image: url('{{ page.metadata.hero_image }}');"{% endif %}>
+    <div class="header {%- if has_hero %} hero{% endif %}" {%- if has_hero %} style="background-image: url('{{ page.hero_image }}');"{% endif %}>
         <h1>{{ page.name }}</h1>
     </div>
 
@@ -22,10 +22,10 @@
         {% for event in site.calendar %}
         <div class="event">
             <div class="meta">
-                <h3>{{ event.metadata.name }}</h3>
+                <h3>{{ event.name }}</h3>
                 <p>
-                    <strong>{{ event.metadata.date }}</strong><br />
-                    {{ event.metadata.location }}
+                    <strong>{{ event.date }}</strong><br />
+                    {{ event.location }}
                 </p>
             </div>
 

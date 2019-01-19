@@ -1,6 +1,6 @@
 {% extends 'base_template.html' %}
 
-{% if page.name is defined and page.name %}
+{% if page.name %}
     {% set header_title = page.name + " | Chicago MegaGames" %}
 {% endif %}
 
@@ -11,8 +11,8 @@
 
         {% if page.hero_image %}
         <figure>
-            <img src="{{ page.hero_image }}" {%- if page.hero_alt is defined %} alt="{{ page.hero_alt }}" {%- endif %} />
-            {% if page.hero_caption is defined %}
+            <img src="{{ page.hero_image }}" {%- if page.hero_alt %} alt="{{ page.hero_alt }}" {%- endif %} />
+            {% if page.hero_caption %}
             <figcaption>
                 <p>{{ page.hero_caption }}</p>
             </figcaption>

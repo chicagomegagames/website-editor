@@ -1,16 +1,16 @@
 {% extends 'base_template.html' %}
 
-{% if page.metadata.name is defined and page.metadata.name %}
-    {% set header_title = page.metadata.name + " | Chicago MegaGames" %}
+{% if page.name %}
+    {% set header_title = page.name + " | Chicago MegaGames" %}
 {% endif %}
 
-{% if page.metadata.hero_image is defined %}
+{% if page.hero_image %}
     {% set has_hero = True %}
 {% else %}
     {% set has_hero = False %}
 {% endif %}
 
-{% if page.metadata['show_quick_facts'] or page.metadata['credits'] %}
+{% if page.show_quick_facts or page.credits %}
     {% set center_content = False %}
 {% else %}
     {% set center_content = True %}
@@ -18,9 +18,9 @@
 
 {% block main %}
 <article class="game">
-    <div class="header {%- if has_hero %} hero{% endif %}" {%- if has_hero %} style="background-image: url('{{ page.metadata.hero_image }}');"{% endif %}>
+    <div class="header {%- if has_hero %} hero{% endif %}" {%- if has_hero %} style="background-image: url('{{ page.hero_image }}');"{% endif %}>
         <h1>{{ page.logo_or_title }}</h1>
-        <p class="subtitle">{{ page.metadata.subtitle }}</p>
+        <p class="subtitle">{{ page.subtitle }}</p>
     </div>
 
     <section class="content {%- if center_content %} centered {%- endif -%}">
@@ -29,31 +29,31 @@
 
     {%- if not center_content %}
     <section class="aside">
-        {%- if page.metadata['show_quick_facts'] -%}
+        {%- if page.show_quick_facts -%}
         <div class="block">
             <h3 id="quick-facts">Quick Facts</h3>
 
             <table class="facts">
                 <tr>
                     <td>Game Length</td>
-                    <td>{{ page.metadata.game_length }}</td>
+                    <td>{{ page.game_length }}</td>
                 </tr>
                 <tr>
                     <td>Players</td>
-                    <td>{{ page.metadata.player_count }}</td>
+                    <td>{{ page.player_count }}</td>
                 </tr>
                 <tr>
                     <td>Control</td>
-                    <td>{{ page.metadata.control_count }}</td>
+                    <td>{{ page.control_count }}</td>
                 </tr>
             </table>
         </div>
         {%- endif -%}
 
-        {%- if page.metadata['credits'] -%}
+        {%- if page.credits -%}
         <div class="block credits">
             <h3 id="credits">Credits</h3>
-            {{ page.metadata.credits|markdown }}
+            {{ page.credits|markdown }}
         </div>
         {%- endif -%}
     </section>
