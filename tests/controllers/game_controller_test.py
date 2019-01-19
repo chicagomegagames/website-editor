@@ -50,7 +50,6 @@ class GameControllerTest(ControllerTest):
 
         edit_response = self.app.post("/games/my_kind_of_town/edit", data = {
             "markdown": "Hello! Yes, this is dog.",
-            "hero_image": "assets/foo.jpg",
         })
 
         expect(edit_response).to(be_successful)

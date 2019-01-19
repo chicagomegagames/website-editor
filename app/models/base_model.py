@@ -21,16 +21,13 @@ class _ContentModel():
 
     @classmethod
     def _convert_form(cls, form):
-        new_form = {}
         for key, info in cls._all_meta().items():
             if key not in form:
                 continue
             value = form[key]
             if info["type"] == "boolean":
                 value = value in ["true", "True", True]
-            new_form[key] = value
-
-        return new_form
+            form[key] = value
 
     @property
     def content(self):

@@ -75,19 +75,7 @@ class BaseModelController(BaseController):
             form = form_to_dict(request.form)
 
             self.clean_form(form)
-            form = model._convert_form(form)
-
-            images = {}
-            for key in self.image_metadata:
-                file_key = "metadata[{key}]".format(key=key)
-                if file_key in request.files:
-                    img = request.files[file_key]
-                    uploaded_image = self.image_service.upload_image(
-                        img.filename,
-                        img.stream
-                    )
-                    image_path = "/images/{}".format(uploaded_image.name)
-                    form["metadata"][key] = image_path
+            model._convert_form(form)
 
             response, status_code = self.update(model, form)
 
