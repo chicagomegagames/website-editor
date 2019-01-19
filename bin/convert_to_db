@@ -4,8 +4,20 @@ import os, sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from app.models import ModelConverter, Page, Game, Event
+from app import ImageService, Config
+from pathlib import Path
 
 if __name__ == '__main__':
     ModelConverter.convert(Page)
     ModelConverter.convert(Game)
     ModelConverter.convert(Event)
+
+    image_service = ImageService(Config.image_bucket)
+
+    upload_dir = Path(Config.upload_path)
+    for image in upload_dir.iterdir():
+        print(image.name)
+        with image.open("rb") as stream:
+            contents = stream.read()
+
+        image_service.upload_image(image.name, contents)
