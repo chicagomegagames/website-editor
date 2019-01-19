@@ -5,3 +5,6 @@ databases:
         database: "/tmp/test.db"
 
 image_bucket: upload_test
+theme: modern2
+default_template: page.html
+content_directory: "tests/fixtures"
