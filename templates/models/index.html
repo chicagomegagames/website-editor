@@ -25,20 +25,20 @@
         <td>
           {{ model.name }}<br />
           <span class="filename">
-            /{{ model.slug }}/
+            {{ model.slug }}
           </span>
         </td>
         {% if hide_show_page is defined and hide_show_page %}
         {% else %}
         <td>
-          <a href="/{{ prefix }}/{{ model.slug }}">Show</a>
+          <a href="/{{ prefix }}/{{ model.edit_url }}">Show</a>
         </td>
         {% endif %}
         <td>
-          <a href="/{{ prefix }}/{{ model.slug }}/edit">Edit</a>
+          <a href="/{{ prefix }}/{{ model.edit_url }}/edit">Edit</a>
         </td>
         <td>
-          <a href="/{{ prefix }}/{{ model.slug }}" data-method="delete">Delete</a>
+          <a href="/{{ prefix }}/{{ model.edit_url }}" data-method="delete">Delete</a>
         </td>
       </tr>
     {% endfor %}

@@ -42,5 +42,9 @@ class _DatabaseModel(_Model, _ContentModel):
     def all_sorted(cls):
         return cls.order_by("name", "asc").get()
 
+    @property
+    def edit_url(self):
+        return self.slug
+
 class BaseModel(_DatabaseModel):
     pass

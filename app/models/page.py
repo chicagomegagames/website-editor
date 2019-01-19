@@ -26,3 +26,7 @@ class Page(BaseModel):
             "hint": "Big, lead-in image",
         },
     }
+
+    @property
+    def edit_url(self):
+        return self.slug.replace("/", "--")

@@ -3,8 +3,8 @@
 {% block main %}
     <h1>{{model.name}}</h1>
     <ul class="actions">
-        <li><a href="/{{prefix}}/{{model.slug}}/edit">edit</a></li>
-        <li><a href="/{{prefix}}/{{model.slug}}" data-method="delete">delete</a></li>
+        <li><a href="/{{prefix}}/{{model.edit_url}}/edit">edit</a></li>
+        <li><a href="/{{prefix}}/{{model.edit_url}}" data-method="delete">delete</a></li>
     </ul>
 
     <h2>meta</h2>
