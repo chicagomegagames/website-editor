@@ -2,90 +2,136 @@
 body {
   font-family: "Source Code Pro", monospace;
   font-size: 16px;
-  line-height: 1.5em; }
+  line-height: 1.5em;
+}
 
 a {
-  color: #1b6ec2; }
+  color: #1b6ec2;
+}
 
 img {
-  max-width: 100%; }
+  max-width: 100%;
+}
 
 .sidebar {
   width: 300px;
-  float: left; }
-  .sidebar h1 {
-    font-size: 1.5em;
-    margin: 0; }
-  .sidebar h2 {
-    font-size: 1.3em;
-    margin: 0; }
+  float: left;
+}
+.sidebar h1 {
+  font-size: 1.5em;
+  margin: 0;
+}
+.sidebar h2 {
+  font-size: 1.3em;
+  margin: 0;
+}
 
 .page {
   width: calc(100% - 300px);
-  float: right; }
-  .page #notifications .notification {
-    box-sizing: border-box;
-    background: #8bff0f;
-    overflow-y: hidden;
-    padding-bottom: 1vmin;
-    transition: height 1s; }
-    .page #notifications .notification p {
-      padding: 10px 20px;
-      overflow-y: hidden;
-      margin: 0; }
-  .page p {
-    max-width: 800px;
-    margin: 0 0 1.5em; }
-  .page textarea {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-    border: 1px solid black;
-    max-width: 800px;
-    height: 20em;
-    font-family: "Source Code Pro", monospace;
-    font-size: 1em; }
-  .page input {
-    font-size: 1em;
-    font-family: "Source Code Pro", monospace; }
-  .page input[type=text] {
-    border: 1px solid black;
-    padding: 5px; }
-  .page table.meta {
-    width: 100%;
-    max-width: 800px; }
-    .page table.meta input {
-      width: 100%; }
-    .page table.meta textarea {
-      height: 10em; }
-    .page table.meta td {
-      vertical-align: top;
-      padding-bottom: 1em; }
-      .page table.meta td img {
-        margin-top: 1em; }
-    .page table.meta tr td:nth-child(2n -1) {
-      text-align: right;
-      box-sizing: border-box;
-      width: 30%;
-      padding-top: 5px; }
-      .page table.meta tr td:nth-child(2n -1)::after {
-        content: ":";
-        width: 10px; }
+  float: right;
+}
+.page #notifications .notification {
+  box-sizing: border-box;
+  background: #8bff0f;
+  overflow-y: hidden;
+  padding-bottom: 1vmin;
+  transition: height 1s;
+}
+.page #notifications .notification p {
+  padding: 10px 20px;
+  overflow-y: hidden;
+  margin: 0;
+}
+.page p {
+  max-width: 800px;
+  margin: 0 0 1.5em;
+}
+.page textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid black;
+  max-width: 800px;
+  height: 20em;
+  font-family: "Source Code Pro", monospace;
+  font-size: 1em;
+}
+.page input {
+  font-size: 1em;
+  font-family: "Source Code Pro", monospace;
+}
+.page input[type=text] {
+  border: 1px solid black;
+  padding: 5px;
+}
+.page table.meta {
+  width: 100%;
+  max-width: 800px;
+}
+.page table.meta input {
+  width: 100%;
+}
+.page table.meta textarea {
+  height: 10em;
+}
+.page table.meta td {
+  vertical-align: top;
+  padding-bottom: 1em;
+}
+.page table.meta td img {
+  margin-top: 1em;
+}
+.page table.meta tr td:nth-child(2n -1) {
+  text-align: right;
+  box-sizing: border-box;
+  width: 30%;
+  padding-top: 5px;
+}
+.page table.meta tr td:nth-child(2n -1)::after {
+  content: ":";
+  width: 10px;
+}
 
 table {
   max-width: 800px;
   width: 100%;
-  font-size: 16px; }
-  table th {
-    text-align: left; }
-  table td {
-    vertical-align: top; }
+  font-size: 16px;
+}
+table th {
+  text-align: left;
+}
+table td {
+  vertical-align: top;
+}
 
 .models tbody tr:hover {
-  background: #eee; }
+  background: #eee;
+}
 .models .filename {
   padding-left: 2em;
-  font-size: .9em;
-  color: #666; }
+  font-size: 0.9em;
+  color: #666;
+}
+
+.image_gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: stretch;
+}
+.image_gallery .item {
+  box-sizing: border-box;
+  width: 32%;
+  margin-bottom: 4em;
+}
+.image_gallery .item textarea {
+  height: 2em;
+  padding: 0.3em;
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: scroll;
+  resize: none;
+  margin-bottom: 1em;
+}
 
 /*# sourceMappingURL=main.css.map */

@@ -155,3 +155,27 @@ table {
     color: #666;
   }
 }
+
+.image_gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: stretch;
+
+  .item {
+    box-sizing: border-box;
+    width: 32%;
+
+    margin-bottom: 4em;
+
+    textarea {
+      height: 2em;
+      padding: .3em;
+      white-space: pre;
+      overflow-wrap: normal;
+      overflow-x: scroll;
+      resize: none;
+      margin-bottom: 1em;
+    }
+  }
+}
