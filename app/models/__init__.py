@@ -4,7 +4,7 @@ import orator
 import inflection
 
 class _Model(orator.Model):
-    _resolver = Config.database()
+    __resolver = Config.database()
 
     __primary_key__ = 'pk'
     __guarded__ = []
