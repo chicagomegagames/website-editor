@@ -1,4 +1,4 @@
-from .base_model import _FileModel
+from .core.file_model import _FileModel
 
 class ModelConverter():
     @classmethod
