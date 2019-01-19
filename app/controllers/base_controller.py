@@ -75,6 +75,7 @@ class BaseModelController(BaseController):
             form = form_to_dict(request.form)
 
             self.clean_form(form)
+            form = model._convert_form(form)
 
             images = {}
             for key in self.image_metadata:
