@@ -14,7 +14,9 @@
             {%- endif -%}
         </textarea>
     {%- elif details['type'] == "image" %}
-        <input type="file" data-metadata-name="{{key}}" name="meta[{{key}}]" accept="image/*" />
+        <input type="text" name="meta[{{key}}]"
+        {%- if has_model %} value="{{model[key]|safe}}" {% endif -%}
+        data-metadata-name="{{key}}" data-metadata-type="value" />
         {%- if has_model and model[key] %}
         <br />
         <img src="{{ model[key] }}" />

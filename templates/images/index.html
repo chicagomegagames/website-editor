@@ -14,10 +14,9 @@
     {% if images|length > 0 %}
     <div class="image_gallery">
         {% for image in images %}
-        <div class="image">
-            <img src="/images/{{image.name}}" /><br />
-            <a href="/images/{{image.name}}">/images/{{image.name}}</a><br />
-            <a href="/images/{{image.name}}" data-method="delete">delete</a>
+        <div class="item">
+            <textarea readonly="readonly" onclick="this.focus();this.select()">{{image.url}}</textarea>
+            <img src="{{image.url}}" /><br />
         </div>
         {% endfor %}
     </div>
