@@ -1,11 +1,16 @@
 ---
-hero_alt: ''
-hero_caption: ''
-hero_image: ''
-layout: index.html
-name: Chicago MegaGames
+layout: page.html
+name: About Us
 slug: /about/
 ---
 
-Chicago MegaGames is a volunteer organization dedicated to designing, developing, and running games with 20 players or more.
-We use elements of board games, roleplaying games, and theater to create collective storytelling experiences that are both massive in scale but completely unique to each player.
+# About Us
+
+Hi, we're Chicago Megagames. You might remember us from such games as [My Kind of Town](/games/my_kind_of_town/) or [Watch the Skies](/games/watch_the_skies/). Perhaps you have heard of us by way of one of our many regular playtests or Design Jams? 
+
+We're a collection of friends from all sorts of fields who share a common hobby in megagaming. This is our current board of directors:
+
+- Charlie Graham
+- Don Kuntz
+- Jeff Levrant
+- Tony Phelps
