@@ -1,7 +1,7 @@
 from .test_helper import *
 
 from app.models import ModelConverter, Page, Game, Event
-from app.models.base_model import _FileModel
+from app.models.core.file_model import _FileModel
 
 from datetime import date
 import orator
